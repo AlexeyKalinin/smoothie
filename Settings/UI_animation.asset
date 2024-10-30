@@ -1,0 +1,375 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f00ffeb1b2ff4cfd9feb7e95b71e8ff, type: 3}
+  m_Name: UI_animation
+  m_EditorClassIdentifier: 
+  style:
+    showFromLeft:
+      ChangePos: 1
+      moveFromTo: {x: -357.11, y: 0, z: 0}
+      ChangeRotation: 1
+      rotation: {x: 0, y: 0, z: 0}
+      ChangeScale: 1
+      scale: {x: 1.05, y: 0.98, z: 1}
+      FromTo: 1
+      interpolatorConfig:
+        _interpolationType: 3
+        _interpolationSpeed: 10
+        _interpolationElasticity: 1.25
+      ChangeColors: 1
+      ChangeBackgroundColor: 0
+      ChangeBackgroundColorTo: 11
+      ChangeTextColor: 0
+      ChangeTextColorTo: 0
+      ChangeSelectColor: 0
+      ChangeSelectColorTo: 0
+      ChangeShadowColor: 0
+      ChangeShadowColorTo: 0
+      ChangeAlpha: 1
+      alphaMultiplier: 1
+      colorInterpolatorSpeed: 0.1
+    showFromRight:
+      ChangePos: 1
+      moveFromTo: {x: 300, y: 0, z: 0}
+      ChangeRotation: 1
+      rotation: {x: 0, y: 39.06, z: 0}
+      ChangeScale: 1
+      scale: {x: 2, y: 1, z: 1}
+      FromTo: 1
+      interpolatorConfig:
+        _interpolationType: 3
+        _interpolationSpeed: 18
+        _interpolationElasticity: 0.91
+      ChangeColors: 1
+      ChangeBackgroundColor: 0
+      ChangeBackgroundColorTo: 12
+      ChangeTextColor: 0
+      ChangeTextColorTo: 1
+      ChangeSelectColor: 0
+      ChangeSelectColorTo: 1
+      ChangeShadowColor: 0
+      ChangeShadowColorTo: 1
+      ChangeAlpha: 1
+      alphaMultiplier: 1
+      colorInterpolatorSpeed: 0.1
+    showFromTop:
+      ChangePos: 1
+      moveFromTo: {x: 0, y: 300, z: 0}
+      ChangeRotation: 1
+      rotation: {x: 0, y: 0, z: 0}
+      ChangeScale: 1
+      scale: {x: 2, y: 1, z: 1}
+      FromTo: 1
+      interpolatorConfig:
+        _interpolationType: 3
+        _interpolationSpeed: 4
+        _interpolationElasticity: 2
+      ChangeColors: 1
+      ChangeBackgroundColor: 0
+      ChangeBackgroundColorTo: 1
+      ChangeTextColor: 0
+      ChangeTextColorTo: 5
+      ChangeSelectColor: 0
+      ChangeSelectColorTo: 8
+      ChangeShadowColor: 0
+      ChangeShadowColorTo: 9
+      ChangeAlpha: 1
+      alphaMultiplier: 1
+      colorInterpolatorSpeed: 0.5
+    showFromBottom:
+      ChangePos: 1
+      moveFromTo: {x: 0, y: -300, z: 0}
+      ChangeRotation: 1
+      rotation: {x: 0, y: 90, z: 0}
+      ChangeScale: 1
+      scale: {x: 1, y: 2, z: 1}
+      FromTo: 1
+      interpolatorConfig:
+        _interpolationType: 2
+        _interpolationSpeed: 3
+        _interpolationElasticity: 0.5
+      ChangeColors: 1
+      ChangeBackgroundColor: 0
+      ChangeBackgroundColorTo: 0
+      ChangeTextColor: 0
+      ChangeTextColorTo: 0
+      ChangeSelectColor: 0
+      ChangeSelectColorTo: 0
+      ChangeShadowColor: 0
+      ChangeShadowColorTo: 0
+      ChangeAlpha: 1
+      alphaMultiplier: 1
+      colorInterpolatorSpeed: 0.1
+    hideToLeft:
+      ChangePos: 1
+      moveFromTo: {x: -500, y: 0, z: 0}
+      ChangeRotation: 1
+      rotation: {x: 0, y: 0, z: 0}
+      ChangeScale: 1
+      scale: {x: 1.1, y: 0.9, z: 1}
+      FromTo: 0
+      interpolatorConfig:
+        _interpolationType: 2
+        _interpolationSpeed: 11
+        _interpolationElasticity: 0.5
+      ChangeColors: 1
+      ChangeBackgroundColor: 0
+      ChangeBackgroundColorTo: 0
+      ChangeTextColor: 0
+      ChangeTextColorTo: 0
+      ChangeSelectColor: 0
+      ChangeSelectColorTo: 0
+      ChangeShadowColor: 0
+      ChangeShadowColorTo: 0
+      ChangeAlpha: 1
+      alphaMultiplier: 0
+      colorInterpolatorSpeed: 0.3
+    hideToRight:
+      ChangePos: 1
+      moveFromTo: {x: 500, y: 0, z: 0}
+      ChangeRotation: 1
+      rotation: {x: 0, y: -74.16, z: 0}
+      ChangeScale: 1
+      scale: {x: 1, y: 1, z: 1}
+      FromTo: 0
+      interpolatorConfig:
+        _interpolationType: 1
+        _interpolationSpeed: 11
+        _interpolationElasticity: 0.5
+      ChangeColors: 1
+      ChangeBackgroundColor: 0
+      ChangeBackgroundColorTo: 0
+      ChangeTextColor: 0
+      ChangeTextColorTo: 5
+      ChangeSelectColor: 0
+      ChangeSelectColorTo: 0
+      ChangeShadowColor: 0
+      ChangeShadowColorTo: 0
+      ChangeAlpha: 1
+      alphaMultiplier: 0
+      colorInterpolatorSpeed: 0.2
+    hideToTop:
+      ChangePos: 1
+      moveFromTo: {x: 0, y: 300, z: 0}
+      ChangeRotation: 1
+      rotation: {x: 50, y: 0, z: 0}
+      ChangeScale: 1
+      scale: {x: 1, y: 1, z: 1}
+      FromTo: 0
+      interpolatorConfig:
+        _interpolationType: 3
+        _interpolationSpeed: 18
+        _interpolationElasticity: 0.5
+      ChangeColors: 1
+      ChangeBackgroundColor: 0
+      ChangeBackgroundColorTo: 0
+      ChangeTextColor: 0
+      ChangeTextColorTo: 4
+      ChangeSelectColor: 0
+      ChangeSelectColorTo: 8
+      ChangeShadowColor: 0
+      ChangeShadowColorTo: 9
+      ChangeAlpha: 1
+      alphaMultiplier: 0
+      colorInterpolatorSpeed: 0.1
+    hideToBottom:
+      ChangePos: 0
+      moveFromTo: {x: 0, y: -300, z: 0}
+      ChangeRotation: 0
+      rotation: {x: 0, y: 80, z: 0}
+      ChangeScale: 0
+      scale: {x: 2, y: 1, z: 1}
+      FromTo: 0
+      interpolatorConfig:
+        _interpolationType: 2
+        _interpolationSpeed: 3
+        _interpolationElasticity: 0.5
+      ChangeColors: 1
+      ChangeBackgroundColor: 0
+      ChangeBackgroundColorTo: 0
+      ChangeTextColor: 0
+      ChangeTextColorTo: 0
+      ChangeSelectColor: 0
+      ChangeSelectColorTo: 0
+      ChangeShadowColor: 0
+      ChangeShadowColorTo: 0
+      ChangeAlpha: 1
+      alphaMultiplier: 0
+      colorInterpolatorSpeed: 0.1
+    normal:
+      ChangePos: 1
+      moveFromTo: {x: 0, y: 0, z: 0}
+      ChangeRotation: 1
+      rotation: {x: 0, y: 0, z: 0}
+      ChangeScale: 1
+      scale: {x: 1, y: 1, z: 1}
+      FromTo: 0
+      interpolatorConfig:
+        _interpolationType: 2
+        _interpolationSpeed: 10
+        _interpolationElasticity: 0.5
+      ChangeColors: 1
+      ChangeBackgroundColor: 1
+      ChangeBackgroundColorTo: 0
+      ChangeTextColor: 1
+      ChangeTextColorTo: 4
+      ChangeSelectColor: 1
+      ChangeSelectColorTo: 8
+      ChangeShadowColor: 1
+      ChangeShadowColorTo: 9
+      ChangeAlpha: 0
+      alphaMultiplier: 1
+      colorInterpolatorSpeed: 0.1
+    over:
+      ChangePos: 1
+      moveFromTo: {x: 0, y: 12, z: 0}
+      ChangeRotation: 1
+      rotation: {x: 0, y: 0, z: 0}
+      ChangeScale: 1
+      scale: {x: 1.02, y: 1.02, z: 1.02}
+      FromTo: 0
+      interpolatorConfig:
+        _interpolationType: 2
+        _interpolationSpeed: 10
+        _interpolationElasticity: 0.5
+      ChangeColors: 1
+      ChangeBackgroundColor: 1
+      ChangeBackgroundColorTo: 1
+      ChangeTextColor: 1
+      ChangeTextColorTo: 5
+      ChangeSelectColor: 1
+      ChangeSelectColorTo: 8
+      ChangeShadowColor: 1
+      ChangeShadowColorTo: 9
+      ChangeAlpha: 0
+      alphaMultiplier: 1
+      colorInterpolatorSpeed: 0.1
+    press:
+      ChangePos: 1
+      moveFromTo: {x: 0, y: -12, z: 0}
+      ChangeRotation: 1
+      rotation: {x: 0, y: 0, z: 0}
+      ChangeScale: 1
+      scale: {x: 0.9, y: 0.95, z: 0.95}
+      FromTo: 0
+      interpolatorConfig:
+        _interpolationType: 1
+        _interpolationSpeed: 64
+        _interpolationElasticity: 0.5
+      ChangeColors: 1
+      ChangeBackgroundColor: 1
+      ChangeBackgroundColorTo: 2
+      ChangeTextColor: 1
+      ChangeTextColorTo: 6
+      ChangeSelectColor: 1
+      ChangeSelectColorTo: 8
+      ChangeShadowColor: 1
+      ChangeShadowColorTo: 9
+      ChangeAlpha: 0
+      alphaMultiplier: 0
+      colorInterpolatorSpeed: 0.1
+    moveUp:
+      ChangePos: 1
+      moveFromTo: {x: 0, y: 0, z: 0}
+      ChangeRotation: 1
+      rotation: {x: 0, y: 0, z: 0}
+      ChangeScale: 1
+      scale: {x: 1, y: 1, z: 1}
+      FromTo: 0
+      interpolatorConfig:
+        _interpolationType: 2
+        _interpolationSpeed: 10
+        _interpolationElasticity: 0.5
+      ChangeColors: 1
+      ChangeBackgroundColor: 0
+      ChangeBackgroundColorTo: 0
+      ChangeTextColor: 0
+      ChangeTextColorTo: 0
+      ChangeSelectColor: 0
+      ChangeSelectColorTo: 0
+      ChangeShadowColor: 0
+      ChangeShadowColorTo: 0
+      ChangeAlpha: 0
+      alphaMultiplier: 0
+      colorInterpolatorSpeed: 1.5
+    moveRight:
+      ChangePos: 0
+      moveFromTo: {x: 0, y: 0, z: 0}
+      ChangeRotation: 0
+      rotation: {x: 0, y: 0, z: 0}
+      ChangeScale: 0
+      scale: {x: 1, y: 1, z: 1}
+      FromTo: 0
+      interpolatorConfig:
+        _interpolationType: 2
+        _interpolationSpeed: 10
+        _interpolationElasticity: 0.5
+      ChangeColors: 1
+      ChangeBackgroundColor: 1
+      ChangeBackgroundColorTo: 1
+      ChangeTextColor: 0
+      ChangeTextColorTo: 0
+      ChangeSelectColor: 0
+      ChangeSelectColorTo: 0
+      ChangeShadowColor: 0
+      ChangeShadowColorTo: 0
+      ChangeAlpha: 0
+      alphaMultiplier: 0
+      colorInterpolatorSpeed: 1.5
+    moveDown:
+      ChangePos: 0
+      moveFromTo: {x: 0, y: 0, z: 0}
+      ChangeRotation: 0
+      rotation: {x: 0, y: 0, z: 0}
+      ChangeScale: 0
+      scale: {x: 1, y: 1, z: 1}
+      FromTo: 0
+      interpolatorConfig:
+        _interpolationType: 2
+        _interpolationSpeed: 10
+        _interpolationElasticity: 0.5
+      ChangeColors: 0
+      ChangeBackgroundColor: 0
+      ChangeBackgroundColorTo: 0
+      ChangeTextColor: 0
+      ChangeTextColorTo: 0
+      ChangeSelectColor: 0
+      ChangeSelectColorTo: 0
+      ChangeShadowColor: 0
+      ChangeShadowColorTo: 0
+      ChangeAlpha: 0
+      alphaMultiplier: 0
+      colorInterpolatorSpeed: 1.5
+    moveLeft:
+      ChangePos: 0
+      moveFromTo: {x: 0, y: 0, z: 0}
+      ChangeRotation: 0
+      rotation: {x: 0, y: 0, z: 0}
+      ChangeScale: 0
+      scale: {x: 1, y: 1, z: 1}
+      FromTo: 0
+      interpolatorConfig:
+        _interpolationType: 2
+        _interpolationSpeed: 10
+        _interpolationElasticity: 0.5
+      ChangeColors: 0
+      ChangeBackgroundColor: 0
+      ChangeBackgroundColorTo: 0
+      ChangeTextColor: 0
+      ChangeTextColorTo: 0
+      ChangeSelectColor: 0
+      ChangeSelectColorTo: 0
+      ChangeShadowColor: 0
+      ChangeShadowColorTo: 0
+      ChangeAlpha: 0
+      alphaMultiplier: 0
+      colorInterpolatorSpeed: 1.5

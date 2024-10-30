@@ -1,0 +1,231 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a22fc521f92264ba1a040f977af5ba32, type: 3}
+  m_Name: New Smoothie Config
+  m_EditorClassIdentifier: 
+  style:
+    show:
+      offset: 10
+      interpolatorConfig:
+        curve:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 0
+            inSlope: 0
+            outSlope: 1
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          - serializedVersion: 3
+            time: 1
+            value: 1
+            inSlope: 1
+            outSlope: 0
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 4
+      fadeIn: 0.15
+    hide:
+      offset: 10
+      interpolatorConfig:
+        curve:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 0
+            inSlope: 0
+            outSlope: 1
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          - serializedVersion: 3
+            time: 1
+            value: 1
+            inSlope: 1
+            outSlope: 0
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 4
+      fadeOut: 0.15
+    move:
+      offset: 10
+      interpolatorConfig:
+        curve:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 0
+            inSlope: 0
+            outSlope: 1
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          - serializedVersion: 3
+            time: 1
+            value: 1
+            inSlope: 1
+            outSlope: 0
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 4
+    eventsContainer:
+      normal:
+        ChangePos: 0
+        moveFromTo: {x: 0, y: 0, z: 0}
+        ChangeRotation: 0
+        rotation: {x: 0, y: 0, z: 0}
+        ChangeScale: 0
+        scale: {x: 1, y: 1, z: 1}
+        interpolatorConfig:
+          curve:
+            serializedVersion: 2
+            m_Curve:
+            - serializedVersion: 3
+              time: 0
+              value: 0
+              inSlope: 0
+              outSlope: 1
+              tangentMode: 0
+              weightedMode: 0
+              inWeight: 0
+              outWeight: 0
+            - serializedVersion: 3
+              time: 1
+              value: 1
+              inSlope: 1
+              outSlope: 0
+              tangentMode: 0
+              weightedMode: 0
+              inWeight: 0
+              outWeight: 0
+            m_PreInfinity: 2
+            m_PostInfinity: 2
+            m_RotationOrder: 4
+        ChangeColors: 0
+        ChangeBackgroundColor: 0
+        ChangeBackgroundColorTo: 0
+        ChangeTextColor: 0
+        ChangeTextColorTo: 0
+        ChangeSelectColor: 0
+        ChangeSelectColorTo: 0
+        ChangeShadowColor: 0
+        ChangeShadowColorTo: 0
+        ChangeAlpha: 0
+        alphaMultiplier: 0
+        colorInterpolatorSpeed: 1.5
+      over:
+        ChangePos: 0
+        moveFromTo: {x: 0, y: 0, z: 0}
+        ChangeRotation: 0
+        rotation: {x: 0, y: 0, z: 0}
+        ChangeScale: 0
+        scale: {x: 1, y: 1, z: 1}
+        interpolatorConfig:
+          curve:
+            serializedVersion: 2
+            m_Curve:
+            - serializedVersion: 3
+              time: 0
+              value: 0
+              inSlope: 0
+              outSlope: 1
+              tangentMode: 0
+              weightedMode: 0
+              inWeight: 0
+              outWeight: 0
+            - serializedVersion: 3
+              time: 1
+              value: 1
+              inSlope: 1
+              outSlope: 0
+              tangentMode: 0
+              weightedMode: 0
+              inWeight: 0
+              outWeight: 0
+            m_PreInfinity: 2
+            m_PostInfinity: 2
+            m_RotationOrder: 4
+        ChangeColors: 0
+        ChangeBackgroundColor: 0
+        ChangeBackgroundColorTo: 0
+        ChangeTextColor: 0
+        ChangeTextColorTo: 0
+        ChangeSelectColor: 0
+        ChangeSelectColorTo: 0
+        ChangeShadowColor: 0
+        ChangeShadowColorTo: 0
+        ChangeAlpha: 0
+        alphaMultiplier: 0
+        colorInterpolatorSpeed: 1.5
+      press:
+        ChangePos: 0
+        moveFromTo: {x: 0, y: 0, z: 0}
+        ChangeRotation: 0
+        rotation: {x: 0, y: 0, z: 0}
+        ChangeScale: 0
+        scale: {x: 1, y: 1, z: 1}
+        interpolatorConfig:
+          curve:
+            serializedVersion: 2
+            m_Curve:
+            - serializedVersion: 3
+              time: 0
+              value: 0
+              inSlope: 0
+              outSlope: 1
+              tangentMode: 0
+              weightedMode: 0
+              inWeight: 0
+              outWeight: 0
+            - serializedVersion: 3
+              time: 1
+              value: 1
+              inSlope: 1
+              outSlope: 0
+              tangentMode: 0
+              weightedMode: 0
+              inWeight: 0
+              outWeight: 0
+            m_PreInfinity: 2
+            m_PostInfinity: 2
+            m_RotationOrder: 4
+        ChangeColors: 0
+        ChangeBackgroundColor: 0
+        ChangeBackgroundColorTo: 0
+        ChangeTextColor: 0
+        ChangeTextColorTo: 0
+        ChangeSelectColor: 0
+        ChangeSelectColorTo: 0
+        ChangeShadowColor: 0
+        ChangeShadowColorTo: 0
+        ChangeAlpha: 0
+        alphaMultiplier: 0
+        colorInterpolatorSpeed: 1.5

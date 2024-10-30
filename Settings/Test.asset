@@ -1,0 +1,112 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a22fc521f92264ba1a040f977af5ba32, type: 3}
+  m_Name: Test
+  m_EditorClassIdentifier: 
+  style:
+    show:
+      offset: 200
+      interpolatorConfig:
+        _interpolationType: 3
+        _interpolationSpeed: 26
+        _interpolationElasticity: 0.52
+      fadeIn: 0.5
+    hide:
+      offset: 300
+      interpolatorConfig:
+        _interpolationType: 2
+        _interpolationSpeed: 10
+        _interpolationElasticity: 0.5
+      fadeOut: 0.5
+    move:
+      offset: 10
+      interpolatorConfig:
+        _interpolationType: 3
+        _interpolationSpeed: 91
+        _interpolationElasticity: 0.14
+      returnDelay: 0.1
+    normal:
+      ChangePos: 1
+      moveFromTo: {x: 0, y: 0, z: 0}
+      ChangeRotation: 0
+      rotation: {x: 0, y: 0, z: 0}
+      ChangeScale: 1
+      scale: {x: 1, y: 1, z: 1}
+      interpolatorConfig:
+        _interpolationType: 2
+        _interpolationSpeed: 10
+        _interpolationElasticity: 0.5
+      ChangeColors: 1
+      ChangeBackgroundColor: 1
+      ChangeBackgroundColorTo: 0
+      ChangeTextColor: 1
+      ChangeTextColorTo: 4
+      ChangeSelectColor: 1
+      ChangeSelectColorTo: 8
+      ChangeShadowColor: 1
+      ChangeShadowColorTo: 9
+      ChangeAlpha: 1
+      alphaMultiplier: 1
+      colorTransitionDuration: 0.15
+    over:
+      ChangePos: 1
+      moveFromTo: {x: 0, y: 10, z: 0}
+      ChangeRotation: 0
+      rotation: {x: 0, y: 0, z: 0}
+      ChangeScale: 1
+      scale: {x: 1.05, y: 1.05, z: 1.05}
+      interpolatorConfig:
+        _interpolationType: 3
+        _interpolationSpeed: 59
+        _interpolationElasticity: 0.25
+      ChangeColors: 1
+      ChangeBackgroundColor: 0
+      ChangeBackgroundColorTo: 0
+      ChangeTextColor: 1
+      ChangeTextColorTo: 5
+      ChangeSelectColor: 0
+      ChangeSelectColorTo: 0
+      ChangeShadowColor: 0
+      ChangeShadowColorTo: 0
+      ChangeAlpha: 1
+      alphaMultiplier: 1
+      colorTransitionDuration: 0.15
+    press:
+      ChangePos: 1
+      moveFromTo: {x: 0, y: -10, z: 0}
+      ChangeRotation: 0
+      rotation: {x: 0, y: 0, z: 0}
+      ChangeScale: 1
+      scale: {x: 0.95, y: 0.95, z: 0.95}
+      interpolatorConfig:
+        _interpolationType: 1
+        _interpolationSpeed: 23
+        _interpolationElasticity: 0.5
+      ChangeColors: 1
+      ChangeBackgroundColor: 0
+      ChangeBackgroundColorTo: 0
+      ChangeTextColor: 1
+      ChangeTextColorTo: 6
+      ChangeSelectColor: 0
+      ChangeSelectColorTo: 0
+      ChangeShadowColor: 0
+      ChangeShadowColorTo: 0
+      ChangeAlpha: 0
+      alphaMultiplier: 0
+      colorTransitionDuration: 0.15
+    focus:
+      deselectedScale: 0.45
+      interpolatorConfig:
+        _interpolationType: 2
+        _interpolationSpeed: 135
+        _interpolationElasticity: 0.2
+      fadeDuration: 0.1

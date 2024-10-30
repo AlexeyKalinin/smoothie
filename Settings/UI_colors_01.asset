@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 390d86ace3e0f47da988beb9e0da0350, type: 3}
+  m_Name: UI_colors_01
+  m_EditorClassIdentifier: 
+  backgroundNormal: {r: 1, g: 1, b: 1, a: 1}
+  backgroundOver: {r: 0.6308719, g: 1, b: 0.2688679, a: 1}
+  backgroundPressed: {r: 0.31999516, g: 0.5566038, b: 0.2494215, a: 1}
+  backgroundDeactivated: {r: 0.5060075, g: 0.7830189, b: 0.5304332, a: 0.5686275}
+  textNormal: {r: 0.9433962, g: 0.24474904, b: 0.29160762, a: 1}
+  textOver: {r: 1, g: 0.6084906, b: 0.63473696, a: 1}
+  textPressed: {r: 0.5566038, g: 0.13915095, b: 0.16713658, a: 1}
+  textDeactivated: {r: 0.6226415, g: 0.44348523, b: 0.4554957, a: 0.5176471}
+  select: {r: 1, g: 0.82290006, b: 0.241, a: 1}
+  shadow: {r: 0, g: 0, b: 0, a: 1}
+  descriptionText: {r: 1, g: 0, b: 0, a: 1}
+  mainText: {r: 0, g: 1, b: 0.816, a: 1}
+  backgroundPanel: {r: 0.11792451, g: 0.6388314, b: 1, a: 1}
