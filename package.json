@@ -4,6 +4,9 @@
   "displayName": "Smoothie UI Library",
   "description": "Library for UI elements in Unity.",
   "unity": "2020.3",
+  "dependencies": {
+    "com.unity.textmeshpro": "3.0.6"
+  },
   "author": {
     "name": "Alexey Kalinin",
     "email": "alexeykalinin@me.com",

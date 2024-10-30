@@ -1,0 +1,16 @@
+{
+    "name": "Smoothie.Editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:0642ee04b6903404fbcba1b742f1c89d"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
