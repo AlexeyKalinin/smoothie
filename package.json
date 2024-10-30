@@ -1,0 +1,12 @@
+{
+  "name": "com.alexeykalinin.smoothie",
+  "version": "1.0.0",
+  "displayName": "Smoothie UI Library",
+  "description": "Library for UI elements in Unity.",
+  "unity": "2020.3",
+  "author": {
+    "name": "Alexey Kalinin",
+    "email": "alexeykalinin@me.com",
+    "url": "wefiftytwo.com"
+  }
+}
