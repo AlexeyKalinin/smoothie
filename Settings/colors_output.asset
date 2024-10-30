@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 390d86ace3e0f47da988beb9e0da0350, type: 3}
-  m_Name: UI_colors
+  m_Name: colors_output
   m_EditorClassIdentifier: 
-  backgroundNormal: {r: 0.9339623, g: 0.6963528, b: 0.46257564, a: 1}
+  backgroundNormal: {r: 0.9056604, g: 0.66082996, b: 0.4229263, a: 1}
   backgroundOver: {r: 1, g: 1, b: 1, a: 1}
   backgroundPressed: {r: 0, g: 0, b: 0, a: 0}
   backgroundDeactivated: {r: 0, g: 0, b: 0, a: 0}
