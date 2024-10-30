@@ -1,6 +1,7 @@
 #if UNITY_EDITOR
 using UnityEditor;
 using UnityEditor.UI;
+using Smoothie;
 
 [CustomEditor(typeof(SmoothieUIButton))]
 public class SmoothieUIButtonEditor : ButtonEditor
