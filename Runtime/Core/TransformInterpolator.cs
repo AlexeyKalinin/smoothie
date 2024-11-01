@@ -21,7 +21,37 @@ public class TransformInterpolator
         this.initialScale = initialScale;
     }
 
-    // Method for event animations (EventsConfig)
+    public void ApplyTransform(Vector3 fromPosition, Vector3 toPosition, FloatInterpolator.Config config, Transform movable, bool resetInterpolator, Action<Vector3> updatePosition)
+    {
+        this.interpolatorConfig = config;
+        HandleTransform(ref smoothPosition, fromPosition, toPosition, updatePosition, resetInterpolator);
+    }
+
+    public void ApplyScaleTransform(Vector3 fromScale, Vector3 toScale, FloatInterpolator.Config config, Transform target, bool resetInterpolator, Action<Vector3> updateScale)
+    {
+        this.interpolatorConfig = config;
+        HandleTransform(ref smoothScale, fromScale, toScale, updateScale, resetInterpolator);
+    }
+
+    public void ApplyRotationTransform(Vector3 fromRotation, Vector3 toRotation, FloatInterpolator.Config config, Transform target, bool resetInterpolator, Action<Vector3> updateRotation)
+    {
+        this.interpolatorConfig = config;
+        HandleTransform(ref smoothRotation, fromRotation, toRotation, updateRotation, resetInterpolator);
+    }
+
+    private void HandleTransform(ref SmoothVector3 smoothVector, Vector3 from, Vector3 to, Action<Vector3> updateAction, bool resetInterpolator)
+    {
+        if (resetInterpolator || smoothVector == null)
+        {
+            smoothVector = new SmoothVector3(context, from, (Vector3Interpolator.Config.InterpolationType)interpolatorConfig.interpolationType, interpolatorConfig.interpolationSpeed, interpolatorConfig.interpolationElasticity, updateAction);
+        }
+        else
+        {
+            smoothVector.UpdateConfig((Vector3Interpolator.Config.InterpolationType)interpolatorConfig.interpolationType, interpolatorConfig.interpolationSpeed, interpolatorConfig.interpolationElasticity);
+        }
+        smoothVector.SetValue(to);
+    }
+
     public void ApplyTransform(SmoothieConfig.EventsConfig config, Transform movable, Transform rotatable, Vector3 initialPosition, Vector3 initialRotation, Vector3 initialScale, Action<Vector3> updatePosition, Action<Vector3> updateRotation, Action<Vector3> updateScale, bool resetInterpolator)
     {
         this.interpolatorConfig = config.interpolatorConfig;
@@ -46,36 +76,6 @@ public class TransformInterpolator
         }
     }
 
-    // Method for Show/Hide and Move animations
-    public void ApplyTransform(Vector3 fromPosition, Vector3 toPosition, FloatInterpolator.Config config, Transform movable, bool resetInterpolator, Action<Vector3> updatePosition)
-    {
-        this.interpolatorConfig = config;
-        HandleTransform(ref smoothPosition, fromPosition, toPosition, updatePosition, resetInterpolator);
-    }
-
-    private void HandleTransform(ref SmoothVector3 smoothVector, Vector3 from, Vector3 to, Action<Vector3> updateAction, bool resetInterpolator)
-    {
-        if (resetInterpolator || smoothVector == null)
-        {
-            smoothVector = new SmoothVector3(context, from, (Vector3Interpolator.Config.InterpolationType)interpolatorConfig.interpolationType, interpolatorConfig.interpolationSpeed, interpolatorConfig.interpolationElasticity, updateAction);
-        }
-        else
-        {
-            smoothVector.UpdateConfig((Vector3Interpolator.Config.InterpolationType)interpolatorConfig.interpolationType, interpolatorConfig.interpolationSpeed, interpolatorConfig.interpolationElasticity);
-        }
-        smoothVector.SetValue(to);
-    }
-
-    // Method for snapping position instantly
-    public void SnapTransform(Vector3 position, Transform movable, Action<Vector3> updatePosition)
-    {
-        if (updatePosition != null)
-        {
-            updatePosition(position);
-        }
-    }
-
-    // Method to stop all ongoing interpolations
     public void Stop()
     {
         smoothPosition?.Stop();

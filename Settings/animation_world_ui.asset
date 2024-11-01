@@ -14,52 +14,52 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   style:
     show:
-      offset: 200
-      offset_random: 0
+      offset: 0
+      offset_random: 0.061
       positionInterpolatorConfig:
-        _interpolationType: 3
-        _interpolationSpeed: 26
+        _interpolationType: 2
+        _interpolationSpeed: 2
         _interpolationElasticity: 0.52
-      scale_main: 1
-      scale_secondary: 1
-      scale_random: 1
+      scale_main: 2
+      scale_secondary: 0.069
+      scale_random: 0
       scaleInterpolatorConfig:
         _interpolationType: 2
-        _interpolationSpeed: 10
-        _interpolationElasticity: 0.5
-      tilt: 0
+        _interpolationSpeed: 2
+        _interpolationElasticity: 0.25
+      tilt: 30
       tilt_negative: 0
       tilt_random: 0
-      yaw: 0
+      yaw: 54
       yaw_negative: 0
       yaw_random: 0
       roll: 0
-      roll_negative: 0
-      roll_random: 0
+      roll_negative: 1
+      roll_random: 0.2
       rotationInterpolatorConfig:
-        _interpolationType: 2
-        _interpolationSpeed: 10
-        _interpolationElasticity: 0.5
+        _interpolationType: 3
+        _interpolationSpeed: 8
+        _interpolationElasticity: 0.16
       fadeIn: 0.5
     hide:
-      offset: 300
-      offset_random: 0
+      offset: 0
+      offset_random: 0.065
       positionInterpolatorConfig:
         _interpolationType: 2
         _interpolationSpeed: 10
         _interpolationElasticity: 0.5
       scale_main: 1
       scale_secondary: 1
-      scale_random: 1
+      scale_random: 0
       scaleInterpolatorConfig:
         _interpolationType: 3
         _interpolationSpeed: 40
         _interpolationElasticity: 0.3
-      tilt: 0
-      tilt_negative: 0
+      tilt: 30
+      tilt_negative: 1
       tilt_random: 0
       yaw: 0
-      yaw_negative: 0
+      yaw_negative: 1
       yaw_random: 0
       roll: 0
       roll_negative: 0

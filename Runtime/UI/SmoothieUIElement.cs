@@ -68,7 +68,7 @@ public class SmoothieUIElement : MonoBehaviour
 
     private Vector3 initialPosition;
     private Vector3 initialRotation;
-    [SerializeField] // Добавлено сериализуемое поле для сохранения значения
+    [SerializeField]
     private Vector3 initialScale;
 
     private Vector3 currentBasePosition;
@@ -182,8 +182,6 @@ public class SmoothieUIElement : MonoBehaviour
         if (rotatableRect != null)
         {
             initialRotation = rotatableRect.localRotation.eulerAngles;
-
-            // Устанавливаем initialScale только в редакторе или если оно не установлено
             if (Application.isPlaying)
             {
                 if (initialScale == Vector3.zero)
@@ -241,7 +239,6 @@ public class SmoothieUIElement : MonoBehaviour
     }
 
     public void ApplySize() => SmoothieSizeHandler.ApplySize(targetRect, textMesh, padding);
-
 
     public void Show(string animationType)
     {
@@ -342,14 +339,56 @@ public class SmoothieUIElement : MonoBehaviour
                 return;
             }
 
-            Vector3 fromPosition = initialPosition + GetOffset(animationType, config.offset);
+            float randomFactor = 1 + UnityEngine.Random.Range(-config.offset_random, config.offset_random);
+            float adjustedOffset = config.offset * randomFactor;
+
+            Vector3 direction = GetDirectionVector(animationType);
+
+            Vector3 fromPosition = initialPosition + direction * adjustedOffset;
 
             if (movableRect != null)
             {
                 movableRect.localPosition = fromPosition;
                 currentBasePosition = fromPosition;
 
-                transformInterpolator.ApplyTransform(fromPosition, initialPosition, config.positionInterpolatorConfig, movableRect, true, UpdatePosition);
+                transformInterpolator.ApplyTransform(fromPosition, initialPosition, config.positionInterpolatorConfig, movableRect, resetInterpolator, UpdatePosition);
+            }
+
+            if (rotatableRect != null)
+            {
+                int mainAxisIndex, secondaryAxisIndex;
+                GetAxisIndices(animationType, out mainAxisIndex, out secondaryAxisIndex);
+
+                float scaleMainRandomFactor = 1 + UnityEngine.Random.Range(-config.scale_random, config.scale_random);
+                float scaleSecondaryRandomFactor = 1 + UnityEngine.Random.Range(-config.scale_random, config.scale_random);
+
+                float scaleMain = config.scale_main * scaleMainRandomFactor;
+                float scaleSecondary = config.scale_secondary * scaleSecondaryRandomFactor;
+
+                Vector3 fromScale = initialScale;
+                fromScale[mainAxisIndex] = scaleMain;
+                fromScale[secondaryAxisIndex] = scaleSecondary;
+
+                rotatableRect.localScale = fromScale;
+
+                transformInterpolator.ApplyScaleTransform(fromScale, initialScale, config.scaleInterpolatorConfig, rotatableRect, resetInterpolator, UpdateScale);
+            }
+
+            if (rotatableRect != null)
+            {
+                Vector3 fromRotation = initialRotation;
+
+                float tilt = GetRandomizedAngle(config.tilt, config.tilt_random, config.tilt_negative);
+                float yaw = GetRandomizedAngle(config.yaw, config.yaw_random, config.yaw_negative);
+                float roll = GetRandomizedAngle(config.roll, config.roll_random, config.roll_negative);
+
+                Vector3 rotationOffset = GetRotationOffset(animationType, tilt, yaw, roll);
+
+                fromRotation += rotationOffset;
+
+                rotatableRect.localRotation = Quaternion.Euler(fromRotation);
+
+                transformInterpolator.ApplyRotationTransform(fromRotation, initialRotation, config.rotationInterpolatorConfig, rotatableRect, resetInterpolator, UpdateRotation);
             }
 
             alphaMultiplier = 0f;
@@ -364,16 +403,170 @@ public class SmoothieUIElement : MonoBehaviour
                 return;
             }
 
-            Vector3 toPosition = initialPosition + GetOffset(animationType, config.offset);
+            float randomFactor = 1 + UnityEngine.Random.Range(-config.offset_random, config.offset_random);
+            float adjustedOffset = config.offset * randomFactor;
+
+            Vector3 direction = GetDirectionVector(animationType);
+
+            Vector3 toPosition = initialPosition + direction * adjustedOffset;
 
             if (movableRect != null)
             {
-                transformInterpolator.ApplyTransform(movableRect.localPosition, toPosition, config.positionInterpolatorConfig, movableRect, true, UpdatePosition);
+                transformInterpolator.ApplyTransform(movableRect.localPosition, toPosition, config.positionInterpolatorConfig, movableRect, resetInterpolator, UpdatePosition);
+            }
+
+            if (rotatableRect != null)
+            {
+                int mainAxisIndex, secondaryAxisIndex;
+                GetAxisIndices(animationType, out mainAxisIndex, out secondaryAxisIndex);
+
+                float scaleMainRandomFactor = 1 + UnityEngine.Random.Range(-config.scale_random, config.scale_random);
+                float scaleSecondaryRandomFactor = 1 + UnityEngine.Random.Range(-config.scale_random, config.scale_random);
+
+                float scaleMain = config.scale_main * scaleMainRandomFactor;
+                float scaleSecondary = config.scale_secondary * scaleSecondaryRandomFactor;
+
+                Vector3 toScale = initialScale;
+                toScale[mainAxisIndex] = scaleMain;
+                toScale[secondaryAxisIndex] = scaleSecondary;
+
+                transformInterpolator.ApplyScaleTransform(rotatableRect.localScale, toScale, config.scaleInterpolatorConfig, rotatableRect, resetInterpolator, UpdateScale);
+            }
+
+            if (rotatableRect != null)
+            {
+                Vector3 toRotation = initialRotation;
+
+                float tilt = GetRandomizedAngle(config.tilt, config.tilt_random, config.tilt_negative);
+                float yaw = GetRandomizedAngle(config.yaw, config.yaw_random, config.yaw_negative);
+                float roll = GetRandomizedAngle(config.roll, config.roll_random, config.roll_negative);
+
+                Vector3 rotationOffset = GetRotationOffset(animationType, tilt, yaw, roll);
+
+                toRotation += rotationOffset;
+
+                transformInterpolator.ApplyRotationTransform(rotatableRect.localRotation.eulerAngles, toRotation, config.rotationInterpolatorConfig, rotatableRect, resetInterpolator, UpdateRotation);
             }
 
             alphaMultiplier = 1f;
             UpdateColorsImmediate();
             StartCoroutine(FadeAlpha(0f, config.fadeOut));
+        }
+    }
+
+    private float GetRandomizedAngle(float angle, float randomPercent, bool allowNegative)
+    {
+        if (allowNegative && UnityEngine.Random.value < 0.5f)
+        {
+            angle *= -1;
+        }
+        float randomFactor = 1 + UnityEngine.Random.Range(-randomPercent, randomPercent);
+        return angle * randomFactor;
+    }
+
+    private Vector3 GetDirectionVector(string animationType)
+    {
+        return animationType switch
+        {
+            "ShowFromLeft" or "HideToLeft" or "MoveLeft" => Vector3.left,
+            "ShowFromRight" or "HideToRight" or "MoveRight" => Vector3.right,
+            "ShowFromTop" or "HideToTop" or "MoveUp" => Vector3.up,
+            "ShowFromBottom" or "HideToBottom" or "MoveDown" => Vector3.down,
+            _ => Vector3.zero,
+        };
+    }
+
+    private void GetAxisIndices(string animationType, out int mainAxisIndex, out int secondaryAxisIndex)
+    {
+        switch (animationType)
+        {
+            case "ShowFromTop":
+            case "HideToTop":
+            case "ShowFromBottom":
+            case "HideToBottom":
+                mainAxisIndex = 1; // Y axis
+                secondaryAxisIndex = 0; // X axis
+                break;
+            case "ShowFromLeft":
+            case "HideToLeft":
+            case "ShowFromRight":
+            case "HideToRight":
+                mainAxisIndex = 0; // X axis
+                secondaryAxisIndex = 1; // Y axis
+                break;
+            default:
+                mainAxisIndex = 0;
+                secondaryAxisIndex = 1;
+                break;
+        }
+    }
+
+    private Vector3 GetRotationOffset(string animationType, float tilt, float yaw, float roll)
+    {
+        float x = 0f, y = 0f, z = 0f;
+
+        switch (animationType)
+        {
+            case "ShowFromTop":
+            case "HideToBottom":
+            case "ShowFromBottom":
+            case "HideToTop":
+                x += tilt;
+                y += yaw;
+                break;
+            case "ShowFromLeft":
+            case "HideToRight":
+            case "ShowFromRight":
+            case "HideToLeft":
+                x += yaw;
+                y += tilt;
+                break;
+            default:
+                break;
+        }
+
+        z += roll;
+
+        return new Vector3(x, y, z);
+    }
+
+    private IEnumerator AnimationCoroutine(string animationType, bool isShowAction)
+    {
+        float duration = 0f;
+
+        if (isShowAction)
+        {
+            if (smoothieConfig.TryGetConfig(animationType, out SmoothieConfig.ShowConfig config))
+            {
+                duration = config.fadeIn;
+            }
+        }
+        else
+        {
+            if (smoothieConfig.TryGetConfig(animationType, out SmoothieConfig.HideConfig config))
+            {
+                duration = config.fadeOut;
+            }
+        }
+
+        yield return new WaitForSeconds(duration);
+
+        isShowing = false;
+        isHiding = false;
+        isShown = isShowAction;
+        isHidden = !isShowAction;
+
+        SetInteractable(isShown);
+
+        animationCoroutine = null;
+    }
+
+    private void SetInteractable(bool interactable)
+    {
+        var selectables = GetComponentsInChildren<Selectable>(true);
+        foreach (var selectable in selectables)
+        {
+            selectable.interactable = interactable;
         }
     }
 
@@ -407,7 +600,7 @@ public class SmoothieUIElement : MonoBehaviour
             return;
         }
 
-        Vector3 offset = GetOffset(animationType, config.offset);
+        Vector3 offset = GetDirectionVector(animationType) * config.offset;
 
         if (additionalOffsetInterpolator == null || resetInterpolator)
         {
@@ -477,137 +670,6 @@ public class SmoothieUIElement : MonoBehaviour
             }
 
             focusAnimationCoroutine = StartCoroutine(AnimateFocusAlpha(focusAlphaMultiplier, targetAlpha, focusConfig.fadeDuration));
-        }
-    }
-
-    private IEnumerator AnimationCoroutine(string animationType, bool isShowAction)
-    {
-        float duration = 0f;
-
-        if (isShowAction)
-        {
-            if (smoothieConfig.TryGetConfig(animationType, out SmoothieConfig.ShowConfig config))
-            {
-                duration = config.fadeIn;
-            }
-        }
-        else
-        {
-            if (smoothieConfig.TryGetConfig(animationType, out SmoothieConfig.HideConfig config))
-            {
-                duration = config.fadeOut;
-            }
-        }
-
-        yield return new WaitForSeconds(duration);
-
-        isShowing = false;
-        isHiding = false;
-        isShown = isShowAction;
-        isHidden = !isShowAction;
-
-        SetInteractable(isShown);
-
-        animationCoroutine = null;
-    }
-
-    private void SetInteractable(bool interactable)
-    {
-        var selectables = GetComponentsInChildren<Selectable>(true);
-        foreach (var selectable in selectables)
-        {
-            selectable.interactable = interactable;
-        }
-    }
-
-    private Vector3 GetOffset(string animationType, float offsetValue)
-    {
-        return animationType switch
-        {
-            "ShowFromLeft" or "HideToLeft" or "MoveLeft" => new Vector3(-offsetValue, 0, 0),
-            "ShowFromRight" or "HideToRight" or "MoveRight" => new Vector3(offsetValue, 0, 0),
-            "ShowFromTop" or "HideToTop" or "MoveUp" => new Vector3(0, offsetValue, 0),
-            "ShowFromBottom" or "HideToBottom" or "MoveDown" => new Vector3(0, -offsetValue, 0),
-            _ => Vector3.zero,
-        };
-    }
-
-    private void UpdateGraphicGroupColors(SmoothieConfig.EventsConfig config)
-    {
-        if (config.ChangeBackgroundColor)
-        {
-            background.selectedColorType = config.ChangeBackgroundColorTo;
-            if (!config.ChangeAlpha) UpdateGraphicGroupColor(background);
-        }
-
-        if (config.ChangeTextColor)
-        {
-            text.selectedColorType = config.ChangeTextColorTo;
-            if (!config.ChangeAlpha) UpdateGraphicGroupColor(text);
-        }
-
-        if (config.ChangeSelectColor)
-        {
-            select.selectedColorType = config.ChangeSelectColorTo;
-            if (!config.ChangeAlpha) UpdateGraphicGroupColor(select);
-        }
-
-        if (config.ChangeShadowColor)
-        {
-            shadow.selectedColorType = config.ChangeShadowColorTo;
-            if (!config.ChangeAlpha) UpdateGraphicGroupColor(shadow);
-        }
-
-        if (config.ChangeAlpha)
-        {
-            alphaMultiplier = config.alphaMultiplier;
-            UpdateColors();
-        }
-    }
-
-    private void OnAdditionalOffsetUpdated(Vector3 newOffset)
-    {
-        additionalOffset = newOffset;
-        UpdatePosition(currentBasePosition);
-    }
-
-    private IEnumerator ReturnAdditionalOffset(SmoothieConfig.MoveConfig config)
-    {
-        yield return new WaitForSeconds(config.returnDelay);
-
-        if (additionalOffsetInterpolator != null)
-        {
-            additionalOffsetInterpolator.SetValue(Vector3.zero);
-        }
-
-        moveReturnCoroutine = null;
-    }
-
-    private void UpdatePosition(Vector3 newPosition)
-    {
-        currentBasePosition = newPosition;
-
-        if (movableRect != null)
-            movableRect.localPosition = currentBasePosition + additionalOffset;
-    }
-
-    private void UpdateRotation(Vector3 newRotation)
-    {
-        if (rotatableRect != null)
-            rotatableRect.localRotation = Quaternion.Euler(newRotation);
-    }
-
-    private void UpdateScale(Vector3 newScale)
-    {
-        if (rotatableRect != null)
-            rotatableRect.localScale = newScale;
-    }
-
-    private void UpdateFocusScale(Vector3 newScale)
-    {
-        if (selectRect != null)
-        {
-            selectRect.localScale = newScale;
         }
     }
 
@@ -726,11 +788,49 @@ public class SmoothieUIElement : MonoBehaviour
                 return;
             }
 
-            Vector3 fromPosition = initialPosition + GetOffset(animationType, config.offset);
+            float randomFactor = 1 + UnityEngine.Random.Range(-config.offset_random, config.offset_random);
+            float adjustedOffset = config.offset * randomFactor;
+
+            Vector3 direction = GetDirectionVector(animationType);
+
+            Vector3 fromPosition = initialPosition + direction * adjustedOffset;
             if (movableRect != null)
             {
                 movableRect.localPosition = fromPosition;
-                currentBasePosition = initialPosition;
+                currentBasePosition = fromPosition;
+            }
+
+            if (rotatableRect != null)
+            {
+                int mainAxisIndex, secondaryAxisIndex;
+                GetAxisIndices(animationType, out mainAxisIndex, out secondaryAxisIndex);
+
+                float scaleMainRandomFactor = 1 + UnityEngine.Random.Range(-config.scale_random, config.scale_random);
+                float scaleSecondaryRandomFactor = 1 + UnityEngine.Random.Range(-config.scale_random, config.scale_random);
+
+                float scaleMain = config.scale_main * scaleMainRandomFactor;
+                float scaleSecondary = config.scale_secondary * scaleSecondaryRandomFactor;
+
+                Vector3 fromScale = initialScale;
+                fromScale[mainAxisIndex] = scaleMain;
+                fromScale[secondaryAxisIndex] = scaleSecondary;
+
+                rotatableRect.localScale = fromScale;
+            }
+
+            if (rotatableRect != null)
+            {
+                Vector3 fromRotation = initialRotation;
+
+                float tilt = GetRandomizedAngle(config.tilt, config.tilt_random, config.tilt_negative);
+                float yaw = GetRandomizedAngle(config.yaw, config.yaw_random, config.yaw_negative);
+                float roll = GetRandomizedAngle(config.roll, config.roll_random, config.roll_negative);
+
+                Vector3 rotationOffset = GetRotationOffset(animationType, tilt, yaw, roll);
+
+                fromRotation += rotationOffset;
+
+                rotatableRect.localRotation = Quaternion.Euler(fromRotation);
             }
 
             alphaMultiplier = 0f;
@@ -776,6 +876,40 @@ public class SmoothieUIElement : MonoBehaviour
         UpdateGraphicGroupColorImmediate(select);
         UpdateGraphicGroupColorImmediate(shadow);
     }
+    
+    private void UpdateGraphicGroupColors(SmoothieConfig.EventsConfig config)
+    {
+        if (config.ChangeBackgroundColor)
+        {
+            background.selectedColorType = config.ChangeBackgroundColorTo;
+            if (!config.ChangeAlpha) UpdateGraphicGroupColor(background);
+        }
+
+        if (config.ChangeTextColor)
+        {
+            text.selectedColorType = config.ChangeTextColorTo;
+            if (!config.ChangeAlpha) UpdateGraphicGroupColor(text);
+        }
+
+        if (config.ChangeSelectColor)
+        {
+            select.selectedColorType = config.ChangeSelectColorTo;
+            if (!config.ChangeAlpha) UpdateGraphicGroupColor(select);
+        }
+
+        if (config.ChangeShadowColor)
+        {
+            shadow.selectedColorType = config.ChangeShadowColorTo;
+            if (!config.ChangeAlpha) UpdateGraphicGroupColor(shadow);
+        }
+
+        if (config.ChangeAlpha)
+        {
+            alphaMultiplier = config.alphaMultiplier;
+            UpdateColors();
+        }
+    }
+
 
     private void UpdateGraphicGroupColorImmediate(GraphicGroup group)
     {
@@ -873,6 +1007,52 @@ public class SmoothieUIElement : MonoBehaviour
         {
             StopCoroutine(moveReturnCoroutine);
             moveReturnCoroutine = null;
+        }
+    }
+
+    private void OnAdditionalOffsetUpdated(Vector3 newOffset)
+    {
+        additionalOffset = newOffset;
+        UpdatePosition(currentBasePosition);
+    }
+
+    private IEnumerator ReturnAdditionalOffset(SmoothieConfig.MoveConfig config)
+    {
+        yield return new WaitForSeconds(config.returnDelay);
+
+        if (additionalOffsetInterpolator != null)
+        {
+            additionalOffsetInterpolator.SetValue(Vector3.zero);
+        }
+
+        moveReturnCoroutine = null;
+    }
+
+    private void UpdatePosition(Vector3 newPosition)
+    {
+        currentBasePosition = newPosition;
+
+        if (movableRect != null)
+            movableRect.localPosition = currentBasePosition + additionalOffset;
+    }
+
+    private void UpdateRotation(Vector3 newRotation)
+    {
+        if (rotatableRect != null)
+            rotatableRect.localRotation = Quaternion.Euler(newRotation);
+    }
+
+    private void UpdateScale(Vector3 newScale)
+    {
+        if (rotatableRect != null)
+            rotatableRect.localScale = newScale;
+    }
+
+    private void UpdateFocusScale(Vector3 newScale)
+    {
+        if (selectRect != null)
+        {
+            selectRect.localScale = newScale;
         }
     }
 }
