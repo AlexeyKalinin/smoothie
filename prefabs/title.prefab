@@ -58,20 +58,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d5c914fa94f94877bb5f78378d3b150, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 0.39215684, g: 0.67511326, b: 0.7921569, a: 1}
-  m_RaycastTarget: 0
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   horizontalIndex: 0
   verticalIndex: 0
-  animationStyles: {fileID: 11400000, guid: 9a0b29b59e1c4468f88da90a4a3e49e8, type: 2}
+  smoothieConfig: {fileID: 0}
   padding: {x: 20, y: 80, z: 20, w: 80}
   targetRect: {fileID: 356066615130367066}
   movableRect: {fileID: 3477424049814314765}
   rotatableRect: {fileID: 2080976927457412251}
   textMesh: {fileID: 5126615425572259836}
-  transitionDuration: 2
-  alphaMultiplier: 1
+  selectRect: {fileID: 0}
   background:
     selectedColorType: 12
     graphics: []
@@ -85,6 +80,12 @@ MonoBehaviour:
   shadow:
     selectedColorType: 1
     graphics: []
+  initialScale: {x: 1, y: 1, z: 1}
+  isShown: 0
+  isHidden: 1
+  isShowing: 0
+  isHiding: 0
+  visualize: 0
 --- !u!1 &6301848904926539706
 GameObject:
   m_ObjectHideFlags: 0
@@ -108,7 +109,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6301848904926539706}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0

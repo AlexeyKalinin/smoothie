@@ -2,6 +2,7 @@ using System;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using Smoothie;
+using UnityEngine.Serialization;
 
 [CreateAssetMenu(menuName = "Smoothie/New Config")]
 public class SmoothieConfig : ScriptableObject
@@ -28,8 +29,33 @@ public class SmoothieConfig : ScriptableObject
     [System.Serializable]
     public class ShowConfig
     {
-        [Space(12)] public float offset = 10;
-        [LabelText("Interpolation"), Space(6)] public FloatInterpolator.Config interpolatorConfig;
+        [TabGroup("Settings", "Position"), Space(12), LabelText("Offset Position")] public float offset = 10;
+        [TabGroup("Settings", "Position"), Range(0.0f, 1), LabelText("Add Randomness")] public float offset_random = 0;
+        [FormerlySerializedAs("interpolatorConfig")] [TabGroup("Settings", "Position"), LabelText("Position Interpolation"), Space(6)]
+        public FloatInterpolator.Config positionInterpolatorConfig;
+
+        [TabGroup("Settings", "Scale"), Space(12), Range(0, 2), LabelText("Squeeze Main")] public float scale_main = 1;
+        [TabGroup("Settings", "Scale"), Range(0, 2), LabelText("Squeeze Secondary")] public float scale_secondary = 1;
+        [TabGroup("Settings", "Scale"), Range(0.0f, 1), LabelText("Add Randomness")] public float scale_random = 1;
+        [TabGroup("Settings", "Scale"), LabelText("Scale Interpolation"), Space(6)]
+        public FloatInterpolator.Config scaleInterpolatorConfig;
+
+        [TabGroup("Settings", "Rotation"), Space(12), Range(-360, 360)] public float tilt = 0.0f;
+        [TabGroup("Settings", "Rotation"), HideLabel, LabelText("Use Negative"), EnableIf("@tilt != 0")] public bool tilt_negative = false;
+        [TabGroup("Settings", "Rotation"), Range(-360, 360), HideLabel, LabelText("Add Randomness"), EnableIf("@tilt != 0")] public float tilt_random = 0;
+
+        [TabGroup("Settings", "Rotation"), Space(12), Range(-360, 360)] public float yaw = 0.0f;
+        [TabGroup("Settings", "Rotation"), HideLabel, LabelText("Use Negative"), EnableIf("@yaw != 0")] public bool yaw_negative = false;
+        [TabGroup("Settings", "Rotation"), Range(-360, 360), HideLabel, LabelText("Add Randomness"), EnableIf("@yaw != 0")] public float yaw_random = 0;
+
+        [TabGroup("Settings", "Rotation"), Space(12), Range(-360, 360)] public float roll = 0.0f;
+        [TabGroup("Settings", "Rotation"), HideLabel, LabelText("Use Negative"), EnableIf("@roll != 0")] public bool roll_negative = false;
+        [TabGroup("Settings", "Rotation"), Range(-360, 360), HideLabel, LabelText("Add Randomness"), EnableIf("@roll != 0")] public float roll_random = 0;
+
+        [TabGroup("Settings", "Rotation"), LabelText("Rotation Interpolation"), Space(6)]
+        public FloatInterpolator.Config rotationInterpolatorConfig;
+
+        [TabGroup("Settings", "Fade")]
         [LabelText("Fade In Transition (sec)"), Space(12), Range(0.0f, 5)]
         public float fadeIn = 0.15f;
     }
@@ -37,9 +63,33 @@ public class SmoothieConfig : ScriptableObject
     [System.Serializable]
     public class HideConfig
     {
-        [Space(12)] public float offset = 10;
-        [LabelText("Interpolation"), Space(6)] public FloatInterpolator.Config interpolatorConfig;
-        [LabelText("Fade Out Transition (sec)"), Space(12), Range(0.0f, 5)]
+        [TabGroup("Settings", "Position"), Space(12), LabelText("Offset Position")] public float offset = 10;
+        [TabGroup("Settings", "Position"), Range(0.0f, 1), LabelText("Add Randomness")] public float offset_random = 0;
+        [FormerlySerializedAs("interpolatorConfig")] [TabGroup("Settings", "Position"), LabelText("Position Interpolation"), Space(6)]
+        public FloatInterpolator.Config positionInterpolatorConfig;
+
+        [TabGroup("Settings", "Scale"), Space(12), Range(0, 2), LabelText("Squeeze Main")] public float scale_main = 1;
+        [TabGroup("Settings", "Scale"), Range(0, 2), LabelText("Squeeze Secondary")] public float scale_secondary = 1;
+        [TabGroup("Settings", "Scale"), Range(0.0f, 1), LabelText("Add Randomness")] public float scale_random = 1;
+        [TabGroup("Settings", "Scale"), LabelText("Scale Interpolation"), Space(6)]
+        public FloatInterpolator.Config scaleInterpolatorConfig;
+
+        [TabGroup("Settings", "Rotation"), Space(12), Range(-360, 360)] public float tilt = 0.0f;
+        [TabGroup("Settings", "Rotation"), HideLabel, LabelText("Use Negative"), EnableIf("@tilt != 0")] public bool tilt_negative = false;
+        [TabGroup("Settings", "Rotation"), Range(-360, 360), HideLabel, LabelText("Add Randomness"), EnableIf("@tilt != 0")] public float tilt_random = 0;
+
+        [TabGroup("Settings", "Rotation"), Space(12), Range(-360, 360)] public float yaw = 0.0f;
+        [TabGroup("Settings", "Rotation"), HideLabel, LabelText("Use Negative"), EnableIf("@yaw != 0")] public bool yaw_negative = false;
+        [TabGroup("Settings", "Rotation"), Range(-360, 360), HideLabel, LabelText("Add Randomness"), EnableIf("@yaw != 0")] public float yaw_random = 0;
+
+        [TabGroup("Settings", "Rotation"), Space(12), Range(-360, 360)] public float roll = 0.0f;
+        [TabGroup("Settings", "Rotation"), HideLabel, LabelText("Use Negative"), EnableIf("@roll != 0")] public bool roll_negative = false;
+        [TabGroup("Settings", "Rotation"), Range(-360, 360), HideLabel, LabelText("Add Randomness"), EnableIf("@roll != 0")] public float roll_random = 0;
+
+        [TabGroup("Settings", "Rotation"), LabelText("Rotation Interpolation"), Space(6)]
+        public FloatInterpolator.Config rotationInterpolatorConfig;
+
+        [TabGroup("Settings", "Fade"), LabelText("Fade Out Transition (sec)"), Space(12), Range(0.0f, 5)]
         public float fadeOut = 0.15f;
     }
 

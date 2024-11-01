@@ -4,7 +4,11 @@ using System.Collections;
 using Sirenix.OdinInspector;
 using Smoothie;
 using UnityEngine.UI;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
+[ExecuteInEditMode]
 public class SmoothieUIScreen : MonoBehaviour
 {
     public List<SmoothieUIElement> Elements { get; private set; } = new List<SmoothieUIElement>();
@@ -23,6 +27,58 @@ public class SmoothieUIScreen : MonoBehaviour
 
     private List<Selectable> selectables = new List<Selectable>();
 
+    [SerializeField]
+    [OnValueChanged("OnVisualizeChanged")]
+    private bool visualize;
+    public bool Visualize
+    {
+        get => visualize;
+        set
+        {
+            visualize = value;
+            OnVisualizeChanged();
+        }
+    }
+
+    private void OnValidate()
+    {
+        if (visualize)
+        {
+            SetVisualizeState(true);
+        }
+        else
+        {
+            SetVisualizeState(false);
+        }
+    }
+
+    private void OnVisualizeChanged()
+    {
+        if (visualize)
+        {
+            SetVisualizeState(true);
+        }
+        else
+        {
+            SetVisualizeState(false);
+        }
+    }
+
+    private void SetVisualizeState(bool state)
+    {
+        Elements.Clear();
+        Elements.AddRange(GetComponentsInChildren<SmoothieUIElement>(true));
+
+        foreach (var element in Elements)
+        {
+            element.Visualize = state;
+        }
+
+#if UNITY_EDITOR
+        EditorUtility.SetDirty(this);
+#endif
+    }
+
     private void Awake()
     {
         Elements.Clear();
@@ -35,7 +91,10 @@ public class SmoothieUIScreen : MonoBehaviour
 
         IndexElements();
 
-        SetHiddenImmediate();
+        if (!visualize)
+        {
+            SetHiddenImmediate();
+        }
     }
 
     private void IndexElements()

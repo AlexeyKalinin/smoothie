@@ -6,6 +6,9 @@ using TMPro;
 using Sirenix.OdinInspector;
 using Smoothie;
 using UnityEngine.EventSystems;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 [ExecuteInEditMode]
 public class SmoothieUIElement : MonoBehaviour
@@ -65,6 +68,7 @@ public class SmoothieUIElement : MonoBehaviour
 
     private Vector3 initialPosition;
     private Vector3 initialRotation;
+    [SerializeField] // Добавлено сериализуемое поле для сохранения значения
     private Vector3 initialScale;
 
     private Vector3 currentBasePosition;
@@ -88,24 +92,78 @@ public class SmoothieUIElement : MonoBehaviour
     private Coroutine animationCoroutine;
     private Coroutine focusAnimationCoroutine;
 
-    private void Awake()
+    [SerializeField]
+    [OnValueChanged("OnVisualizeChanged")]
+    private bool visualize;
+    public bool Visualize
     {
-        Initialize();
-        SetHiddenImmediate();
-    }
-
-    private void OnEnable()
-    {
-        Initialize();
+        get => visualize;
+        set
+        {
+            visualize = value;
+            OnVisualizeChanged();
+        }
     }
 
     private void OnValidate()
     {
         Initialize();
+
         if (ActualTheme != null)
         {
             UpdateColorsImmediate();
         }
+
+        if (visualize)
+        {
+            SetVisualizeState(true);
+        }
+        else
+        {
+            SetVisualizeState(false);
+        }
+    }
+
+    private void OnVisualizeChanged()
+    {
+        if (visualize)
+        {
+            SetVisualizeState(true);
+        }
+        else
+        {
+            SetVisualizeState(false);
+        }
+    }
+
+    private void SetVisualizeState(bool state)
+    {
+        if (state)
+        {
+            SetShownImmediate();
+        }
+        else
+        {
+            SetHiddenImmediate();
+        }
+
+#if UNITY_EDITOR
+        EditorUtility.SetDirty(this);
+#endif
+    }
+
+    private void Awake()
+    {
+        Initialize();
+        if (!visualize)
+        {
+            SetHiddenImmediate();
+        }
+    }
+
+    private void OnEnable()
+    {
+        Initialize();
     }
 
     private void Initialize()
@@ -124,7 +182,27 @@ public class SmoothieUIElement : MonoBehaviour
         if (rotatableRect != null)
         {
             initialRotation = rotatableRect.localRotation.eulerAngles;
-            initialScale = rotatableRect.localScale;
+
+            // Устанавливаем initialScale только в редакторе или если оно не установлено
+            if (Application.isPlaying)
+            {
+                if (initialScale == Vector3.zero)
+                {
+                    initialScale = rotatableRect.localScale;
+                    if (initialScale == Vector3.zero)
+                    {
+                        initialScale = Vector3.one;
+                    }
+                }
+            }
+            else
+            {
+                initialScale = rotatableRect.localScale;
+                if (initialScale == Vector3.zero)
+                {
+                    initialScale = Vector3.one;
+                }
+            }
         }
         else
         {
@@ -163,6 +241,7 @@ public class SmoothieUIElement : MonoBehaviour
     }
 
     public void ApplySize() => SmoothieSizeHandler.ApplySize(targetRect, textMesh, padding);
+
 
     public void Show(string animationType)
     {
@@ -222,7 +301,6 @@ public class SmoothieUIElement : MonoBehaviour
             return;
         }
 
-        // Stop any existing coroutines or interpolators that might interfere
         StopAllCoroutinesSafe();
 
         HandleOtherAnimations(animationType, isShowAction, true, isStateChange);
@@ -230,7 +308,6 @@ public class SmoothieUIElement : MonoBehaviour
 
     private void HandleOtherAnimations(string animationType, bool isShowAction, bool resetInterpolator, bool isStateChange)
     {
-        // We ensure that only one animation coroutine runs at a time
         if (animationCoroutine != null)
         {
             StopCoroutine(animationCoroutine);
@@ -255,7 +332,6 @@ public class SmoothieUIElement : MonoBehaviour
         }
     }
 
-
     private void HandleShowHideAnimation(string animationType, bool isShowAction, bool resetInterpolator)
     {
         if (isShowAction)
@@ -270,11 +346,10 @@ public class SmoothieUIElement : MonoBehaviour
 
             if (movableRect != null)
             {
-                // Reset the interpolator and set starting position
                 movableRect.localPosition = fromPosition;
                 currentBasePosition = fromPosition;
 
-                transformInterpolator.ApplyTransform(fromPosition, initialPosition, config.interpolatorConfig, movableRect, true, UpdatePosition);
+                transformInterpolator.ApplyTransform(fromPosition, initialPosition, config.positionInterpolatorConfig, movableRect, true, UpdatePosition);
             }
 
             alphaMultiplier = 0f;
@@ -293,7 +368,7 @@ public class SmoothieUIElement : MonoBehaviour
 
             if (movableRect != null)
             {
-                transformInterpolator.ApplyTransform(movableRect.localPosition, toPosition, config.interpolatorConfig, movableRect, true, UpdatePosition);
+                transformInterpolator.ApplyTransform(movableRect.localPosition, toPosition, config.positionInterpolatorConfig, movableRect, true, UpdatePosition);
             }
 
             alphaMultiplier = 1f;
@@ -301,7 +376,6 @@ public class SmoothieUIElement : MonoBehaviour
             StartCoroutine(FadeAlpha(0f, config.fadeOut));
         }
     }
-
 
     private void HandleEventsAnimation(string animationType, bool resetInterpolator)
     {
@@ -594,7 +668,7 @@ public class SmoothieUIElement : MonoBehaviour
                     graphic.color = targetColor;
 #if UNITY_EDITOR
                     graphic.SetAllDirty();
-                    UnityEditor.EditorUtility.SetDirty(graphic);
+                    EditorUtility.SetDirty(graphic);
 #endif
                 }
             }
@@ -722,7 +796,7 @@ public class SmoothieUIElement : MonoBehaviour
                 graphic.color = targetColor;
 #if UNITY_EDITOR
                 graphic.SetAllDirty();
-                UnityEditor.EditorUtility.SetDirty(graphic);
+                EditorUtility.SetDirty(graphic);
 #endif
             }
         }
@@ -730,9 +804,6 @@ public class SmoothieUIElement : MonoBehaviour
 
     public void SetHiddenImmediate()
     {
-        if (!gameObject.activeInHierarchy)
-            return;
-
         StopAllCoroutinesSafe();
         ResetTransforms();
         SetAlphaImmediate(0f);
@@ -745,9 +816,6 @@ public class SmoothieUIElement : MonoBehaviour
 
     public void SetShownImmediate()
     {
-        if (!gameObject.activeInHierarchy)
-            return;
-
         StopAllCoroutinesSafe();
         ResetTransforms();
         SetAlphaImmediate(1f);
@@ -807,5 +875,4 @@ public class SmoothieUIElement : MonoBehaviour
             moveReturnCoroutine = null;
         }
     }
-
 }

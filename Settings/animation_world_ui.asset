@@ -15,14 +15,56 @@ MonoBehaviour:
   style:
     show:
       offset: 200
-      interpolatorConfig:
+      offset_random: 0
+      positionInterpolatorConfig:
         _interpolationType: 3
         _interpolationSpeed: 26
         _interpolationElasticity: 0.52
+      scale_main: 1
+      scale_secondary: 1
+      scale_random: 1
+      scaleInterpolatorConfig:
+        _interpolationType: 2
+        _interpolationSpeed: 10
+        _interpolationElasticity: 0.5
+      tilt: 0
+      tilt_negative: 0
+      tilt_random: 0
+      yaw: 0
+      yaw_negative: 0
+      yaw_random: 0
+      roll: 0
+      roll_negative: 0
+      roll_random: 0
+      rotationInterpolatorConfig:
+        _interpolationType: 2
+        _interpolationSpeed: 10
+        _interpolationElasticity: 0.5
       fadeIn: 0.5
     hide:
       offset: 300
-      interpolatorConfig:
+      offset_random: 0
+      positionInterpolatorConfig:
+        _interpolationType: 2
+        _interpolationSpeed: 10
+        _interpolationElasticity: 0.5
+      scale_main: 1
+      scale_secondary: 1
+      scale_random: 1
+      scaleInterpolatorConfig:
+        _interpolationType: 3
+        _interpolationSpeed: 40
+        _interpolationElasticity: 0.3
+      tilt: 0
+      tilt_negative: 0
+      tilt_random: 0
+      yaw: 0
+      yaw_negative: 0
+      yaw_random: 0
+      roll: 0
+      roll_negative: 0
+      roll_random: 0
+      rotationInterpolatorConfig:
         _interpolationType: 2
         _interpolationSpeed: 10
         _interpolationElasticity: 0.5
@@ -86,7 +128,7 @@ MonoBehaviour:
       ChangeRotation: 0
       rotation: {x: 0, y: 0, z: 0}
       ChangeScale: 1
-      scale: {x: 0.95, y: 0.95, z: 0.95}
+      scale: {x: 0.95, y: 0.59, z: 0.95}
       interpolatorConfig:
         _interpolationType: 1
         _interpolationSpeed: 23

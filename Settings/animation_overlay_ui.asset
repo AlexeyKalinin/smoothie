@@ -15,217 +15,119 @@ MonoBehaviour:
   style:
     show:
       offset: 10
+      offset_random: 0
       interpolatorConfig:
-        curve:
-          serializedVersion: 2
-          m_Curve:
-          - serializedVersion: 3
-            time: 0
-            value: 0
-            inSlope: 0
-            outSlope: 1
-            tangentMode: 0
-            weightedMode: 0
-            inWeight: 0
-            outWeight: 0
-          - serializedVersion: 3
-            time: 1
-            value: 1
-            inSlope: 1
-            outSlope: 0
-            tangentMode: 0
-            weightedMode: 0
-            inWeight: 0
-            outWeight: 0
-          m_PreInfinity: 2
-          m_PostInfinity: 2
-          m_RotationOrder: 4
+        _interpolationType: 2
+        _interpolationSpeed: 10
+        _interpolationElasticity: 0.5
+      scale: 1
+      scale_factor: 0
+      scale_random: 1
+      scaleInterpolatorConfig:
+        _interpolationType: 2
+        _interpolationSpeed: 10
+        _interpolationElasticity: 0.5
+      tilt: 0
+      tilt_negative: 0
+      tilt_random: -60
+      yaw: 0
+      yaw_negative: 0
+      yaw_random: 0
+      roll: 0
+      roll_negative: 0
+      roll_random: 0
+      rotationInterpolatorConfig:
+        _interpolationType: 2
+        _interpolationSpeed: 10
+        _interpolationElasticity: 0.5
       fadeIn: 0.15
     hide:
       offset: 10
       interpolatorConfig:
-        curve:
-          serializedVersion: 2
-          m_Curve:
-          - serializedVersion: 3
-            time: 0
-            value: 0
-            inSlope: 0
-            outSlope: 1
-            tangentMode: 0
-            weightedMode: 0
-            inWeight: 0
-            outWeight: 0
-          - serializedVersion: 3
-            time: 1
-            value: 1
-            inSlope: 1
-            outSlope: 0
-            tangentMode: 0
-            weightedMode: 0
-            inWeight: 0
-            outWeight: 0
-          m_PreInfinity: 2
-          m_PostInfinity: 2
-          m_RotationOrder: 4
+        _interpolationType: 2
+        _interpolationSpeed: 10
+        _interpolationElasticity: 0.5
       fadeOut: 0.15
     move:
       offset: 10
       interpolatorConfig:
-        curve:
-          serializedVersion: 2
-          m_Curve:
-          - serializedVersion: 3
-            time: 0
-            value: 0
-            inSlope: 0
-            outSlope: 1
-            tangentMode: 0
-            weightedMode: 0
-            inWeight: 0
-            outWeight: 0
-          - serializedVersion: 3
-            time: 1
-            value: 1
-            inSlope: 1
-            outSlope: 0
-            tangentMode: 0
-            weightedMode: 0
-            inWeight: 0
-            outWeight: 0
-          m_PreInfinity: 2
-          m_PostInfinity: 2
-          m_RotationOrder: 4
-    eventsContainer:
-      normal:
-        ChangePos: 0
-        moveFromTo: {x: 0, y: 0, z: 0}
-        ChangeRotation: 0
-        rotation: {x: 0, y: 0, z: 0}
-        ChangeScale: 0
-        scale: {x: 1, y: 1, z: 1}
-        interpolatorConfig:
-          curve:
-            serializedVersion: 2
-            m_Curve:
-            - serializedVersion: 3
-              time: 0
-              value: 0
-              inSlope: 0
-              outSlope: 1
-              tangentMode: 0
-              weightedMode: 0
-              inWeight: 0
-              outWeight: 0
-            - serializedVersion: 3
-              time: 1
-              value: 1
-              inSlope: 1
-              outSlope: 0
-              tangentMode: 0
-              weightedMode: 0
-              inWeight: 0
-              outWeight: 0
-            m_PreInfinity: 2
-            m_PostInfinity: 2
-            m_RotationOrder: 4
-        ChangeColors: 0
-        ChangeBackgroundColor: 0
-        ChangeBackgroundColorTo: 0
-        ChangeTextColor: 0
-        ChangeTextColorTo: 0
-        ChangeSelectColor: 0
-        ChangeSelectColorTo: 0
-        ChangeShadowColor: 0
-        ChangeShadowColorTo: 0
-        ChangeAlpha: 0
-        alphaMultiplier: 0
-        colorInterpolatorSpeed: 1.5
-      over:
-        ChangePos: 0
-        moveFromTo: {x: 0, y: 0, z: 0}
-        ChangeRotation: 0
-        rotation: {x: 0, y: 0, z: 0}
-        ChangeScale: 0
-        scale: {x: 1, y: 1, z: 1}
-        interpolatorConfig:
-          curve:
-            serializedVersion: 2
-            m_Curve:
-            - serializedVersion: 3
-              time: 0
-              value: 0
-              inSlope: 0
-              outSlope: 1
-              tangentMode: 0
-              weightedMode: 0
-              inWeight: 0
-              outWeight: 0
-            - serializedVersion: 3
-              time: 1
-              value: 1
-              inSlope: 1
-              outSlope: 0
-              tangentMode: 0
-              weightedMode: 0
-              inWeight: 0
-              outWeight: 0
-            m_PreInfinity: 2
-            m_PostInfinity: 2
-            m_RotationOrder: 4
-        ChangeColors: 0
-        ChangeBackgroundColor: 0
-        ChangeBackgroundColorTo: 0
-        ChangeTextColor: 0
-        ChangeTextColorTo: 0
-        ChangeSelectColor: 0
-        ChangeSelectColorTo: 0
-        ChangeShadowColor: 0
-        ChangeShadowColorTo: 0
-        ChangeAlpha: 0
-        alphaMultiplier: 0
-        colorInterpolatorSpeed: 1.5
-      press:
-        ChangePos: 0
-        moveFromTo: {x: 0, y: 0, z: 0}
-        ChangeRotation: 0
-        rotation: {x: 0, y: 0, z: 0}
-        ChangeScale: 0
-        scale: {x: 1, y: 1, z: 1}
-        interpolatorConfig:
-          curve:
-            serializedVersion: 2
-            m_Curve:
-            - serializedVersion: 3
-              time: 0
-              value: 0
-              inSlope: 0
-              outSlope: 1
-              tangentMode: 0
-              weightedMode: 0
-              inWeight: 0
-              outWeight: 0
-            - serializedVersion: 3
-              time: 1
-              value: 1
-              inSlope: 1
-              outSlope: 0
-              tangentMode: 0
-              weightedMode: 0
-              inWeight: 0
-              outWeight: 0
-            m_PreInfinity: 2
-            m_PostInfinity: 2
-            m_RotationOrder: 4
-        ChangeColors: 0
-        ChangeBackgroundColor: 0
-        ChangeBackgroundColorTo: 0
-        ChangeTextColor: 0
-        ChangeTextColorTo: 0
-        ChangeSelectColor: 0
-        ChangeSelectColorTo: 0
-        ChangeShadowColor: 0
-        ChangeShadowColorTo: 0
-        ChangeAlpha: 0
-        alphaMultiplier: 0
-        colorInterpolatorSpeed: 1.5
+        _interpolationType: 2
+        _interpolationSpeed: 10
+        _interpolationElasticity: 0.5
+      returnDelay: 0.5
+    normal:
+      ChangePos: 0
+      moveFromTo: {x: 0, y: 0, z: 0}
+      ChangeRotation: 0
+      rotation: {x: 0, y: 0, z: 0}
+      ChangeScale: 0
+      scale: {x: 1, y: 1, z: 1}
+      interpolatorConfig:
+        _interpolationType: 2
+        _interpolationSpeed: 10
+        _interpolationElasticity: 0.5
+      ChangeColors: 0
+      ChangeBackgroundColor: 0
+      ChangeBackgroundColorTo: 0
+      ChangeTextColor: 0
+      ChangeTextColorTo: 0
+      ChangeSelectColor: 0
+      ChangeSelectColorTo: 0
+      ChangeShadowColor: 0
+      ChangeShadowColorTo: 0
+      ChangeAlpha: 0
+      alphaMultiplier: 0
+      colorTransitionDuration: 0.15
+    over:
+      ChangePos: 0
+      moveFromTo: {x: 0, y: 0, z: 0}
+      ChangeRotation: 0
+      rotation: {x: 0, y: 0, z: 0}
+      ChangeScale: 0
+      scale: {x: 1, y: 1, z: 1}
+      interpolatorConfig:
+        _interpolationType: 2
+        _interpolationSpeed: 10
+        _interpolationElasticity: 0.5
+      ChangeColors: 0
+      ChangeBackgroundColor: 0
+      ChangeBackgroundColorTo: 0
+      ChangeTextColor: 0
+      ChangeTextColorTo: 0
+      ChangeSelectColor: 0
+      ChangeSelectColorTo: 0
+      ChangeShadowColor: 0
+      ChangeShadowColorTo: 0
+      ChangeAlpha: 0
+      alphaMultiplier: 0
+      colorTransitionDuration: 0.15
+    press:
+      ChangePos: 1
+      moveFromTo: {x: 0, y: 0, z: 0}
+      ChangeRotation: 1
+      rotation: {x: 0, y: 0, z: 0}
+      ChangeScale: 1
+      scale: {x: 1, y: 1, z: 1}
+      interpolatorConfig:
+        _interpolationType: 2
+        _interpolationSpeed: 10
+        _interpolationElasticity: 0.5
+      ChangeColors: 0
+      ChangeBackgroundColor: 0
+      ChangeBackgroundColorTo: 0
+      ChangeTextColor: 0
+      ChangeTextColorTo: 0
+      ChangeSelectColor: 0
+      ChangeSelectColorTo: 0
+      ChangeShadowColor: 0
+      ChangeShadowColorTo: 0
+      ChangeAlpha: 0
+      alphaMultiplier: 0
+      colorTransitionDuration: 0.15
+    focus:
+      deselectedScale: 0.8
+      interpolatorConfig:
+        _interpolationType: 2
+        _interpolationSpeed: 10
+        _interpolationElasticity: 0.5
+      fadeDuration: 0.2
