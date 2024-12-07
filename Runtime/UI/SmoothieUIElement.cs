@@ -1055,4 +1055,13 @@ public class SmoothieUIElement : MonoBehaviour
             selectRect.localScale = newScale;
         }
     }
+    public void ShowFromTop() => Show("ShowFromTop");
+    public void ShowFromBottom() => Show("ShowFromBottom");
+    public void ShowFromLeft() => Show("ShowFromLeft");
+    public void ShowFromRight() => Show("ShowFromRight");
+
+    public void HideToTop() => Hide("HideToTop");
+    public void HideToBottom() => Hide("HideToBottom");
+    public void HideToLeft() => Hide("HideToLeft");
+    public void HideToRight() => Hide("HideToRight");
 }
