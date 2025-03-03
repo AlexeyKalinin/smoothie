@@ -26,11 +26,12 @@ namespace Smoothie
             var newStyle = ScriptableObject.CreateInstance<SmoothieScreenAnimationStyle>();
             newStyle.styleName = "New Style";
             newStyle.name = newStyle.styleName;
+            newStyle.ManagerRef = this;
             newStyle.SynchronizeWithBase(baseShowHideDefinitions);
 
-#if UNITY_EDITOR
+        #if UNITY_EDITOR
             AssetDatabase.AddObjectToAsset(newStyle, this);
-#endif
+        #endif
             dependentStyles.Add(newStyle);
         }
 
@@ -48,9 +49,18 @@ namespace Smoothie
         {
             oldDependentStyles.Clear();
             oldDependentStyles.AddRange(dependentStyles);
+            
+            // Set manager reference for all styles
+            foreach (var style in dependentStyles)
+            {
+                if (style != null)
+                {
+                    style.ManagerRef = this;
+                }
+            }
         }
 
-#if UNITY_EDITOR
+    #if UNITY_EDITOR
         private void OnValidate()
         {
             var removed = oldDependentStyles.Except(dependentStyles).ToList();
@@ -62,7 +72,10 @@ namespace Smoothie
             foreach (var style in dependentStyles)
             {
                 if (style != null)
+                {
+                    style.ManagerRef = this;
                     style.SynchronizeWithBase(baseShowHideDefinitions);
+                }
             }
 
             oldDependentStyles.Clear();
@@ -76,7 +89,7 @@ namespace Smoothie
                 }
             };
         }
-#endif
+    #endif
     }
 
     [System.Serializable]

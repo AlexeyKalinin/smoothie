@@ -14,7 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ManagerRef: {fileID: 11400000}
   _styleName: Simple
-  eventDefinitions: []
+  eventDefinitions:
+  - eventKey: Test
+    duration: 1.89
+    useSpring: 0
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -35,19 +38,3 @@ MonoBehaviour:
   - Test
   dependentStyles:
   - {fileID: -6549989029247853011}
-  - {fileID: 7592516842452084811}
---- !u!114 &7592516842452084811
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1bab38aec997c40058bea6febec06512, type: 3}
-  m_Name: New Style
-  m_EditorClassIdentifier: 
-  ManagerRef: {fileID: 11400000}
-  _styleName: New Style
-  eventDefinitions: []

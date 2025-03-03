@@ -1,5 +1,30 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-652328658067160653
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 10412af3b41194fd19e053e9addc1882, type: 3}
+  m_Name: Second
+  m_EditorClassIdentifier: 
+  ColorSchemeRef: {fileID: 11400000}
+  themeName: Second
+  colorDefinitions:
+  - key: Blue
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - key: Red
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - key: White
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - key: Black
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - key: Purple
+    color: {r: 1, g: 1, b: 1, a: 1}
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -26,8 +51,8 @@ MonoBehaviour:
   newThemeName: Second
   dependentThemes:
   - {fileID: 2392277408576623929}
-  - {fileID: 5431233898417014166}
-  - {fileID: 7168014632812020755}
+  - {fileID: -652328658067160653}
+  - {fileID: 7374833555585629861}
 --- !u!114 &2392277408576623929
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -40,6 +65,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 10412af3b41194fd19e053e9addc1882, type: 3}
   m_Name: First
   m_EditorClassIdentifier: 
+  ColorSchemeRef: {fileID: 11400000}
   themeName: First
   colorDefinitions:
   - key: Blue
@@ -52,7 +78,32 @@ MonoBehaviour:
     color: {r: 0, g: 0, b: 0, a: 1}
   - key: Purple
     color: {r: 0.6051183, g: 0, b: 1, a: 1}
---- !u!114 &5431233898417014166
+--- !u!114 &7374833555585629861
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 10412af3b41194fd19e053e9addc1882, type: 3}
+  m_Name: Theme 3
+  m_EditorClassIdentifier: 
+  ColorSchemeRef: {fileID: 11400000}
+  themeName: Theme 3
+  colorDefinitions:
+  - key: Blue
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - key: Red
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - key: White
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - key: Black
+    color: {r: 1, g: 1, b: 1, a: 1}
+  - key: Purple
+    color: {r: 1, g: 1, b: 1, a: 1}
+--- !u!114 &7508459598118877863
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -64,39 +115,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 10412af3b41194fd19e053e9addc1882, type: 3}
   m_Name: Second
   m_EditorClassIdentifier: 
+  ColorSchemeRef: {fileID: 11400000}
   themeName: Second
   colorDefinitions:
   - key: Blue
-    color: {r: 0.36900002, g: 1, b: 0.95725024, a: 1}
+    color: {r: 1, g: 1, b: 1, a: 1}
   - key: Red
-    color: {r: 0.4824233, g: 0.6132076, b: 0.130162, a: 1}
+    color: {r: 1, g: 1, b: 1, a: 1}
   - key: White
-    color: {r: 0.4824233, g: 0.6132076, b: 0.130162, a: 1}
+    color: {r: 1, g: 1, b: 1, a: 1}
   - key: Black
-    color: {r: 0.4824233, g: 0.6132076, b: 0.130162, a: 1}
+    color: {r: 1, g: 1, b: 1, a: 1}
   - key: Purple
-    color: {r: 0.4824233, g: 0.6132076, b: 0.130162, a: 1}
---- !u!114 &7168014632812020755
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 10412af3b41194fd19e053e9addc1882, type: 3}
-  m_Name: Third
-  m_EditorClassIdentifier: 
-  themeName: Third
-  colorDefinitions:
-  - key: Blue
-    color: {r: 0.12344251, g: 0.34879044, b: 0.3584906, a: 1}
-  - key: Red
-    color: {r: 0.5471698, g: 0.19873619, b: 0.19873619, a: 1}
-  - key: White
-    color: {r: 0.6037736, g: 0.41827536, b: 0.15663938, a: 1}
-  - key: Black
-    color: {r: 0.3327085, g: 0.5566038, b: 0.25992346, a: 1}
-  - key: Purple
-    color: {r: 0.4480235, g: 0.33383763, b: 0.5849056, a: 1}
+    color: {r: 1, g: 1, b: 1, a: 1}

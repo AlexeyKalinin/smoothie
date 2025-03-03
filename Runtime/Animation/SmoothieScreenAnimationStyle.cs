@@ -2,12 +2,19 @@ using UnityEngine;
 using Sirenix.OdinInspector;
 using System.Collections.Generic;
 using System.Linq;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 namespace Smoothie
 {
     [HideMonoScript]
     public class SmoothieScreenAnimationStyle : ScriptableObject
     {
+        // Reference to the parent manager
+        [HideInInspector]
+        public SmoothieScreenAnimationManager ManagerRef;
+
         [SerializeField, OnValueChanged("UpdateAssetName")]
         [LabelText("Style Name")]
         private string _styleName;
@@ -22,6 +29,25 @@ namespace Smoothie
             get => _styleName;
             set => _styleName = value;
         }
+
+        // Red button for removing this style
+        [Button("Remove This Style", ButtonHeight = 25)]
+        [GUIColor(1f, 0.25f, 0.25f)]
+        #if UNITY_EDITOR
+        private void RemoveThisStyle()
+        {
+            if (ManagerRef != null)
+            {
+                ManagerRef.dependentStyles.Remove(this);
+                AssetDatabase.RemoveObjectFromAsset(this);
+                AssetDatabase.SaveAssets();
+            }
+            else
+            {
+                Debug.LogWarning($"Can't remove style {name} because ManagerRef is null.");
+            }
+        }
+        #endif
 
         public void SynchronizeWithBase(List<ShowHideBaseDefinition> baseDefinitions)
         {
