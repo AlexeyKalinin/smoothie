@@ -1,7 +1,9 @@
 {
     "name": "Smoothie.Editor",
     "rootNamespace": "",
-    "references": [],
+    "references": [
+        "GUID:3faaaceefed0c494d98e91833565c9ba"
+    ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
