@@ -1,5 +1,6 @@
 using UnityEngine;
 using Sirenix.OdinInspector;
+using UnityEngine.Serialization;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -10,8 +11,8 @@ namespace Smoothie
     public class SmoothieScreen : ScriptableObject
     {
         // Reference to the parent screen manager
-        [HideInInspector]
-        public SmoothieScreenManager ScreenManagerRef;
+        [FormerlySerializedAs("ScreenManagerRef")] [HideInInspector]
+        public SmoothieScreenManager screenManagerRef;
 
         [FoldoutGroup("$FoldoutTitle")]
         [OnValueChanged("UpdateObjectName")]
@@ -35,9 +36,9 @@ namespace Smoothie
         #if UNITY_EDITOR
         private void RemoveThisScreen()
         {
-            if (ScreenManagerRef != null)
+            if (screenManagerRef != null)
             {
-                ScreenManagerRef.screens.Remove(this);
+                screenManagerRef.screens.Remove(this);
                 AssetDatabase.RemoveObjectFromAsset(this);
                 AssetDatabase.SaveAssets();
             }
@@ -84,7 +85,13 @@ namespace Smoothie
                 // Если хотим видеть эффект в Editor, но Manager отсутствует,
                 // можно напрямую искать ScreenView и включать/выключать:
                 Debug.LogWarning("SmoothieRuntimeManager.Instance not found! Trying direct approach...");
+                
+                #if UNITY_2022_2_OR_NEWER
+                var views = Object.FindObjectsByType<SmoothieScreenView>(FindObjectsSortMode.None);
+                #else
                 var views = Object.FindObjectsOfType<SmoothieScreenView>(true);
+                #endif
+                
                 foreach (var v in views)
                 {
                     if (v.screen == this)
@@ -112,7 +119,12 @@ namespace Smoothie
         public void OnVisualizeChanged()
         {
             // Если хотим работать и в Editor, убираем if (Application.isPlaying)
+            #if UNITY_2022_2_OR_NEWER
+            var views = Object.FindObjectsByType<SmoothieScreenView>(FindObjectsSortMode.None);
+            #else
             var views = Object.FindObjectsOfType<SmoothieScreenView>(true);
+            #endif
+            
             foreach (var view in views)
             {
                 if (view.screen == this)

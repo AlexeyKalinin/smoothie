@@ -10,29 +10,29 @@ namespace Smoothie
     [CustomEditor(typeof(SmoothieRuntimeManager))]
 public class SmoothieRuntimeManagerEditor : OdinEditor
 {
-    private SmoothieRuntimeManager manager;
-    private List<SmoothieTheme> availableThemes = new List<SmoothieTheme>();
-    private int selectedThemeIndex = 0;
+    private SmoothieRuntimeManager _manager;
+    private readonly List<SmoothieTheme> _availableThemes = new List<SmoothieTheme>();
+    private int _selectedThemeIndex;
 
     protected override void OnEnable()
     {
         base.OnEnable();
-        manager = target as SmoothieRuntimeManager;
+        _manager = target as SmoothieRuntimeManager;
         UpdateAvailableThemes();
     }
 
     private void UpdateAvailableThemes()
     {
-        availableThemes.Clear();
-        if (manager != null && manager.ColorScheme != null)
+        _availableThemes.Clear();
+        if (_manager != null && _manager.ColorScheme != null)
         {
-            availableThemes.AddRange(manager.ColorScheme.dependentThemes);
+            _availableThemes.AddRange(_manager.ColorScheme.dependentThemes);
             
             // Найдем индекс текущей темы
-            if (manager.CurrentTheme != null)
+            if (_manager.CurrentTheme != null)
             {
-                selectedThemeIndex = availableThemes.IndexOf(manager.CurrentTheme);
-                if (selectedThemeIndex < 0) selectedThemeIndex = 0;
+                _selectedThemeIndex = _availableThemes.IndexOf(_manager.CurrentTheme);
+                if (_selectedThemeIndex < 0) _selectedThemeIndex = 0;
             }
         }
     }
@@ -41,7 +41,7 @@ public class SmoothieRuntimeManagerEditor : OdinEditor
     {
         base.OnInspectorGUI();
 
-        if (manager == null || manager.ColorScheme == null || availableThemes.Count == 0)
+        if (_manager == null || _manager.ColorScheme == null || _availableThemes.Count == 0)
             return;
 
         EditorGUILayout.Space(10);
@@ -53,18 +53,18 @@ public class SmoothieRuntimeManagerEditor : OdinEditor
 
         // Выбор темы
         EditorGUI.BeginChangeCheck();
-        selectedThemeIndex = EditorGUILayout.Popup("Preview Theme", selectedThemeIndex, 
-            GetThemeNames(availableThemes));
+        _selectedThemeIndex = EditorGUILayout.Popup("Preview Theme", _selectedThemeIndex, 
+            GetThemeNames(_availableThemes));
             
-        if (EditorGUI.EndChangeCheck() && selectedThemeIndex >= 0 && selectedThemeIndex < availableThemes.Count)
+        if (EditorGUI.EndChangeCheck() && _selectedThemeIndex >= 0 && _selectedThemeIndex < _availableThemes.Count)
         {
             // Применяем тему в режиме редактора
-            SmoothieTheme selectedTheme = availableThemes[selectedThemeIndex];
-            if (selectedTheme != null && manager.CurrentTheme != selectedTheme)
+            SmoothieTheme selectedTheme = _availableThemes[_selectedThemeIndex];
+            if (selectedTheme != null && _manager.CurrentTheme != selectedTheme)
             {
-                Undo.RecordObject(manager, "Change Theme");
-                manager.SetCurrentTheme(selectedTheme);
-                EditorUtility.SetDirty(manager);
+                Undo.RecordObject(_manager, "Change Theme");
+                _manager.SetCurrentTheme(selectedTheme);
+                EditorUtility.SetDirty(_manager);
             }
         }
 
@@ -73,12 +73,12 @@ public class SmoothieRuntimeManagerEditor : OdinEditor
         // Кнопка для последовательного перебора тем (для демонстрации)
         if (GUILayout.Button("Cycle Through Themes", GUILayout.Height(30)))
         {
-            selectedThemeIndex = (selectedThemeIndex + 1) % availableThemes.Count;
-            SmoothieTheme nextTheme = availableThemes[selectedThemeIndex];
+            _selectedThemeIndex = (_selectedThemeIndex + 1) % _availableThemes.Count;
+            SmoothieTheme nextTheme = _availableThemes[_selectedThemeIndex];
             
-            Undo.RecordObject(manager, "Cycle Theme");
-            manager.SetCurrentTheme(nextTheme);
-            EditorUtility.SetDirty(manager);
+            Undo.RecordObject(_manager, "Cycle Theme");
+            _manager.SetCurrentTheme(nextTheme);
+            EditorUtility.SetDirty(_manager);
         }
     }
 

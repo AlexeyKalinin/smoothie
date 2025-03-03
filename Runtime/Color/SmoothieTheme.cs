@@ -122,7 +122,12 @@ namespace Smoothie
                     return;
                     
                 // Найдем все RuntimeManagers и проверим, использует ли кто-то из них эту тему
-                var managers = UnityEngine.Object.FindObjectsOfType<SmoothieRuntimeManager>(true);
+                #if UNITY_2022_2_OR_NEWER
+                var managers = Object.FindObjectsByType<SmoothieRuntimeManager>(FindObjectsSortMode.None);
+                #else
+                var managers = Object.FindObjectsOfType<SmoothieRuntimeManager>(true);
+                #endif
+                
                 foreach (var manager in managers)
                 {
                     if (manager.CurrentTheme == this)

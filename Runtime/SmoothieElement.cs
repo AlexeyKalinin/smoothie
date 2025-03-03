@@ -13,7 +13,7 @@ namespace Smoothie
     public class SmoothieElement : MonoBehaviour
     {
         [SerializeField] private Image image;
-        [SerializeField] private bool useOverrideColor = false;
+        [SerializeField] private bool useOverrideColor;
         [SerializeField, ShowIf("useOverrideColor")] private Color overrideColor = Color.white;
 
         #if UNITY_EDITOR

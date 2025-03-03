@@ -21,7 +21,7 @@ namespace Smoothie
         public bool visualizeAllInEditor;
 
         [System.NonSerialized]
-        private List<SmoothieScreen> oldScreens = new List<SmoothieScreen>();
+        private readonly List<SmoothieScreen> _oldScreens = new List<SmoothieScreen>();
     #endif
 
         public void UpdateScreensStatus()
@@ -41,7 +41,7 @@ namespace Smoothie
             SmoothieScreen newScreen = CreateInstance<SmoothieScreen>();
             newScreen.screenName = "New Screen";
             newScreen.name = newScreen.screenName;
-            newScreen.ScreenManagerRef = this;
+            newScreen.screenManagerRef = this;
             screens.Add(newScreen);
 
         #if UNITY_EDITOR
@@ -54,15 +54,15 @@ namespace Smoothie
     #if UNITY_EDITOR
         private void OnEnable()
         {
-            oldScreens.Clear();
-            oldScreens.AddRange(screens);
+            _oldScreens.Clear();
+            _oldScreens.AddRange(screens);
             
             // Set manager reference for all screens
             foreach (var screen in screens)
             {
                 if (screen != null)
                 {
-                    screen.ScreenManagerRef = this;
+                    screen.screenManagerRef = this;
                 }
             }
         }
@@ -73,7 +73,7 @@ namespace Smoothie
             {
                 // 1) Находим экраны, которые были удалены из списка
                 var removed = new List<SmoothieScreen>();
-                foreach (var oldScr in oldScreens)
+                foreach (var oldScr in _oldScreens)
                 {
                     if (!screens.Contains(oldScr))
                         removed.Add(oldScr);
@@ -89,15 +89,15 @@ namespace Smoothie
                 }
 
                 // 3) Обновляем копию списка
-                oldScreens.Clear();
-                oldScreens.AddRange(screens);
+                _oldScreens.Clear();
+                _oldScreens.AddRange(screens);
                 
                 // 4) Set manager reference for all screens
                 foreach (var screen in screens)
                 {
                     if (screen != null)
                     {
-                        screen.ScreenManagerRef = this;
+                        screen.screenManagerRef = this;
                     }
                 }
 

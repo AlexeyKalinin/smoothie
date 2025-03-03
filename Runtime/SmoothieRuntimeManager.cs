@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using System;
 using PrimeTween;
+using UnityEngine.Serialization;
 
 #if UNITY_EDITOR
 using Sirenix.OdinInspector;
@@ -35,19 +36,20 @@ public class SmoothieRuntimeManager : MonoBehaviour
 
     // Выбор текущей темы через дропдаун (в редакторе)
 #if UNITY_EDITOR
+    [FormerlySerializedAs("_currentTheme")]
     [ValueDropdown("GetThemeDropdown")]
     [OnValueChanged("ApplyThemeImmediate")]
 #endif
-    [SerializeField] private SmoothieTheme _currentTheme;
+    [SerializeField] private SmoothieTheme currentTheme;
     public SmoothieTheme CurrentTheme {
-        get { return _currentTheme; }
+        get { return currentTheme; }
         set {
-            if (_currentTheme != value) {
-                var oldTheme = _currentTheme;
-                _currentTheme = value;
+            if (currentTheme != value) {
+                var oldTheme = currentTheme;
+                currentTheme = value;
                 
                 if (Application.isPlaying)
-                    AnimateThemeTransition(oldTheme, _currentTheme);
+                    AnimateThemeTransition(oldTheme, currentTheme);
                 else
                     ApplyThemeImmediate();
             }
@@ -55,8 +57,8 @@ public class SmoothieRuntimeManager : MonoBehaviour
     }
 
     // Словарь для хранения текущих анимированных цветов
-    private Dictionary<string, Color> animatedColors = new Dictionary<string, Color>();
-    public IReadOnlyDictionary<string, Color> AnimatedColors => animatedColors;
+    private readonly Dictionary<string, Color> _animatedColors = new Dictionary<string, Color>();
+    public IReadOnlyDictionary<string, Color> AnimatedColors => _animatedColors;
 
     // Событие, которое вызывается при смене темы
     public event Action OnThemeChanged;
@@ -65,11 +67,11 @@ public class SmoothieRuntimeManager : MonoBehaviour
     public event Action OnColorsUpdated;
 
     // Кэш цветов для текущей темы для быстрого доступа (ключ -> цвет)
-    private Dictionary<string, Color> cachedColors = new Dictionary<string, Color>();
-    public IReadOnlyDictionary<string, Color> CachedColors => cachedColors;
+    private readonly Dictionary<string, Color> _cachedColors = new Dictionary<string, Color>();
+    public IReadOnlyDictionary<string, Color> CachedColors => _cachedColors;
 
     // Список зарегистрированных ScreenView
-    private List<SmoothieScreenView> allViews = new List<SmoothieScreenView>();
+    private readonly List<SmoothieScreenView> _allViews = new List<SmoothieScreenView>();
 
     private void Awake()
     {
@@ -93,8 +95,8 @@ public class SmoothieRuntimeManager : MonoBehaviour
     private void OnEnable()
     {
         // Если текущая тема не установлена, берем первую из списка зависимых тем
-        if (_currentTheme == null && colorScheme != null && colorScheme.dependentThemes.Count > 0)
-            _currentTheme = colorScheme.dependentThemes[0];
+        if (currentTheme == null && colorScheme != null && colorScheme.dependentThemes.Count > 0)
+            currentTheme = colorScheme.dependentThemes[0];
         
         ApplyThemeImmediate();
     }
@@ -108,16 +110,16 @@ public class SmoothieRuntimeManager : MonoBehaviour
     // Применить тему немедленно, без анимации
     public void ApplyThemeImmediate()
     {
-        if (_currentTheme == null)
+        if (currentTheme == null)
             return;
             
         // Обновляем анимированные цвета напрямую из текущей темы
-        animatedColors.Clear();
-        foreach (var def in _currentTheme.colorDefinitions)
+        _animatedColors.Clear();
+        foreach (var def in currentTheme.colorDefinitions)
         {
             if (!string.IsNullOrEmpty(def.key))
             {
-                animatedColors[def.key] = def.color;
+                _animatedColors[def.key] = def.color;
             }
         }
         
@@ -131,7 +133,7 @@ public class SmoothieRuntimeManager : MonoBehaviour
         // Обновляем все элементы с новыми цветами
         RefreshAllElements();
         
-        Debug.Log($"Применена тема {_currentTheme.ThemeName} с {_currentTheme.colorDefinitions.Count} цветами");
+        //Debug.Log($"Применена тема {_currentTheme.ThemeName} с {_currentTheme.colorDefinitions.Count} цветами");
     }
 
     // Анимируем переход между темами
@@ -167,7 +169,7 @@ public class SmoothieRuntimeManager : MonoBehaviour
             Color endColor = Color.white;
             
             // Получаем начальный цвет (из текущего анимированного состояния или из старой темы)
-            if (animatedColors.TryGetValue(key, out Color currentAnimatedColor))
+            if (_animatedColors.TryGetValue(key, out Color currentAnimatedColor))
                 startColor = currentAnimatedColor;
             else if (oldTheme.TryGetColor(key, out Color oldColor))
                 startColor = oldColor;
@@ -189,7 +191,7 @@ public class SmoothieRuntimeManager : MonoBehaviour
             // Если цвета не отличаются, пропускаем анимацию
             if (startColor == endColor)
             {
-                animatedColors[key] = endColor;
+                _animatedColors[key] = endColor;
                 continue;
             }
 
@@ -208,44 +210,44 @@ public class SmoothieRuntimeManager : MonoBehaviour
     void AnimateColorComponents(string colorKey, Color startColor, Color endColor)
     {
         // Создаем текущий цвет, который будем изменять
-        if (!animatedColors.ContainsKey(colorKey))
-            animatedColors[colorKey] = startColor;
+        if (!_animatedColors.ContainsKey(colorKey))
+            _animatedColors[colorKey] = startColor;
             
         // Сохраняем ссылку на ключ, чтобы использовать в лямбда-выражениях
         string key = colorKey;
             
         // Анимация для R компонента
         Tween.Custom(startColor.r, endColor.r, themeTransitionDuration, value => {
-            if (animatedColors.TryGetValue(key, out Color currentColor)) {
+            if (_animatedColors.TryGetValue(key, out Color currentColor)) {
                 currentColor.r = value;
-                animatedColors[key] = currentColor;
+                _animatedColors[key] = currentColor;
                 OnColorsUpdated?.Invoke();
             }
         });
         
         // Анимация для G компонента
         Tween.Custom(startColor.g, endColor.g, themeTransitionDuration, value => {
-            if (animatedColors.TryGetValue(key, out Color currentColor)) {
+            if (_animatedColors.TryGetValue(key, out Color currentColor)) {
                 currentColor.g = value;
-                animatedColors[key] = currentColor;
+                _animatedColors[key] = currentColor;
                 OnColorsUpdated?.Invoke();
             }
         });
         
         // Анимация для B компонента
         Tween.Custom(startColor.b, endColor.b, themeTransitionDuration, value => {
-            if (animatedColors.TryGetValue(key, out Color currentColor)) {
+            if (_animatedColors.TryGetValue(key, out Color currentColor)) {
                 currentColor.b = value;
-                animatedColors[key] = currentColor;
+                _animatedColors[key] = currentColor;
                 OnColorsUpdated?.Invoke();
             }
         });
         
         // Анимация для A компонента
         Tween.Custom(startColor.a, endColor.a, themeTransitionDuration, value => {
-            if (animatedColors.TryGetValue(key, out Color currentColor)) {
+            if (_animatedColors.TryGetValue(key, out Color currentColor)) {
                 currentColor.a = value;
-                animatedColors[key] = currentColor;
+                _animatedColors[key] = currentColor;
                 OnColorsUpdated?.Invoke();
             }
         });
@@ -253,19 +255,19 @@ public class SmoothieRuntimeManager : MonoBehaviour
 
     public void RegisterView(SmoothieScreenView view)
     {
-        if (!allViews.Contains(view))
-            allViews.Add(view);
+        if (!_allViews.Contains(view))
+            _allViews.Add(view);
     }
 
     public void UnregisterView(SmoothieScreenView view)
     {
-        if (allViews.Contains(view))
-            allViews.Remove(view);
+        if (_allViews.Contains(view))
+            _allViews.Remove(view);
     }
 
     public void ShowScreen(SmoothieScreen screen)
     {
-        foreach (var view in allViews)
+        foreach (var view in _allViews)
         {
             if (view != null && view.screen == screen)
             {
@@ -278,7 +280,7 @@ public class SmoothieRuntimeManager : MonoBehaviour
 
     public void HideScreen(SmoothieScreen screen)
     {
-        foreach (var view in allViews)
+        foreach (var view in _allViews)
         {
             if (view != null && view.screen == screen)
             {
@@ -291,7 +293,7 @@ public class SmoothieRuntimeManager : MonoBehaviour
 
     public void HideAllScreens()
     {
-        foreach (var view in allViews)
+        foreach (var view in _allViews)
         {
             var elements = view.GetComponentsInChildren<SmoothieElement>(true);
             foreach (var element in elements)
@@ -305,7 +307,8 @@ public class SmoothieRuntimeManager : MonoBehaviour
         if (!Application.isPlaying)
         {
             // В редакторе (без запущенной игры) – ищем все ScreenView напрямую
-            var viewsInEditor = UnityEngine.Object.FindObjectsOfType<SmoothieScreenView>(true);
+            var viewsInEditor = UnityEngine.Object.FindObjectsByType<SmoothieScreenView>(FindObjectsSortMode.None);
+            
             int editorCount = 0;
             foreach (var v in viewsInEditor)
             {
@@ -318,7 +321,7 @@ public class SmoothieRuntimeManager : MonoBehaviour
 
         // В Play Mode – используем список allViews
         int count = 0;
-        foreach (var view in allViews)
+        foreach (var view in _allViews)
         {
             if (view != null && view.screen == screen)
                 count++;
@@ -332,7 +335,7 @@ public class SmoothieRuntimeManager : MonoBehaviour
         if (!Application.isPlaying)
         {
             // В редакторе ищем все ScreenView напрямую
-            var viewsInEditor = UnityEngine.Object.FindObjectsOfType<SmoothieScreenView>(true);
+            var viewsInEditor = UnityEngine.Object.FindObjectsByType<SmoothieScreenView>(FindObjectsSortMode.None);
             foreach (var v in viewsInEditor)
             {
                 if (v != null && v.screen == screen)
@@ -350,7 +353,7 @@ public class SmoothieRuntimeManager : MonoBehaviour
 #endif
 
         // В Play Mode – используем список allViews
-        foreach (var view in allViews)
+        foreach (var view in _allViews)
         {
             if (view != null && view.screen == screen)
             {
@@ -369,7 +372,7 @@ public class SmoothieRuntimeManager : MonoBehaviour
     {
         if (Application.isPlaying) 
         {
-            foreach (var view in allViews)
+            foreach (var view in _allViews)
                 if (view != null)
                     view.RefreshColor();
         } 
@@ -377,7 +380,7 @@ public class SmoothieRuntimeManager : MonoBehaviour
         {
 #if UNITY_EDITOR
             // В редакторе ищем все экраны напрямую
-            var views = UnityEngine.Object.FindObjectsOfType<SmoothieScreenView>(true);
+            var views = UnityEngine.Object.FindObjectsByType<SmoothieScreenView>(FindObjectsSortMode.None);
             foreach (var view in views)
             {
                 if (view != null)
@@ -415,12 +418,12 @@ public class SmoothieRuntimeManager : MonoBehaviour
     // Обновляет кэш цветов для текущей темы
     private void UpdateCachedColors()
     {
-        cachedColors.Clear();
-        if (_currentTheme != null)
+        _cachedColors.Clear();
+        if (currentTheme != null)
         {
-            foreach (var def in _currentTheme.colorDefinitions)
+            foreach (var def in currentTheme.colorDefinitions)
                 if (!string.IsNullOrEmpty(def.key))
-                    cachedColors[def.key] = def.color;
+                    _cachedColors[def.key] = def.color;
         }
     }
 
@@ -431,11 +434,11 @@ public class SmoothieRuntimeManager : MonoBehaviour
             return Color.white;
 
         // Проверяем, есть ли цвет в анимированных цветах
-        if (animatedColors.TryGetValue(key, out Color color))
+        if (_animatedColors.TryGetValue(key, out Color color))
             return color;
 
         // Если нет, возвращаем цвет из текущей темы (или белый, если ключ не найден)
-        if (_currentTheme != null && _currentTheme.TryGetColor(key, out color))
+        if (currentTheme != null && currentTheme.TryGetColor(key, out color))
             return color;
 
         return Color.white;
