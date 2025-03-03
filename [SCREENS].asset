@@ -1,0 +1,84 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-8455102341966946457
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f5062d581d2834604bf83c733968935a, type: 3}
+  m_Name: Blue
+  m_EditorClassIdentifier: 
+  screenName: Blue
+  instancesCount: 1
+  isShown: 0
+  visualizeInEditor: 0
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 110da1faa877941d6ab5a526af2238bc, type: 3}
+  m_Name: '[SCREENS]'
+  m_EditorClassIdentifier: 
+  screens:
+  - {fileID: 1575875814963057311}
+  - {fileID: 904873274323677191}
+  - {fileID: -8455102341966946457}
+  - {fileID: 6014118549925893944}
+  visualizeAllInEditor: 1
+--- !u!114 &904873274323677191
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f5062d581d2834604bf83c733968935a, type: 3}
+  m_Name: Red
+  m_EditorClassIdentifier: 
+  screenName: Red
+  instancesCount: 2
+  isShown: 1
+  visualizeInEditor: 1
+--- !u!114 &1575875814963057311
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f5062d581d2834604bf83c733968935a, type: 3}
+  m_Name: 'Green  '
+  m_EditorClassIdentifier: 
+  screenName: 'Green  '
+  instancesCount: 1
+  isShown: 1
+  visualizeInEditor: 1
+--- !u!114 &6014118549925893944
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f5062d581d2834604bf83c733968935a, type: 3}
+  m_Name: Pink
+  m_EditorClassIdentifier: 
+  screenName: Pink
+  instancesCount: 1
+  isShown: 1
+  visualizeInEditor: 0
