@@ -3,103 +3,129 @@ using UnityEngine.UI;
 #if UNITY_EDITOR
 using Sirenix.OdinInspector;
 using UnityEditor;
-using System.Collections.Generic;
 using System.Linq;
+using System.Collections.Generic;
 #endif
 
 namespace Smoothie
 {
     [ExecuteAlways]
-public class SmoothieElement : MonoBehaviour
-{
-    // Ссылка на компонент Image, который мы перекрашиваем
-    [SerializeField] private Image image;
-
-    // Если true – всегда использовать overrideColor независимо от темы
-    [SerializeField] private bool useOverrideColor = false;
-    [SerializeField, ShowIf("useOverrideColor")] private Color overrideColor = Color.white;
-
-#if UNITY_EDITOR
-    // Дропдаун для выбора ключа, если не используется override
-    [ValueDropdown("GetColorKeys")]
-    [OnValueChanged("RefreshColor")]
-#endif
-    [SerializeField] private string colorKey;
-
-    private void OnEnable()
+    public class SmoothieElement : MonoBehaviour
     {
-        RefreshColor();
-        if (SmoothieRuntimeManager.Instance != null)
-        {
-            SmoothieRuntimeManager.Instance.OnThemeChanged += RefreshColor;
-            // Подписываемся на обновление цветов при анимации
-            SmoothieRuntimeManager.Instance.OnColorsUpdated += RefreshColor;
-        }
-    }
+        [SerializeField] private Image image;
+        [SerializeField] private bool useOverrideColor = false;
+        [SerializeField, ShowIf("useOverrideColor")] private Color overrideColor = Color.white;
 
-    private void OnDisable()
-    {
-        if (SmoothieRuntimeManager.Instance != null)
-        {
-            SmoothieRuntimeManager.Instance.OnThemeChanged -= RefreshColor;
-            // Отписываемся от обновления цветов при анимации
-            SmoothieRuntimeManager.Instance.OnColorsUpdated -= RefreshColor;
-        }
-    }
+        #if UNITY_EDITOR
+        [ValueDropdown("GetColorKeys")]
+        [OnValueChanged("RefreshColor")]
+        #endif
+        [SerializeField] private string colorKey;
 
-    /// <summary>
-    /// Обновляет цвет компонента Image.
-    /// Если useOverrideColor включён, используется overrideColor.
-    /// Иначе – берётся цвет из текущего кэша анимированных цветов по colorKey.
-    /// </summary>
-    public void RefreshColor()
-    {
-        if (image == null)
-            return;
-            
-        if (useOverrideColor) 
+        // Storing only the style name
+        [SerializeField]
+        private string selectedElementAnimationStyle;
+
+        private void OnEnable()
         {
-            image.color = overrideColor;
-        } 
-        else 
-        {
-            var mgr = SmoothieRuntimeManager.Instance;
-            if (mgr != null && !string.IsNullOrEmpty(colorKey)) 
+            RefreshColor();
+            if (SmoothieRuntimeManager.Instance != null)
             {
-                // Используем анимированный цвет вместо прямого доступа к теме
-                image.color = mgr.GetAnimatedColor(colorKey);
+                SmoothieRuntimeManager.Instance.OnThemeChanged += RefreshColor;
+                SmoothieRuntimeManager.Instance.OnColorsUpdated += RefreshColor;
             }
         }
-    }
 
-#if UNITY_EDITOR
-    private IEnumerable<string> GetColorKeys()
-    {
-        if (Application.isPlaying) 
+        private void OnDisable()
         {
-            if (SmoothieRuntimeManager.Instance != null && SmoothieRuntimeManager.Instance.ColorScheme != null)
-                return SmoothieRuntimeManager.Instance.ColorScheme.baseThemeDefinitions.Select(d => d.key);
-        } 
-        else 
-        {
-            string[] guids = AssetDatabase.FindAssets("t:SmoothieColorScheme");
-            if (guids != null && guids.Length > 0) 
+            if (SmoothieRuntimeManager.Instance != null)
             {
-                string assetPath = AssetDatabase.GUIDToAssetPath(guids[0]);
-                var scheme = AssetDatabase.LoadAssetAtPath<SmoothieColorScheme>(assetPath);
-                if (scheme != null)
-                    return scheme.baseThemeDefinitions.Select(d => d.key);
+                SmoothieRuntimeManager.Instance.OnThemeChanged -= RefreshColor;
+                SmoothieRuntimeManager.Instance.OnColorsUpdated -= RefreshColor;
             }
         }
-        return new List<string>();
+
+        public void RefreshColor()
+        {
+            if (image == null) return;
+
+            if (useOverrideColor)
+            {
+                image.color = overrideColor;
+            }
+            else
+            {
+                var mgr = SmoothieRuntimeManager.Instance;
+                if (mgr != null && !string.IsNullOrEmpty(colorKey))
+                {
+                    image.color = mgr.GetAnimatedColor(colorKey);
+                }
+            }
+        }
+
+        // Example: on pointer enter
+        public void OnPointerEnter()
+        {
+            var manager = SmoothieRuntimeManager.Instance?.ElementAnimationManager;
+            if (manager == null) return;
+
+            // Find the selected style
+            var style = manager.dependentStyles
+                .Find(s => s != null && s.styleName == selectedElementAnimationStyle);
+            if (style == null) return;
+
+            // Find the event definition with key "PointerEnter"
+            if (style.TryGetEventDefinition("PointerEnter", out var def))
+            {
+                Debug.Log($"[SmoothieElement] PointerEnter => duration={def.duration}, useSpring={def.useSpring}");
+                // TODO: Implement actual tween, e.g., animate scale or color
+            }
+        }
+
+        #if UNITY_EDITOR
+        private IEnumerable<string> GetColorKeys()
+        {
+            if (Application.isPlaying)
+            {
+                if (SmoothieRuntimeManager.Instance != null && SmoothieRuntimeManager.Instance.ColorScheme != null)
+                    return SmoothieRuntimeManager.Instance.ColorScheme.baseThemeDefinitions.Select(d => d.key);
+            }
+            else
+            {
+                string[] guids = AssetDatabase.FindAssets("t:SmoothieColorScheme");
+                if (guids != null && guids.Length > 0)
+                {
+                    string assetPath = AssetDatabase.GUIDToAssetPath(guids[0]);
+                    var scheme = AssetDatabase.LoadAssetAtPath<SmoothieColorScheme>(assetPath);
+                    if (scheme != null)
+                        return scheme.baseThemeDefinitions.Select(d => d.key);
+                }
+            }
+            return new List<string>();
+        }
+
+        [ShowInInspector, LabelText("Element Animation Style")]
+        [ValueDropdown("GetElementAnimationStyles")]
+        public string ElementAnimationStyleName
+        {
+            get => selectedElementAnimationStyle;
+            set => selectedElementAnimationStyle = value;
+        }
+
+        private IEnumerable<string> GetElementAnimationStyles()
+        {
+            var manager = SmoothieRuntimeManager.Instance?.ElementAnimationManager;
+            if (manager == null) return new List<string>();
+
+            return manager.dependentStyles
+                .Where(s => s != null && !string.IsNullOrEmpty(s.styleName))
+                .Select(s => s.styleName);
+        }
+
+        private void OnValidate()
+        {
+            RefreshColor();
+        }
+        #endif
     }
-    
-    // Реакция на изменения в инспекторе
-    private void OnValidate()
-    {
-        // При изменении настроек в инспекторе сразу обновляем цвет
-        RefreshColor();
-    }
-#endif
-}
 }

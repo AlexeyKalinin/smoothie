@@ -22,6 +22,13 @@ public class SmoothieRuntimeManager : MonoBehaviour
     [SerializeField] private SmoothieColorScheme colorScheme;  // Основной ScriptableObject с темами
     public SmoothieColorScheme ColorScheme => colorScheme;
 
+    [Header("Animation Managers")]
+    [SerializeField] private SmoothieScreenAnimationManager screenAnimationManager;
+    public SmoothieScreenAnimationManager ScreenAnimationManager => screenAnimationManager;
+
+    [SerializeField] private SmoothieElementAnimationManager elementAnimationManager;
+    public SmoothieElementAnimationManager ElementAnimationManager => elementAnimationManager;
+
     [Header("Theme Transition")]
     [SerializeField, Range(0.1f, 2f)] private float themeTransitionDuration = 0.5f;
     [SerializeField] private Ease themeTransitionEase = Ease.InOutSine;
