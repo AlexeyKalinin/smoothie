@@ -8,42 +8,45 @@ using System.Linq;
 
 namespace Smoothie
 {
-    [CreateAssetMenu(
-        fileName = "SmoothieElementAnimationManager",
-        menuName = "Smoothie/Animation/Element Animation Manager")]
+    [CreateAssetMenu(fileName = "SmoothieElementAnimationManager", menuName = "Smoothie/Animation/Element Animation Manager")]
     public class SmoothieElementAnimationManager : ScriptableObject
     {
-        [TitleGroup("Configuration")]
-        [HorizontalGroup("Configuration/Split")]
-        [VerticalGroup("Configuration/Split/Left")]
-        [BoxGroup("Configuration/Split/Left/Events")]
-        [LabelText("Possible Events")]
+        // --- 1) Сворачиваемая группа для Events ---
+        [FoldoutGroup("Events", expanded: false)]
+        [LabelText("Events")]
         [ListDrawerSettings(Expanded = true, DraggableItems = true)]
         public List<string> possibleEvents = new List<string>()
         {
-            "PointerEnter",
-            "PointerExit",
-            "PointerClick",
-            "Press",
-            "Release"
+            "Normal"
         };
 
-        [VerticalGroup("Configuration/Split/Right")]
-        [BoxGroup("Configuration/Split/Right/UI Elements")]
-        [LabelText("Possible UI Elements")]
+        // --- 2) Сворачиваемая группа для UI Elements ---
+        [FoldoutGroup("UI Elements", expanded: false)]
+        [LabelText("UI Elements")]
         [ListDrawerSettings(Expanded = true, DraggableItems = true)]
         public List<string> possibleUIElements = new List<string>()
         {
+            "Move",
             "Background",
-            "Text",
-            "Icon",
-            "Border",
-            "Shadow"
+            "Text"
         };
 
-        [TitleGroup("Animation Styles", "Available Animation Styles")]
+        // --- 3) Несворачиваемая секция «Styles» ---
+        //[BoxGroup("Styles", showLabel: false)]
+        [LabelText("Styles")]
+        [ListDrawerSettings(
+            ShowIndexLabels = false,
+            ShowPaging = false,
+            ShowItemCount = false,
+            HideAddButton = true,
+            DraggableItems = false,
+            HideRemoveButton = true,
+            Expanded = true)]
+        [InlineEditor(InlineEditorObjectFieldModes.Foldout)]
+        public List<SmoothieElementAnimationStyle> dependentStyles = new List<SmoothieElementAnimationStyle>();
+
         [Button("Add New Style", ButtonSizes.Large), GUIColor(0.4f, 0.8f, 0.4f)]
-        public void AddNewDependentStyle()
+        public void AddNewStyle()
         {
             var newStyle = ScriptableObject.CreateInstance<SmoothieElementAnimationStyle>();
             newStyle.styleName = "New Style";
@@ -56,14 +59,10 @@ namespace Smoothie
             dependentStyles.Add(newStyle);
         }
 
-        [ListDrawerSettings(Expanded = true, DraggableItems = false, ShowIndexLabels = false)]
-        [InlineEditor(InlineEditorObjectFieldModes.Foldout)]
-        public List<SmoothieElementAnimationStyle> dependentStyles = new List<SmoothieElementAnimationStyle>();
-
 #if UNITY_EDITOR
         private void OnValidate()
         {
-            // Проставляем ManagerRef для стилей, у которых она не заполнена (для старых стилей)
+            // Устанавливаем ссылку ManagerRef для всех стилей, если её нет
             foreach (var style in dependentStyles)
             {
                 if (style != null && style.ManagerRef == null)
@@ -72,7 +71,7 @@ namespace Smoothie
                 }
             }
 
-            // Удаляем из ассета те стили, которых уже нет в списке
+            // Удаляем из ассета стили, которые больше не в списке
             var stylesInAsset = AssetDatabase.LoadAllAssetsAtPath(AssetDatabase.GetAssetPath(this))
                 .OfType<SmoothieElementAnimationStyle>()
                 .ToList();
@@ -85,7 +84,7 @@ namespace Smoothie
                 }
             }
 
-            // Отложенное сохранение, чтобы избежать ошибки во время импорта ассетов
+            // Отложенное сохранение
             EditorApplication.delayCall += () =>
             {
                 if (!EditorApplication.isCompiling &&
@@ -97,19 +96,5 @@ namespace Smoothie
             };
         }
 #endif
-
-        [Button("Event Reference Guide", ButtonSizes.Medium)]
-        private void ShowEventReferenceGuide()
-        {
-            // Show a quick reference for events in the console
-            string guide = "Event Reference Guide:\n";
-            
-            foreach (var evt in possibleEvents)
-            {
-                guide += $"- {evt}: Call OnElement.{evt}() to trigger this event\n";
-            }
-            
-            Debug.Log(guide);
-        }
     }
 }

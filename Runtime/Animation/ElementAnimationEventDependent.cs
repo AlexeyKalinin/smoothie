@@ -1,6 +1,7 @@
+using UnityEngine;
 using Sirenix.OdinInspector;
 using System.Collections.Generic;
-using UnityEngine;
+using System.Linq;
 
 namespace Smoothie
 {
@@ -10,58 +11,54 @@ namespace Smoothie
         [HideInInspector]
         public SmoothieElementAnimationStyle parentStyle;
 
-        public void SetParentStyle(SmoothieElementAnimationStyle style)
+        [HideInInspector]
+        public string DisplayTitle
         {
-            parentStyle = style;
+            get
+            {
+                if (eventKeys == null || eventKeys.Count == 0)
+                    return "No Events";
+                return string.Join(", ", eventKeys);
+            }
         }
 
-        [BoxGroup("Event")]
-        [HorizontalGroup("Event/Info")]
-        [ValueDropdown("GetAllPossibleEvents")]
-        [LabelText("Event")]
-        [LabelWidth(50)]
-        public string eventKey;
-
-        [HorizontalGroup("Event/Info")]
-        [LabelText("Duration")]
-        [LabelWidth(60)]
-        [Range(0.01f, 5f)]
-        public float duration = 0.3f;
-
-        [HorizontalGroup("Event/Info")]
-        [LabelText("Spring")]
-        [LabelWidth(50)]
-        public bool useSpring = false;
-
-        [BoxGroup("Event")]
-        [HorizontalGroup("Event/Actions")]
-        [Button("Add UI Element", ButtonSizes.Small), GUIColor(0.4f, 0.8f, 0.4f)]
-        private void AddUIElementButton()
-        {
-            AddNewUIElement();
-        }
-
-        [FoldoutGroup("UI Elements", expanded: true)]
+        [ValueDropdown("GetAvailableEvents")]
+        [LabelText("Event Keys")]
         [ListDrawerSettings(
-            Expanded = true, 
-            DraggableItems = true, 
-            HideAddButton = true,
-            ShowItemCount = false,
-            ShowPaging = false)]
+            DraggableItems = false,
+            Expanded = true,
+            HideAddButton = false,
+            HideRemoveButton = false, // Показываем стандартные крестики у eventKeys
+            ShowIndexLabels = false,
+            ShowItemCount = true
+        )]
+        public List<string> eventKeys = new List<string>();
+
+        [LabelText("")] // убираем подпись "UI Elements"
+        [ListDrawerSettings(
+            DraggableItems = false,
+            Expanded = true,
+            HideAddButton = true,   // скрываем стандартную "+"
+            HideRemoveButton = true,// скрываем крестики
+            ShowIndexLabels = false,
+            ShowItemCount = true
+        )]
         public List<ElementAnimationUIElement> uiElements = new List<ElementAnimationUIElement>();
 
-        private IEnumerable<string> GetAllPossibleEvents()
+        private IEnumerable<string> GetAvailableEvents()
         {
             if (parentStyle != null && parentStyle.ManagerRef != null)
             {
                 return parentStyle.ManagerRef.possibleEvents;
             }
-            return new[] { "<No Manager>" };
+            return new[] { "Click", "Hover" };
         }
 
-        /// <summary>
-        /// Обновляет родительские ссылки у всех UI элементов
-        /// </summary>
+        public void SetParentStyle(SmoothieElementAnimationStyle style)
+        {
+            parentStyle = style;
+        }
+
         public void UpdateParentReferences()
         {
             foreach (var element in uiElements)
@@ -71,31 +68,9 @@ namespace Smoothie
             }
         }
 
-        /// <summary>
-        /// Добавляет новый UI элемент
-        /// </summary>
-        public void AddNewUIElement()
+        public bool HandlesEvent(string eventKey)
         {
-            var newElement = new ElementAnimationUIElement();
-            newElement.SetParentEvent(this);
-            
-            // Установим первый доступный тип элемента, если есть
-            if (parentStyle != null && parentStyle.ManagerRef != null && 
-                parentStyle.ManagerRef.possibleUIElements.Count > 0)
-            {
-                newElement.uiElementKey = parentStyle.ManagerRef.possibleUIElements[0];
-            }
-            
-            uiElements.Add(newElement);
-        }
-
-        /// <summary>
-        /// Находит UI элемент по ключу
-        /// </summary>
-        public bool TryGetUIElement(string key, out ElementAnimationUIElement element)
-        {
-            element = uiElements.Find(e => e.uiElementKey == key);
-            return element != null;
+            return eventKeys != null && eventKeys.Contains(eventKey);
         }
     }
 }

@@ -4,6 +4,7 @@ using UnityEditor;
 using Sirenix.OdinInspector.Editor;
 using Sirenix.Utilities.Editor;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Smoothie
 {
@@ -12,7 +13,7 @@ namespace Smoothie
     {
         private SmoothieElement _element;
         
-        // Для отображения в режиме предпросмотра
+        // For preview display
         private string _selectedEvent;
         private List<string> _availableEvents = new List<string>();
         private SmoothieElementAnimationStyle _currentStyle;
@@ -29,27 +30,33 @@ namespace Smoothie
             _availableEvents.Clear();
             if (_element == null) return;
 
-            // Получаем имя стиля анимации
+            // Get animation style name
             string styleName = _element.ElementAnimationStyleName;
             if (string.IsNullOrEmpty(styleName)) return;
             
-            // Находим стиль анимации
+            // Find animation style
             var manager = FindObjectOfType<SmoothieRuntimeManager>()?.ElementAnimationManager;
             if (manager == null) return;
             
             _currentStyle = manager.dependentStyles.Find(s => s.styleName == styleName);
             if (_currentStyle == null) return;
             
-            // Собираем все доступные события из стиля
+            // Collect all available events from style event definitions
+            var eventSet = new HashSet<string>();
             foreach (var eventDef in _currentStyle.eventDefinitions)
             {
-                if (!string.IsNullOrEmpty(eventDef.eventKey))
+                if (eventDef.eventKeys != null && eventDef.eventKeys.Count > 0)
                 {
-                    _availableEvents.Add(eventDef.eventKey);
+                    foreach (var eventKey in eventDef.eventKeys)
+                    {
+                        eventSet.Add(eventKey);
+                    }
                 }
             }
             
-            // Выбираем первое событие по умолчанию
+            _availableEvents.AddRange(eventSet);
+            
+            // Select first event by default
             if (_availableEvents.Count > 0 && string.IsNullOrEmpty(_selectedEvent))
             {
                 _selectedEvent = _availableEvents[0];
@@ -69,7 +76,7 @@ namespace Smoothie
             EditorGUILayout.LabelField("Animation Preview", EditorStyles.boldLabel);
             EditorGUILayout.Space(5);
             
-            // Выпадающий список с доступными событиями
+            // Event dropdown
             EditorGUI.BeginChangeCheck();
             var eventIndex = _availableEvents.IndexOf(_selectedEvent);
             if (eventIndex < 0) eventIndex = 0;
@@ -82,44 +89,24 @@ namespace Smoothie
             
             EditorGUILayout.Space(5);
             
-            // Кнопка для воспроизведения анимации
+            // Play animation button
             if (GUILayout.Button("Play Animation", GUILayout.Height(30)))
             {
                 if (!string.IsNullOrEmpty(_selectedEvent))
                 {
-                    // В режиме воспроизведения вызываем метод воспроизведения анимации
+                    // In play mode, call animation method
                     if (Application.isPlaying)
                     {
                         _element.PlayAnimation(_selectedEvent);
                     }
                     else
                     {
-                        // В режиме редактирования показываем сообщение
+                        // In edit mode, show message
                         Debug.Log($"Animation Preview: Event '{_selectedEvent}' would play in Play Mode.");
-                        
-                        // Можно добавить предпросмотр в редакторе, если необходимо
-                        // SimulateAnimationInEditor(_selectedEvent);
                     }
                 }
             }
         }
-
-        /*
-        // Опциональный метод для симуляции анимации в редакторе
-        private void SimulateAnimationInEditor(string eventKey)
-        {
-            if (_currentStyle == null) return;
-            
-            // Находим определение события
-            if (_currentStyle.TryGetEventDefinition(eventKey, out var eventDef))
-            {
-                Debug.Log($"[Editor Preview] {eventKey} => duration={eventDef.duration}, useSpring={eventDef.useSpring}");
-                
-                // Можно добавить логику для симуляции анимации в режиме редактора
-                // Например, временно изменять цвета или позиции элементов
-            }
-        }
-        */
     }
 }
 #endif

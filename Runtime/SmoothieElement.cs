@@ -38,7 +38,7 @@ namespace Smoothie
                 {
                     return manager.possibleUIElements.ToArray();
                 }
-                return new string[] { "Background", "Text", "Icon", "Border", "Shadow" };
+                return new string[] { "Background", "Text", "Icon" };
             }
             #endif
         }
@@ -75,8 +75,6 @@ namespace Smoothie
         public void RefreshColor()
         {
             // This is a stub method to maintain compatibility
-            // The previous version used this to update Image colors based on theme
-            // Since we've removed those fields, this is now just a placeholder
         }
 
         #region Animation Events
@@ -122,10 +120,10 @@ namespace Smoothie
                 .Find(s => s != null && s.styleName == animationStyle);
             if (style == null) return;
 
-            // Find the event definition with the specified key
+            // Find the event definition that handles this event key
             if (style.TryGetEventDefinition(eventKey, out var eventDef))
             {
-                Debug.Log($"[SmoothieElement] {eventKey} => duration={eventDef.duration}, useSpring={eventDef.useSpring}");
+                Debug.Log($"[SmoothieElement] Playing animation for event: {eventKey}");
                 
                 // Для каждого UI элемента в событии
                 foreach (var uiElement in eventDef.uiElements)
@@ -134,31 +132,16 @@ namespace Smoothie
                     var elementRef = GetReferenceByKey(uiElement.uiElementKey);
                     if (elementRef == null || elementRef.targetObject == null) continue;
 
-                    var targetRect = elementRef.targetObject.GetComponent<RectTransform>();
                     var targetGraphic = elementRef.targetObject.GetComponent<Graphic>();
-                    if (targetRect == null && targetGraphic == null) continue;
+                    if (targetGraphic == null) continue;
 
                     // Для каждого действия анимации
                     foreach (var action in uiElement.actions)
                     {
-                        // Выполняем действие в зависимости от его типа
-                        switch (action.actionType)
+                        // В упрощенной версии у нас есть только ChangeColor
+                        if (action.actionType == AnimationActionType.ChangeColor)
                         {
-                            case AnimationActionType.ChangeColor:
-                                PlayColorAnimation(targetGraphic, action);
-                                break;
-                            case AnimationActionType.Move:
-                                PlayMoveAnimation(targetRect, action);
-                                break;
-                            case AnimationActionType.Scale:
-                                PlayScaleAnimation(targetRect, action);
-                                break;
-                            case AnimationActionType.Rotate:
-                                PlayRotateAnimation(targetRect, action);
-                                break;
-                            case AnimationActionType.Fade:
-                                PlayFadeAnimation(targetGraphic, action);
-                                break;
+                            PlayColorAnimation(targetGraphic, action);
                         }
                     }
                 }
@@ -175,87 +158,15 @@ namespace Smoothie
         {
             if (targetGraphic == null) return;
 
-            // Определяем цвет в зависимости от настроек
-            Color targetColor = action.targetColor;
-            if (action.useThemeColor && SmoothieRuntimeManager.Instance != null)
+            // Get color from theme
+            Color targetColor = Color.white;
+            if (!string.IsNullOrEmpty(action.colorKey) && SmoothieRuntimeManager.Instance != null)
             {
                 targetColor = SmoothieRuntimeManager.Instance.GetAnimatedColor(action.colorKey);
             }
 
-            // Настройки анимации
-            var tweenSettings = new TweenSettings(
-                action.duration,
-                action.useSpring ? Ease.OutBack : action.ease,
-                startDelay: action.delay);
-
             // Запускаем анимацию цвета
-            Tween.Color(targetGraphic, targetColor, tweenSettings);
-        }
-
-        private void PlayMoveAnimation(RectTransform targetRect, ElementAnimationAction action)
-        {
-            if (targetRect == null) return;
-
-            // Определяем целевую позицию
-            Vector2 targetPosition = action.relativeMovement
-                ? (Vector2)targetRect.anchoredPosition + action.moveDirection
-                : action.moveDirection;
-
-            // Настройки анимации
-            var tweenSettings = new TweenSettings(
-                action.duration,
-                action.useSpring ? Ease.OutBack : action.ease,
-                startDelay: action.delay);
-
-            // Запускаем анимацию движения
-            Tween.UIAnchoredPosition(targetRect, targetPosition, tweenSettings);
-        }
-
-        private void PlayScaleAnimation(RectTransform targetRect, ElementAnimationAction action)
-        {
-            if (targetRect == null) return;
-
-            // Определяем целевой масштаб
-            Vector3 targetScale = action.uniformScale
-                ? Vector3.one * action.scaleFactor
-                : new Vector3(action.targetScale.x, action.targetScale.y, 1f);
-
-            // Настройки анимации
-            var tweenSettings = new TweenSettings(
-                action.duration,
-                action.useSpring ? Ease.OutBack : action.ease,
-                startDelay: action.delay);
-
-            // Запускаем анимацию масштабирования
-            Tween.LocalScale(targetRect, targetScale, tweenSettings);
-        }
-
-        private void PlayRotateAnimation(RectTransform targetRect, ElementAnimationAction action)
-        {
-            if (targetRect == null) return;
-
-            // Настройки анимации
-            var tweenSettings = new TweenSettings(
-                action.duration,
-                action.useSpring ? Ease.OutBack : action.ease,
-                startDelay: action.delay);
-
-            // Запускаем анимацию вращения
-            Tween.Rotation(targetRect, Quaternion.Euler(0, 0, action.rotationAngle), tweenSettings);
-        }
-
-        private void PlayFadeAnimation(Graphic targetGraphic, ElementAnimationAction action)
-        {
-            if (targetGraphic == null) return;
-
-            // Настройки анимации
-            var tweenSettings = new TweenSettings(
-                action.duration,
-                action.useSpring ? Ease.OutBack : action.ease,
-                startDelay: action.delay);
-
-            // Запускаем анимацию прозрачности
-            Tween.Alpha(targetGraphic, action.targetAlpha, tweenSettings);
+            Tween.Color(targetGraphic, targetColor, action.duration);
         }
         #endregion
 

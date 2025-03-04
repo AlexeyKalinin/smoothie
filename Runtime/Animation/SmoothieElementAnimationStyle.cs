@@ -8,18 +8,43 @@ using UnityEditor;
 
 namespace Smoothie
 {
+    [HideMonoScript]
     public class SmoothieElementAnimationStyle : ScriptableObject
     {
-        // Скрываем от инспектора, но храним ссылку на менеджера
         [HideInInspector]
         public SmoothieElementAnimationManager ManagerRef;
 
-        [BoxGroup("Style Info", showLabel: false)]
-        [HorizontalGroup("Style Info/Name")]
+        [BoxGroup("Style", showLabel: false)]
+        [HorizontalGroup("Style/Row", Width = 0.8f)]
         [SerializeField, OnValueChanged("UpdateAssetName")]
-        [LabelText("Style Name")]
-        [LabelWidth(80)]
-        private string _styleName = "Untitled";
+        [LabelText("Style Name"), LabelWidth(80)]
+        private string _styleName = "New Style";
+
+        // Удаляем (или комментируем) кнопку добавления нового события:
+        // [HorizontalGroup("Style/Row")]
+        // [Button("+", ButtonSizes.Small), GUIColor(0.4f, 0.8f, 0.4f)]
+        // private void AddEventButton()
+        // {
+        //     AddNewEvent();
+        // }
+
+        [HorizontalGroup("Style/Row")]
+        [Button("✕", ButtonSizes.Small), GUIColor(0.9f, 0.3f, 0.3f)]
+        private void RemoveStyleButton()
+        {
+            RemoveThisStyle();
+        }
+
+        [ListDrawerSettings(
+            DraggableItems = false,   // запрет на перетаскивание
+            Expanded = true,          // сразу раскрыт
+            HideAddButton = false,    // показывать кнопку "+" от Odin, если нужно
+            HideRemoveButton = true,  // скрыть стандартные крестики "x"
+            ShowIndexLabels = false,
+            ShowItemCount = true
+        )]
+        [LabelText(" ")]
+        public List<ElementAnimationEventDependent> eventDefinitions = new List<ElementAnimationEventDependent>();
 
         public string styleName
         {
@@ -27,30 +52,15 @@ namespace Smoothie
             set => _styleName = value;
         }
 
-        [HorizontalGroup("Style Info/Name")]
-        [Button("Add Event", ButtonSizes.Small), GUIColor(0.4f, 0.8f, 0.4f)]
-        private void AddEventButton()
-        {
-            AddNewEvent();
-        }
-
-        [HorizontalGroup("Style Info/Name", Width = 120)]
-        [Button("Remove Style", ButtonSizes.Small), GUIColor(0.9f, 0.3f, 0.3f)]
-        private void RemoveStyleButton()
-        {
-            RemoveThisStyle();
-        }
-
-        [ListDrawerSettings(
-            Expanded = true,
-            DraggableItems = true,
-            HideAddButton = true,
-            ShowItemCount = true)]
-        [LabelText("Event Definitions")]
-        public List<ElementAnimationEventDependent> eventDefinitions = new List<ElementAnimationEventDependent>();
-
-        // Красная кнопка для удаления этого стиля
 #if UNITY_EDITOR
+        private void RemoveEventDefinition(ElementAnimationEventDependent eventDef)
+        {
+            if (eventDefinitions.Contains(eventDef))
+            {
+                eventDefinitions.Remove(eventDef);
+            }
+        }
+
         private void RemoveThisStyle()
         {
             if (ManagerRef != null)
@@ -71,24 +81,24 @@ namespace Smoothie
         }
 #endif
 
-        [Button("Add Event", ButtonSizes.Large), GUIColor(0.4f, 0.8f, 0.4f)]
-        private void AddNewEvent()
+        // Метод для добавления нового события можно оставить, если он используется где-то ещё
+        public void AddNewEvent()
         {
             var newEvent = new ElementAnimationEventDependent();
             newEvent.SetParentStyle(this);
             
-            // Если есть доступные события, выбираем первое
+            // Если нужны события по умолчанию
             if (ManagerRef != null && ManagerRef.possibleEvents.Count > 0)
             {
-                newEvent.eventKey = ManagerRef.possibleEvents[0];
+                newEvent.eventKeys.Add(ManagerRef.possibleEvents[0]);
             }
             
             eventDefinitions.Add(newEvent);
         }
 
-        public bool TryGetEventDefinition(string key, out ElementAnimationEventDependent def)
+        public bool TryGetEventDefinition(string eventKey, out ElementAnimationEventDependent def)
         {
-            def = eventDefinitions.FirstOrDefault(e => e.eventKey == key);
+            def = eventDefinitions.FirstOrDefault(e => e.HandlesEvent(eventKey));
             return (def != null);
         }
 
@@ -99,24 +109,24 @@ namespace Smoothie
 
         private void OnEnable()
         {
-            ForceParentStyleForAll();
+            UpdateParentReferences();
         }
 
 #if UNITY_EDITOR
         private void OnValidate()
         {
-            ForceParentStyleForAll();
+            UpdateParentReferences();
         }
 #endif
 
-        private void ForceParentStyleForAll()
+        private void UpdateParentReferences()
         {
-            for (int i = 0; i < eventDefinitions.Count; i++)
+            foreach (var eventDef in eventDefinitions)
             {
-                if (eventDefinitions[i] != null)
+                if (eventDef != null)
                 {
-                    eventDefinitions[i].SetParentStyle(this);
-                    eventDefinitions[i].UpdateParentReferences();
+                    eventDef.SetParentStyle(this);
+                    eventDef.UpdateParentReferences();
                 }
             }
         }

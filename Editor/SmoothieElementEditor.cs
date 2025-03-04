@@ -4,7 +4,7 @@ using UnityEditor;
 using Sirenix.OdinInspector.Editor;
 using Sirenix.Utilities.Editor;
 using System.Collections.Generic;
-using UnityEngine.UI;
+using System.Linq;
 
 namespace Smoothie
 {
@@ -47,14 +47,23 @@ namespace Smoothie
             _currentStyle = _animationManager.dependentStyles.Find(s => s.styleName == styleName);
             if (_currentStyle == null) return;
             
-            // Collect available events
+            // Collect available events from all event definitions
+            var eventSet = new HashSet<string>();
             foreach (var eventDef in _currentStyle.eventDefinitions)
             {
-                if (!string.IsNullOrEmpty(eventDef.eventKey))
+                if (eventDef.eventKeys != null && eventDef.eventKeys.Count > 0)
                 {
-                    _availableEvents.Add(eventDef.eventKey);
+                    foreach (var eventKey in eventDef.eventKeys)
+                    {
+                        if (!string.IsNullOrEmpty(eventKey))
+                        {
+                            eventSet.Add(eventKey);
+                        }
+                    }
                 }
             }
+            
+            _availableEvents.AddRange(eventSet);
             
             // Select first event by default
             if (_availableEvents.Count > 0 && string.IsNullOrEmpty(_selectedEvent))
