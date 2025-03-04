@@ -1,9 +1,9 @@
-using UnityEngine;
-using Sirenix.OdinInspector;
-using UnityEngine.Serialization;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
+using UnityEngine;
+using Sirenix.OdinInspector;
+using UnityEngine.Serialization;
 
 namespace Smoothie
 {

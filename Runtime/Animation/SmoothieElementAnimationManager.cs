@@ -13,17 +13,36 @@ namespace Smoothie
         menuName = "Smoothie/Animation/Element Animation Manager")]
     public class SmoothieElementAnimationManager : ScriptableObject
     {
+        [TitleGroup("Configuration")]
+        [HorizontalGroup("Configuration/Split")]
+        [VerticalGroup("Configuration/Split/Left")]
+        [BoxGroup("Configuration/Split/Left/Events")]
         [LabelText("Possible Events")]
+        [ListDrawerSettings(Expanded = true, DraggableItems = true)]
         public List<string> possibleEvents = new List<string>()
         {
             "PointerEnter",
             "PointerExit",
             "PointerClick",
-            "TRR"
+            "Press",
+            "Release"
         };
 
-        [Button("Add New Style", ButtonHeight = 30)]
-        [GUIColor(0.25f, 1f, 0.25f)]
+        [VerticalGroup("Configuration/Split/Right")]
+        [BoxGroup("Configuration/Split/Right/UI Elements")]
+        [LabelText("Possible UI Elements")]
+        [ListDrawerSettings(Expanded = true, DraggableItems = true)]
+        public List<string> possibleUIElements = new List<string>()
+        {
+            "Background",
+            "Text",
+            "Icon",
+            "Border",
+            "Shadow"
+        };
+
+        [TitleGroup("Animation Styles", "Available Animation Styles")]
+        [Button("Add New Style", ButtonSizes.Large), GUIColor(0.4f, 0.8f, 0.4f)]
         public void AddNewDependentStyle()
         {
             var newStyle = ScriptableObject.CreateInstance<SmoothieElementAnimationStyle>();
@@ -37,9 +56,8 @@ namespace Smoothie
             dependentStyles.Add(newStyle);
         }
 
-        [ListDrawerSettings(Expanded = true, DraggableItems = false)]
-        [InlineEditor(Expanded = false)]
-        [LabelText("Element Styles")]
+        [ListDrawerSettings(Expanded = true, DraggableItems = false, ShowIndexLabels = false)]
+        [InlineEditor(InlineEditorObjectFieldModes.Foldout)]
         public List<SmoothieElementAnimationStyle> dependentStyles = new List<SmoothieElementAnimationStyle>();
 
 #if UNITY_EDITOR
@@ -79,5 +97,19 @@ namespace Smoothie
             };
         }
 #endif
+
+        [Button("Event Reference Guide", ButtonSizes.Medium)]
+        private void ShowEventReferenceGuide()
+        {
+            // Show a quick reference for events in the console
+            string guide = "Event Reference Guide:\n";
+            
+            foreach (var evt in possibleEvents)
+            {
+                guide += $"- {evt}: Call OnElement.{evt}() to trigger this event\n";
+            }
+            
+            Debug.Log(guide);
+        }
     }
 }

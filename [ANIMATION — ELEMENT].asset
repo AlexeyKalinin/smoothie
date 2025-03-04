@@ -1,5 +1,20 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-7941148410663887273
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1bab38aec997c40058bea6febec06512, type: 3}
+  m_Name: Test
+  m_EditorClassIdentifier: 
+  ManagerRef: {fileID: 11400000}
+  _styleName: Test
+  eventDefinitions: []
 --- !u!114 &-6549989029247853011
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15,9 +30,11 @@ MonoBehaviour:
   ManagerRef: {fileID: 11400000}
   _styleName: Simple
   eventDefinitions:
-  - eventKey: Test
-    duration: 1.89
+  - parentStyle: {fileID: -6549989029247853011}
+    eventKey: PointerEnter
+    duration: 0.3
     useSpring: 0
+    uiElements: []
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -31,10 +48,35 @@ MonoBehaviour:
   m_Name: "[ANIMATION \u2014 ELEMENT]"
   m_EditorClassIdentifier: 
   possibleEvents:
-  - PointerEnter
+  - Normal
   - PointerExit
   - PointerClick
   - TRR
   - Test
+  possibleUIElements:
+  - Background
+  - Text
+  - Icon
+  - Border
+  - Shadow
+  - Toggle
+  - Loop
   dependentStyles:
   - {fileID: -6549989029247853011}
+  - {fileID: 8160096904114636327}
+  - {fileID: -7941148410663887273}
+--- !u!114 &8160096904114636327
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1bab38aec997c40058bea6febec06512, type: 3}
+  m_Name: New Style
+  m_EditorClassIdentifier: 
+  ManagerRef: {fileID: 11400000}
+  _styleName: New Style
+  eventDefinitions: []
