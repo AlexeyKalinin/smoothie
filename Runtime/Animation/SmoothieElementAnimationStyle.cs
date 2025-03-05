@@ -44,7 +44,7 @@ namespace Smoothie
             ShowItemCount = true
         )]
         [LabelText(" ")]
-        public List<ElementAnimationEventDependent> eventDefinitions = new List<ElementAnimationEventDependent>();
+        public List<SmoothieElementAnimationEventDependent> eventDefinitions = new List<SmoothieElementAnimationEventDependent>();
 
         public string styleName
         {
@@ -53,7 +53,7 @@ namespace Smoothie
         }
 
 #if UNITY_EDITOR
-        private void RemoveEventDefinition(ElementAnimationEventDependent eventDef)
+        private void RemoveEventDefinition(SmoothieElementAnimationEventDependent eventDef)
         {
             if (eventDefinitions.Contains(eventDef))
             {
@@ -84,7 +84,7 @@ namespace Smoothie
         // Метод для добавления нового события можно оставить, если он используется где-то ещё
         public void AddNewEvent()
         {
-            var newEvent = new ElementAnimationEventDependent();
+            var newEvent = new SmoothieElementAnimationEventDependent();
             newEvent.SetParentStyle(this);
             
             // Если нужны события по умолчанию
@@ -96,7 +96,7 @@ namespace Smoothie
             eventDefinitions.Add(newEvent);
         }
 
-        public bool TryGetEventDefinition(string eventKey, out ElementAnimationEventDependent def)
+        public bool TryGetEventDefinition(string eventKey, out SmoothieElementAnimationEventDependent def)
         {
             def = eventDefinitions.FirstOrDefault(e => e.HandlesEvent(eventKey));
             return (def != null);

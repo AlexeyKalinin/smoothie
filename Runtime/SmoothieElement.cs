@@ -154,7 +154,7 @@ namespace Smoothie
         }
 
         #region Animation Methods
-        private void PlayColorAnimation(Graphic targetGraphic, ElementAnimationAction action)
+        private void PlayColorAnimation(Graphic targetGraphic, SmoothieElementAnimationAction action)
         {
             if (targetGraphic == null) return;
 

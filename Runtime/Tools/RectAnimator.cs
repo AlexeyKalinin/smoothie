@@ -9,17 +9,17 @@ public class RectAnimator : MonoBehaviour
     [SerializeField] FloatInterpolator.Config _iForward = FloatInterpolator.Config.Direct;
     [SerializeField] FloatInterpolator.Config _iBack = FloatInterpolator.Config.Direct;
 
-    private SmoothFloat _smoothTop;
-    private SmoothFloat _smoothRight;
-    private SmoothFloat _smoothBottom;
-    private SmoothFloat _smoothLeft;
+    private SmoothieFloat _smoothieTop;
+    private SmoothieFloat _smoothieRight;
+    private SmoothieFloat _smoothieBottom;
+    private SmoothieFloat _smoothieLeft;
     
     void Start()
     {
-        _smoothTop = new SmoothFloat(this, current.anchorMax.y, _iForward.interpolationType, _iForward.interpolationSpeed, _iForward.interpolationElasticity, value => SetAnchorMaxY(value));
-        _smoothRight = new SmoothFloat(this, current.anchorMax.x, _iForward.interpolationType, _iForward.interpolationSpeed, _iForward.interpolationElasticity, value => SetAnchorMaxX(value));
-        _smoothBottom = new SmoothFloat(this, current.anchorMin.y, _iForward.interpolationType, _iForward.interpolationSpeed, _iForward.interpolationElasticity, value => SetAnchorMinY(value));
-        _smoothLeft = new SmoothFloat(this, current.anchorMin.x, _iForward.interpolationType, _iForward.interpolationSpeed, _iForward.interpolationElasticity, value => SetAnchorMinX(value));
+        _smoothieTop = new SmoothieFloat(this, current.anchorMax.y, _iForward.interpolationType, _iForward.interpolationSpeed, _iForward.interpolationElasticity, value => SetAnchorMaxY(value));
+        _smoothieRight = new SmoothieFloat(this, current.anchorMax.x, _iForward.interpolationType, _iForward.interpolationSpeed, _iForward.interpolationElasticity, value => SetAnchorMaxX(value));
+        _smoothieBottom = new SmoothieFloat(this, current.anchorMin.y, _iForward.interpolationType, _iForward.interpolationSpeed, _iForward.interpolationElasticity, value => SetAnchorMinY(value));
+        _smoothieLeft = new SmoothieFloat(this, current.anchorMin.x, _iForward.interpolationType, _iForward.interpolationSpeed, _iForward.interpolationElasticity, value => SetAnchorMinX(value));
     }
 
     public void MoveTo(GameObject targetObject)
@@ -39,30 +39,30 @@ public class RectAnimator : MonoBehaviour
 
         if (movingRight)
         {
-            _smoothRight.UpdateConfig(_iForward.interpolationType, _iForward.interpolationSpeed, _iForward.interpolationElasticity);
-            _smoothLeft.UpdateConfig(_iBack.interpolationType, _iBack.interpolationSpeed, _iBack.interpolationElasticity);
+            _smoothieRight.UpdateConfig(_iForward.interpolationType, _iForward.interpolationSpeed, _iForward.interpolationElasticity);
+            _smoothieLeft.UpdateConfig(_iBack.interpolationType, _iBack.interpolationSpeed, _iBack.interpolationElasticity);
         }
         else
         {
-            _smoothRight.UpdateConfig(_iBack.interpolationType, _iBack.interpolationSpeed, _iBack.interpolationElasticity);
-            _smoothLeft.UpdateConfig(_iForward.interpolationType, _iForward.interpolationSpeed, _iForward.interpolationElasticity);
+            _smoothieRight.UpdateConfig(_iBack.interpolationType, _iBack.interpolationSpeed, _iBack.interpolationElasticity);
+            _smoothieLeft.UpdateConfig(_iForward.interpolationType, _iForward.interpolationSpeed, _iForward.interpolationElasticity);
         }
 
         if (movingUp)
         {
-            _smoothTop.UpdateConfig(_iForward.interpolationType, _iForward.interpolationSpeed, _iForward.interpolationElasticity);
-            _smoothBottom.UpdateConfig(_iBack.interpolationType, _iBack.interpolationSpeed, _iBack.interpolationElasticity);
+            _smoothieTop.UpdateConfig(_iForward.interpolationType, _iForward.interpolationSpeed, _iForward.interpolationElasticity);
+            _smoothieBottom.UpdateConfig(_iBack.interpolationType, _iBack.interpolationSpeed, _iBack.interpolationElasticity);
         }
         else
         {
-            _smoothTop.UpdateConfig(_iBack.interpolationType, _iBack.interpolationSpeed, _iBack.interpolationElasticity);
-            _smoothBottom.UpdateConfig(_iForward.interpolationType, _iForward.interpolationSpeed, _iForward.interpolationElasticity);
+            _smoothieTop.UpdateConfig(_iBack.interpolationType, _iBack.interpolationSpeed, _iBack.interpolationElasticity);
+            _smoothieBottom.UpdateConfig(_iForward.interpolationType, _iForward.interpolationSpeed, _iForward.interpolationElasticity);
         }
 
-        _smoothTop.SetValue(targetRect.anchorMax.y);
-        _smoothRight.SetValue(targetRect.anchorMax.x);
-        _smoothBottom.SetValue(targetRect.anchorMin.y);
-        _smoothLeft.SetValue(targetRect.anchorMin.x);
+        _smoothieTop.SetValue(targetRect.anchorMax.y);
+        _smoothieRight.SetValue(targetRect.anchorMax.x);
+        _smoothieBottom.SetValue(targetRect.anchorMin.y);
+        _smoothieLeft.SetValue(targetRect.anchorMin.x);
     }
 
     private void SetAnchorMinX(float value)

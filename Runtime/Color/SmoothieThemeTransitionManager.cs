@@ -8,7 +8,7 @@ namespace Smoothie
     /// <summary>
     /// Пример компонента для демонстрации переключения темы с эффектами
     /// </summary>
-    public class ThemeTransitionManager : MonoBehaviour
+    public class SmoothieThemeTransitionManager : MonoBehaviour
     {
         [SerializeField] private SmoothieRuntimeManager runtimeManager;
         

@@ -8,9 +8,9 @@ namespace Smoothie
     public class SmoothieElementAnimationUIElement
     {
         [HideInInspector]
-        private ElementAnimationEventDependent parentEvent;
+        private SmoothieElementAnimationEventDependent parentEvent;
 
-        public void SetParentEvent(ElementAnimationEventDependent parent)
+        public void SetParentEvent(SmoothieElementAnimationEventDependent parent)
         {
             parentEvent = parent;
         }
@@ -26,7 +26,7 @@ namespace Smoothie
             DraggableItems = false,
             Expanded = true)]
         [LabelText(" ")]
-        public List<ElementAnimationAction> actions = new List<ElementAnimationAction>();
+        public List<SmoothieElementAnimationAction> actions = new List<SmoothieElementAnimationAction>();
 
         private IEnumerable<string> GetUIElements()
         {

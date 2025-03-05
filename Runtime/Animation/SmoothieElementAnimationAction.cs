@@ -7,7 +7,7 @@ namespace Smoothie
     /// Simplified animation action for UI elements
     /// </summary>
     [System.Serializable]
-    public class ElementAnimationAction
+    public class SmoothieElementAnimationAction
     {
         [HideInInspector]
         private SmoothieElementAnimationUIElement _parentSmoothieElement;

@@ -6,7 +6,7 @@ namespace Smoothie
     using Config = FloatInterpolator.Config;
 
     [CustomPropertyDrawer(typeof(Config))]
-    class FloatInterpolatorConfigDrawer : PropertyDrawer
+    class SmoothieInterpolatorConfigEditor : PropertyDrawer
     {
         static GUIContent _textSpeed = new GUIContent("Speed");
         static GUIContent _textElasticity = new GUIContent("Elasticity");

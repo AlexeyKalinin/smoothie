@@ -9,7 +9,7 @@ using System.Linq;
 namespace Smoothie
 {
     [Sirenix.OdinInspector.Editor.OdinDrawer]
-    public class SmoothieElementAnimationEventDependentDrawer : OdinValueDrawer<SmoothieElementAnimationEventDependent>
+    public class SmoothieElementAnimationEventDependentEditor : OdinValueDrawer<SmoothieElementAnimationEventDependent>
     {
         private static Dictionary<SmoothieElementAnimationEventDependent, bool> s_foldoutMap
             = new Dictionary<SmoothieElementAnimationEventDependent, bool>();

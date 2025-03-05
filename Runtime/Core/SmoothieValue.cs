@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Smoothie
 {
-    public abstract class SmoothValue<T>
+    public abstract class SmoothieValue<T>
     {
         protected MonoBehaviour _caller;
         protected System.Action<T> _onUpdate;
@@ -31,7 +31,7 @@ namespace Smoothie
         }
     }
 
-    public class SmoothFloat : SmoothValue<float>
+    public class SmoothieFloat : SmoothieValue<float>
     {
         private FloatInterpolator _floatInterpolator;
 
@@ -41,7 +41,7 @@ namespace Smoothie
             set { _floatInterpolator.currentValue = value; }
         }
 
-        public SmoothFloat(MonoBehaviour caller, float initialValue, FloatInterpolator.Config.InterpolationType interpolator, float speed, float elasticity, System.Action<float> onUpdate)
+        public SmoothieFloat(MonoBehaviour caller, float initialValue, FloatInterpolator.Config.InterpolationType interpolator, float speed, float elasticity, System.Action<float> onUpdate)
         {
             _caller = caller;
             FloatInterpolator.Config config = new FloatInterpolator.Config(interpolator, speed, elasticity);
@@ -85,11 +85,11 @@ namespace Smoothie
                 yield return null;
             }
 
-            SmoothFloatTweens.RemoveTween(this);
+            SmoothieFloatTweens.RemoveTween(this);
         }
     }
     
-    public class SmoothVector2 : SmoothValue<Vector2>
+    public class SmoothieVector2 : SmoothieValue<Vector2>
     {
         private Vector2Interpolator _vector2Interpolator;
 
@@ -99,7 +99,7 @@ namespace Smoothie
             set { _vector2Interpolator.currentValue = value; }
         }
 
-        public SmoothVector2(MonoBehaviour caller, Vector2 initialValue, Vector2Interpolator.Config.InterpolationType interpolator, float speed, float elasticity, System.Action<Vector2> onUpdate)
+        public SmoothieVector2(MonoBehaviour caller, Vector2 initialValue, Vector2Interpolator.Config.InterpolationType interpolator, float speed, float elasticity, System.Action<Vector2> onUpdate)
         {
             _caller = caller;
             Vector2Interpolator.Config config = new Vector2Interpolator.Config(interpolator, speed, elasticity);
@@ -143,11 +143,11 @@ namespace Smoothie
                 yield return null;
             }
 
-            SmoothVector2Tweens.RemoveTween(this);
+            SmoothieVector2Tweens.RemoveTween(this);
         }
     }
 
-    public class SmoothVector3 : SmoothValue<Vector3>
+    public class SmoothieVector3 : SmoothieValue<Vector3>
     {
         private Vector3Interpolator _vector3Interpolator;
 
@@ -162,7 +162,7 @@ namespace Smoothie
             IsComplete = value;
         }
 
-        public SmoothVector3(MonoBehaviour caller, Vector3 initialValue, Vector3Interpolator.Config.InterpolationType interpolator, float speed, float elasticity, System.Action<Vector3> onUpdate)
+        public SmoothieVector3(MonoBehaviour caller, Vector3 initialValue, Vector3Interpolator.Config.InterpolationType interpolator, float speed, float elasticity, System.Action<Vector3> onUpdate)
         {
             _caller = caller;
             Vector3Interpolator.Config config = new Vector3Interpolator.Config(interpolator, speed, elasticity);
@@ -206,7 +206,7 @@ namespace Smoothie
                 yield return null;
             }
 
-            SmoothVector3Tweens.RemoveTween(this);
+            SmoothieVector3Tweens.RemoveTween(this);
             SetIsComplete(true);
             RaiseOnAnimationCompleted();
         }
