@@ -6,7 +6,7 @@ using System.Linq;
 namespace Smoothie
 {
     [System.Serializable]
-    public class ElementAnimationEventDependent
+    public class SmoothieElementAnimationEventDependent
     {
         [HideInInspector]
         public SmoothieElementAnimationStyle parentStyle;
@@ -43,7 +43,7 @@ namespace Smoothie
             ShowIndexLabels = false,
             ShowItemCount = true
         )]
-        public List<ElementAnimationUIElement> uiElements = new List<ElementAnimationUIElement>();
+        public List<SmoothieElementAnimationUIElement> uiElements = new List<SmoothieElementAnimationUIElement>();
 
         private IEnumerable<string> GetAvailableEvents()
         {

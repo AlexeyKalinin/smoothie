@@ -10,11 +10,11 @@ namespace Smoothie
     public class ElementAnimationAction
     {
         [HideInInspector]
-        private ElementAnimationUIElement parentElement;
+        private SmoothieElementAnimationUIElement _parentSmoothieElement;
 
-        public void SetParentElement(ElementAnimationUIElement parent)
+        public void SetParentElement(SmoothieElementAnimationUIElement parent)
         {
-            parentElement = parent;
+            _parentSmoothieElement = parent;
         }
 
         [HideLabel]

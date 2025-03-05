@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Smoothie
 {
     [System.Serializable]
-    public class ElementAnimationUIElement
+    public class SmoothieElementAnimationUIElement
     {
         [HideInInspector]
         private ElementAnimationEventDependent parentEvent;

@@ -9,10 +9,10 @@ using System.Linq;
 namespace Smoothie
 {
     [Sirenix.OdinInspector.Editor.OdinDrawer]
-    public class ElementAnimationEventDependentDrawer : OdinValueDrawer<ElementAnimationEventDependent>
+    public class SmoothieElementAnimationEventDependentDrawer : OdinValueDrawer<SmoothieElementAnimationEventDependent>
     {
-        private static Dictionary<ElementAnimationEventDependent, bool> s_foldoutMap
-            = new Dictionary<ElementAnimationEventDependent, bool>();
+        private static Dictionary<SmoothieElementAnimationEventDependent, bool> s_foldoutMap
+            = new Dictionary<SmoothieElementAnimationEventDependent, bool>();
 
         protected override void DrawPropertyLayout(GUIContent label)
         {
@@ -127,7 +127,7 @@ namespace Smoothie
                     EditorGUILayout.Space(5);
                     if (GUILayout.Button("Add UI Element", GUILayout.ExpandWidth(true), GUILayout.Height(25)))
                     {
-                        target.uiElements.Add(new ElementAnimationUIElement());
+                        target.uiElements.Add(new SmoothieElementAnimationUIElement());
                         uiElementsProperty.RecordForUndo("Add UI Element");
                     }
                 }
