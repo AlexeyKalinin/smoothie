@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-5070670440470789834
+--- !u!114 &-6064095759012049685
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -10,16 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 971c51af8104e495b90cf02ae12e5531, type: 3}
-  m_Name: 
+  m_Name: global_snow
   m_EditorClassIdentifier: 
-  themeName: 777
+  themeName: global_snow
   parentDefinition: {fileID: 11400000}
   parameterValues:
   - ParameterName: New Parameter
-    Type: 1
-    Enabled: 1
-    ColorValue: {r: 0, g: 0, b: 0, a: 0}
-    FloatValue: 1.15
+    Type: 0
+    Enabled: 0
+    ColorValue: {r: 1, g: 1, b: 1, a: 1}
+    FloatValue: 0
     VectorValue: {x: 0, y: 0, z: 0}
   - ParameterName: Test
     Type: 0
@@ -51,6 +51,57 @@ MonoBehaviour:
     ColorValue: {r: 0, g: 0, b: 0, a: 0}
     FloatValue: 0
     VectorValue: {x: 0, y: 0, z: 0}
+--- !u!114 &-5316031354763720687
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 971c51af8104e495b90cf02ae12e5531, type: 3}
+  m_Name: global_night
+  m_EditorClassIdentifier: 
+  themeName: global_night
+  parentDefinition: {fileID: 11400000}
+  parameterValues:
+  - ParameterName: Test
+    Type: 0
+    Enabled: 1
+    ColorValue: {r: 0, g: 0, b: 0, a: 0}
+    FloatValue: 0
+    VectorValue: {x: 0, y: 0, z: 0}
+  - ParameterName: TOP
+    Type: 1
+    Enabled: 1
+    ColorValue: {r: 1, g: 1, b: 1, a: 1}
+    FloatValue: 0
+    VectorValue: {x: 0, y: 0, z: 0}
+  - ParameterName: Class
+    Type: 1
+    Enabled: 1
+    ColorValue: {r: 1, g: 1, b: 1, a: 1}
+    FloatValue: 0
+    VectorValue: {x: 0, y: 0, z: 0}
+  - ParameterName: New Parameter
+    Type: 3
+    Enabled: 1
+    ColorValue: {r: 0, g: 0, b: 0, a: 0}
+    FloatValue: 0
+    VectorValue: {x: 0, y: 0, z: 0}
+  - ParameterName: 
+    Type: 5
+    Enabled: 1
+    ColorValue: {r: 0, g: 0, b: 0, a: 0}
+    FloatValue: 0
+    VectorValue: {x: 0, y: 0, z: 0}
+  - ParameterName: "\u041D\u041D\u041D"
+    Type: 0
+    Enabled: 1
+    ColorValue: {r: 0, g: 0, b: 0, a: 0}
+    FloatValue: 0
+    VectorValue: {x: 0, y: 0, z: 0}
 --- !u!114 &-3727150175028446952
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -61,9 +112,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 971c51af8104e495b90cf02ae12e5531, type: 3}
-  m_Name: Test
+  m_Name: ui_light
   m_EditorClassIdentifier: 
-  themeName: Test
+  themeName: ui_light
   parentDefinition: {fileID: 11400000}
   parameterValues:
   - ParameterName: Test
@@ -87,11 +138,68 @@ MonoBehaviour:
   - ParameterName: New Parameter
     Type: 3
     Enabled: 1
-    ColorValue: {r: 0, g: 0, b: 0, a: 0}
+    ColorValue: {r: 0.7924528, g: 0.25044498, b: 0.25044498, a: 0.56078434}
     FloatValue: 0
     VectorValue: {x: 0, y: 0, z: 0}
   - ParameterName: "\u041D\u041D\u041D"
     Type: 0
+    Enabled: 1
+    ColorValue: {r: 0, g: 0, b: 0, a: 0}
+    FloatValue: 0
+    VectorValue: {x: 0, y: 0, z: 0}
+  - ParameterName: 
+    Type: 5
+    Enabled: 1
+    ColorValue: {r: 0, g: 0, b: 0, a: 0}
+    FloatValue: 0
+    VectorValue: {x: 0, y: 0, z: 0}
+--- !u!114 &-3418104019541918869
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 971c51af8104e495b90cf02ae12e5531, type: 3}
+  m_Name: global_winter
+  m_EditorClassIdentifier: 
+  themeName: global_winter
+  parentDefinition: {fileID: 11400000}
+  parameterValues:
+  - ParameterName: New Parameter
+    Type: 0
+    Enabled: 0
+    ColorValue: {r: 1, g: 1, b: 1, a: 1}
+    FloatValue: 0
+    VectorValue: {x: 0, y: 0, z: 0}
+  - ParameterName: Test
+    Type: 0
+    Enabled: 1
+    ColorValue: {r: 0, g: 0, b: 0, a: 0}
+    FloatValue: 0
+    VectorValue: {x: 0, y: 0, z: 0}
+  - ParameterName: TOP
+    Type: 1
+    Enabled: 1
+    ColorValue: {r: 1, g: 1, b: 1, a: 1}
+    FloatValue: 0
+    VectorValue: {x: 0, y: 0, z: 0}
+  - ParameterName: Class
+    Type: 1
+    Enabled: 1
+    ColorValue: {r: 1, g: 1, b: 1, a: 1}
+    FloatValue: 0
+    VectorValue: {x: 0, y: 0, z: 0}
+  - ParameterName: "\u041D\u041D\u041D"
+    Type: 0
+    Enabled: 1
+    ColorValue: {r: 0, g: 0, b: 0, a: 0}
+    FloatValue: 0
+    VectorValue: {x: 0, y: 0, z: 0}
+  - ParameterName: 
+    Type: 5
     Enabled: 1
     ColorValue: {r: 0, g: 0, b: 0, a: 0}
     FloatValue: 0
@@ -106,9 +214,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 971c51af8104e495b90cf02ae12e5531, type: 3}
-  m_Name: 1st
+  m_Name: global_day
   m_EditorClassIdentifier: 
-  themeName: 1st
+  themeName: global_day
   parentDefinition: {fileID: 11400000}
   parameterValues:
   - ParameterName: New Parameter
@@ -187,3 +295,54 @@ MonoBehaviour:
   - Name: New Parameter
     Type: 1
     Actions: []
+--- !u!114 &5520942053270759708
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 971c51af8104e495b90cf02ae12e5531, type: 3}
+  m_Name: ui_dark
+  m_EditorClassIdentifier: 
+  themeName: ui_dark
+  parentDefinition: {fileID: 11400000}
+  parameterValues:
+  - ParameterName: Test
+    Type: 2
+    Enabled: 1
+    ColorValue: {r: 0, g: 0, b: 0, a: 0}
+    FloatValue: 0
+    VectorValue: {x: 0, y: 0, z: 0}
+  - ParameterName: TOP
+    Type: 1
+    Enabled: 1
+    ColorValue: {r: 1, g: 1, b: 1, a: 1}
+    FloatValue: 0
+    VectorValue: {x: 0, y: 0, z: 0}
+  - ParameterName: Class
+    Type: 1
+    Enabled: 1
+    ColorValue: {r: 1, g: 1, b: 1, a: 1}
+    FloatValue: 0
+    VectorValue: {x: 0, y: 0, z: 0}
+  - ParameterName: New Parameter
+    Type: 3
+    Enabled: 1
+    ColorValue: {r: 0.7924528, g: 0.25044498, b: 0.25044498, a: 0.56078434}
+    FloatValue: 0
+    VectorValue: {x: 0, y: 0, z: 0}
+  - ParameterName: "\u041D\u041D\u041D"
+    Type: 0
+    Enabled: 1
+    ColorValue: {r: 0, g: 0, b: 0, a: 0}
+    FloatValue: 0
+    VectorValue: {x: 0, y: 0, z: 0}
+  - ParameterName: 
+    Type: 5
+    Enabled: 1
+    ColorValue: {r: 0, g: 0, b: 0, a: 0}
+    FloatValue: 0
+    VectorValue: {x: 0, y: 0, z: 0}

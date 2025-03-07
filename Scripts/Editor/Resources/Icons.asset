@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62bbf5c1158ee4040a6d0f1f605acec5, type: 3}
+  m_Name: Icons
+  m_EditorClassIdentifier: 
+  backIcon: {fileID: 2800000, guid: d5147e2e984204771b978c931ffb10b2, type: 3}
+  duplicateIcon: {fileID: 2800000, guid: 9e37401af991f4c2fb7e9ac0920509af, type: 3}
+  deleteIcon: {fileID: 2800000, guid: 2a4ad1c2968f6444085ab5c840d17fcd, type: 3}
+  editIcon: {fileID: 2800000, guid: 2022dcce6f733406da6a059aa1be5786, type: 3}
+  backIconTint: {r: 0.8867924, g: 0.8867924, b: 0.8867924, a: 1}
+  duplicateIconTint: {r: 0.747953, g: 0.79729444, b: 0.8301887, a: 1}
+  deleteIconTint: {r: 0.8396226, g: 0.75003934, b: 0.68516374, a: 1}
+  editIconTint: {r: 0.39315593, g: 0.8773585, b: 0.5465713, a: 1}
