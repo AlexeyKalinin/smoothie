@@ -69,6 +69,12 @@ MonoBehaviour:
     ColorValue: {r: 1, g: 1, b: 1, a: 1}
     FloatValue: 0
     VectorValue: {x: 0, y: 0, z: 0}
+  - ParameterName: Test
+    Type: 0
+    Enabled: 1
+    ColorValue: {r: 0, g: 0, b: 0, a: 0}
+    FloatValue: 0
+    VectorValue: {x: 0, y: 0, z: 0}
 --- !u!114 &-5316031354763720687
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -242,12 +248,6 @@ MonoBehaviour:
     VectorValue: {x: 0, y: 0, z: 0}
   - ParameterName: Test
     Type: 0
-    Enabled: 1
-    ColorValue: {r: 0, g: 0, b: 0, a: 0}
-    FloatValue: 0
-    VectorValue: {x: 0, y: 0, z: 0}
-  - ParameterName: 
-    Type: 5
     Enabled: 1
     ColorValue: {r: 0, g: 0, b: 0, a: 0}
     FloatValue: 0

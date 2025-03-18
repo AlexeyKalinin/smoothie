@@ -1,0 +1,125 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-4551622664707020735
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76416127c28a4826b8d63ede899e877e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  containerName: Container 1
+  toggle1: 0
+  toggle2: 0
+  someFloat: 0.4
+  nodePosition: {x: 476, y: 131}
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03f071d76f5e4ed19dc851f402a896db, type: 3}
+  m_Name: SmoothieManager
+  m_EditorClassIdentifier: 
+  containers:
+  - {fileID: -4551622664707020735}
+  - {fileID: 1614275563359304584}
+  - {fileID: 8650673579238543218}
+  - {fileID: 8855874846644689515}
+  - {fileID: 1241899183261217166}
+  - {fileID: 8080445905252049287}
+  editorPanOffset: {x: 359, y: 170}
+  editorZoomScale: 1
+--- !u!114 &1241899183261217166
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76416127c28a4826b8d63ede899e877e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  containerName: Container 5
+  toggle1: 0
+  toggle2: 0
+  someFloat: 0
+  nodePosition: {x: 117, y: -61}
+--- !u!114 &1614275563359304584
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76416127c28a4826b8d63ede899e877e, type: 3}
+  m_Name: (Clone)
+  m_EditorClassIdentifier: 
+  containerName: Container 1 Copy
+  toggle1: 0
+  toggle2: 0
+  someFloat: 0.4
+  nodePosition: {x: -33, y: 136}
+--- !u!114 &8080445905252049287
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76416127c28a4826b8d63ede899e877e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  containerName: Container 6
+  toggle1: 0
+  toggle2: 0
+  someFloat: 0
+  nodePosition: {x: 0, y: 0}
+--- !u!114 &8650673579238543218
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76416127c28a4826b8d63ede899e877e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  containerName: Container 3
+  toggle1: 0
+  toggle2: 0
+  someFloat: 0
+  nodePosition: {x: -268, y: 136}
+--- !u!114 &8855874846644689515
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76416127c28a4826b8d63ede899e877e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  containerName: Container 4
+  toggle1: 0
+  toggle2: 0
+  someFloat: 0
+  nodePosition: {x: 234, y: 131}
