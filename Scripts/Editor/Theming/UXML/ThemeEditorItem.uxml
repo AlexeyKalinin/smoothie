@@ -1,0 +1,8 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+    <ui:VisualElement class="theme-item">
+        <ui:Label name="themeName" class="theme-name" />
+        <ui:Button name="openButton" text="Open" class="open-button" />
+        <ui:Button name="duplicateButton" class="icon-button small-button" />
+        <ui:Button name="deleteButton" class="icon-button small-button" />
+    </ui:VisualElement>
+</ui:UXML>

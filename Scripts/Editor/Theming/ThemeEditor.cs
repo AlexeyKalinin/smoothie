@@ -1,5 +1,7 @@
 using UnityEngine;
+using UnityEngine.UIElements;
 using UnityEditor;
+using UnityEditor.UIElements;
 using System.Linq;
 
 namespace Smoothie
@@ -7,90 +9,182 @@ namespace Smoothie
     [CustomEditor(typeof(Theme))]
     public class ThemeEditor : Editor
     {
+        // UI Elements
+        private VisualElement _root;
+        private Button _backButton;
+        private Button _duplicateButton;
+        private Button _deleteButton;
+        private Button _editThemeButton;
+        private TextField _themeNameField;
+        private Toggle _editParametersToggle;
+        private Label _parameterCountLabel;
+        private VisualElement _parametersContainer;
+        
+        // Data references
         private Theme _theme;
         private SerializedProperty _nameProperty;
         private SerializedProperty _parameterValuesProperty;
         
-        // Режим редактирования параметров (отдельно от режима редактирования темы)
+        // Editor state
         private bool _editMode = false;
-        
-        // Статическая ссылка на тему, которая сейчас находится в режиме редактирования (Edit Theme)
         private static Theme currentlyEditingTheme = null;
         private bool IsEditingThisTheme => currentlyEditingTheme == _theme;
-        
-        // Размеры кнопок
-        private const float ButtonHeight = 24f;
-        private const float IconButtonWidth = 50f;   // для кнопок с иконками (Back, Duplicate, Delete)
-        private const float EditButtonWidth = 100f;    // для текстовой кнопки "Edit Theme"
-        
-        // Стили кнопок
-        private GUIStyle iconButtonStyle;
-        private GUIStyle textButtonStyle;
-        private GUIStyle toggleButtonStyle;
-        
+
         private void OnEnable()
         {
             _theme = (Theme)target;
             _nameProperty = serializedObject.FindProperty("themeName");
             _parameterValuesProperty = serializedObject.FindProperty("parameterValues");
+        }
+
+        public override VisualElement CreateInspectorGUI()
+        {
+            // Load UXML template
+            var visualTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(
+                "Assets/Smoothie/Scripts/Editor/Theming/UXML/ThemeEditor.uxml");
             
-            // Инициализация стилей
-            iconButtonStyle = new GUIStyle(EditorStyles.miniButton)
+            if (visualTree == null)
             {
-                padding = new RectOffset(8, 8, 4, 4),
-                alignment = TextAnchor.MiddleCenter
-            };
-            textButtonStyle = new GUIStyle(EditorStyles.miniButton)
+                Debug.LogError("Failed to load ThemeEditor.uxml. Please make sure the file exists at the specified path.");
+                return new Label("Error loading UI template.");
+            }
+            
+            _root = visualTree.Instantiate();
+            
+            // Load USS styles
+            var styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>(
+                "Assets/Smoothie/Scripts/Editor/Theming/USS/SmoothieEditor.uss");
+                
+            if (styleSheet != null)
             {
-                padding = new RectOffset(10, 10, 4, 4),
-                alignment = TextAnchor.MiddleCenter
-            };
-            toggleButtonStyle = new GUIStyle(EditorStyles.miniButton)
+                _root.styleSheets.Add(styleSheet);
+            }
+            
+            // Get UI components
+            _backButton = _root.Q<Button>("backButton");
+            _editThemeButton = _root.Q<Button>("editThemeButton");
+            _duplicateButton = _root.Q<Button>("duplicateButton");
+            _deleteButton = _root.Q<Button>("deleteButton");
+            _themeNameField = _root.Q<TextField>("themeName");
+            _editParametersToggle = _root.Q<Toggle>("editParametersToggle");
+            _parameterCountLabel = _root.Q<Label>("parameterCount");
+            _parametersContainer = _root.Q<VisualElement>("parametersContainer");
+            
+            // Initialize values
+            if (_themeNameField != null)
+                _themeNameField.value = _theme.ThemeName;
+                
+            if (_editParametersToggle != null)
+                _editParametersToggle.value = _editMode;
+                
+            if (_editThemeButton != null)
             {
-                padding = new RectOffset(10, 10, 4, 4),
-                alignment = TextAnchor.MiddleCenter
-            };
+                UpdateEditThemeButtonStyle();
+                _editThemeButton.text = "Edit Theme";
+            }
+            
+            // Set up icons
+            SetupIcons();
+            
+            // Set up event handlers
+            SetupEventHandlers();
+            
+            // Update parameter count display
+            UpdateParameterCountDisplay();
+            
+            // Add IMGUI container for parameters
+            if (_parametersContainer != null)
+            {
+                var imguiContainer = new IMGUIContainer(DrawParametersGUI);
+                _parametersContainer.Add(imguiContainer);
+            }
+            
+            return _root;
         }
         
-        public override void OnInspectorGUI()
+        private void UpdateEditThemeButtonStyle()
         {
-            EditorGUIUtility.hierarchyMode = false;
-            EditorGUIUtility.wideMode = true;
-            int oldIndent = EditorGUI.indentLevel;
-            EditorGUI.indentLevel = 0;
-            serializedObject.Update();
+            if (_editThemeButton == null) return;
             
-            // Оборачиваем всё в горизонтальный контейнер с равными отступами слева и справа
-            EditorGUILayout.BeginHorizontal();
-            GUILayout.Space(0); // левый отступ 5
-            EditorGUILayout.BeginVertical();
-            GUILayout.Space(10); // верхний отступ 10
-            
-            // Получаем ассет с иконками
-            SmoothieUIAssets uiAssets = SmoothieUIAssets.Instance;
-            GUIContent backContent, duplicateContent, deleteContent;
-            if (uiAssets != null && uiAssets.backIcon != null && uiAssets.duplicateIcon != null && uiAssets.deleteIcon != null)
+            if (IsEditingThisTheme)
             {
-                backContent      = new GUIContent(uiAssets.backIcon,      "Back to Theme Definition");
-                duplicateContent = new GUIContent(uiAssets.duplicateIcon, "Duplicate this theme");
-                deleteContent    = new GUIContent(uiAssets.deleteIcon,    "Delete this theme");
+                _editThemeButton.AddToClassList("edit-theme-button-active");
             }
             else
             {
-                backContent      = new GUIContent("Back");
-                duplicateContent = new GUIContent("Duplicate");
-                deleteContent    = new GUIContent("Delete");
+                _editThemeButton.RemoveFromClassList("edit-theme-button-active");
             }
-            
-            // --- Верхняя строка с кнопками ---
-            EditorGUILayout.BeginHorizontal();
+        }
+        private void DrawDivider(Rect rect)
+        {
+            // Верхняя тень (темная линия)
+            Rect shadowRect = new Rect(rect.x, rect.y, rect.width, 1);
+            EditorGUI.DrawRect(shadowRect, new Color(0.1f, 0.1f, 0.1f, 0.3f));
+    
+            // Нижняя подсветка (светлая линия)
+            Rect highlightRect = new Rect(rect.x, rect.y + 1, rect.width, 1);
+            EditorGUI.DrawRect(highlightRect, new Color(1f, 1f, 1f, 0.1f));
+        }
+        private void SetupIcons()
+        {
+            SmoothieUIAssets uiAssets = SmoothieUIAssets.Instance;
+            if (uiAssets != null)
             {
-                Color oldColor = GUI.color;
+                // Back button
+                if (_backButton != null && uiAssets.backIcon != null)
+                {
+                    var backImage = new Image();
+                    backImage.image = uiAssets.backIcon;
+                    backImage.tintColor = uiAssets.backIconTint;
+                    backImage.AddToClassList("button-icon");
+                    _backButton.Add(backImage);
+                }
+                else if (_backButton != null)
+                {
+                    _backButton.text = "Back";
+                }
                 
-                // Кнопка Back (иконка) слева
-                if (uiAssets != null)
-                    GUI.color = uiAssets.backIconTint;
-                if (GUILayout.Button(backContent, iconButtonStyle, GUILayout.Width(IconButtonWidth), GUILayout.Height(ButtonHeight)))
+                // Duplicate button
+                if (_duplicateButton != null && uiAssets.duplicateIcon != null)
+                {
+                    var duplicateImage = new Image();
+                    duplicateImage.image = uiAssets.duplicateIcon;
+                    duplicateImage.tintColor = uiAssets.duplicateIconTint;
+                    duplicateImage.AddToClassList("button-icon");
+                    _duplicateButton.Add(duplicateImage);
+                }
+                else if (_duplicateButton != null)
+                {
+                    _duplicateButton.text = "Duplicate";
+                }
+                
+                // Delete button
+                if (_deleteButton != null && uiAssets.deleteIcon != null)
+                {
+                    var deleteImage = new Image();
+                    deleteImage.image = uiAssets.deleteIcon;
+                    deleteImage.tintColor = uiAssets.deleteIconTint;
+                    deleteImage.AddToClassList("button-icon");
+                    _deleteButton.Add(deleteImage);
+                }
+                else if (_deleteButton != null)
+                {
+                    _deleteButton.text = "Delete";
+                }
+            }
+            else
+            {
+                if (_backButton != null) _backButton.text = "Back";
+                if (_duplicateButton != null) _duplicateButton.text = "Duplicate";
+                if (_deleteButton != null) _deleteButton.text = "Delete";
+            }
+        }
+        
+        private void SetupEventHandlers()
+        {
+            if (_backButton != null)
+            {
+                _backButton.clicked += () =>
                 {
                     if (_theme.ParentDefinition != null)
                     {
@@ -98,76 +192,76 @@ namespace Smoothie
                         var mainAsset = AssetDatabase.LoadMainAssetAtPath(path);
                         Selection.activeObject = mainAsset;
                     }
-                }
-                
-                // Растягиваем пространство между кнопками
-                GUILayout.FlexibleSpace();
-                
-                // Toggle-кнопка "Edit Theme" – она показывает, что тема в режиме редактирования.
-                bool isEditing = IsEditingThisTheme;
-                bool newIsEditing = GUILayout.Toggle(isEditing, "Edit Theme", toggleButtonStyle,
-                    GUILayout.Width(EditButtonWidth), GUILayout.Height(ButtonHeight));
-                if (newIsEditing != isEditing)
-                {
-                    if (newIsEditing)
-                    {
-                        // Если другая тема уже редактируется, переключаемся на эту
-                        currentlyEditingTheme = _theme;
-                    }
-                    else
-                    {
-                        currentlyEditingTheme = null;
-                    }
-                }
-                
-                // Кнопка Duplicate (иконка)
-                if (uiAssets != null)
-                    GUI.color = uiAssets.duplicateIconTint;
-                if (GUILayout.Button(duplicateContent, iconButtonStyle, GUILayout.Width(IconButtonWidth), GUILayout.Height(ButtonHeight)))
-                {
-                    DuplicateTheme();
-                }
-                
-                // Кнопка Delete (иконка)
-                if (uiAssets != null)
-                    GUI.color = uiAssets.deleteIconTint;
-                if (GUILayout.Button(deleteContent, iconButtonStyle, GUILayout.Width(IconButtonWidth), GUILayout.Height(ButtonHeight)))
+                };
+            }
+            
+            if (_duplicateButton != null)
+            {
+                _duplicateButton.clicked += DuplicateTheme;
+            }
+            
+            if (_deleteButton != null)
+            {
+                _deleteButton.clicked += () =>
                 {
                     if (EditorUtility.DisplayDialog("Delete Theme",
                         $"Are you sure you want to delete the theme '{_theme.ThemeName}'?",
                         "Delete", "Cancel"))
                     {
                         DeleteTheme();
-                        // После удаления выбираем родительский ассет
                         var path = AssetDatabase.GetAssetPath(_theme.ParentDefinition);
                         var mainAsset = AssetDatabase.LoadMainAssetAtPath(path);
                         Selection.activeObject = mainAsset;
-                        // Завершаем отрисовку, так как объект удалён
-                        EndLayout();
-                        return;
                     }
-                }
-                
-                GUI.color = oldColor;
+                };
             }
-            EditorGUILayout.EndHorizontal();
-            EditorGUILayout.Space();
-            EditorGUILayout.Space(5);
             
-            // Поле редактирования имени темы
-            string newName = EditorGUILayout.DelayedTextField("Theme Name", _theme.ThemeName);
-            if (newName != _theme.ThemeName)
+            if (_editThemeButton != null)
             {
-                _theme.ThemeName = newName;
-                _theme.name = newName;
-                EditorUtility.SetDirty(_theme);
-                AssetDatabase.SaveAssets();
+                _editThemeButton.clicked += () =>
+                {
+                    bool newState = !IsEditingThisTheme;
+                    currentlyEditingTheme = newState ? _theme : null;
+                    UpdateEditThemeButtonStyle();
+                };
             }
             
-            // Переключатель "Edit Parameters" (оставляем без изменений)
-            _editMode = EditorGUILayout.Toggle("Edit Parameters", _editMode);
+            if (_themeNameField != null)
+            {
+                _themeNameField.RegisterValueChangedCallback(evt =>
+                {
+                    if (evt.newValue != _theme.ThemeName)
+                    {
+                        _theme.ThemeName = evt.newValue;
+                        _theme.name = evt.newValue;
+                        EditorUtility.SetDirty(_theme);
+                        AssetDatabase.SaveAssets();
+                    }
+                });
+            }
             
-            // Подсчет параметров с полупрозрачным текстом
+            if (_editParametersToggle != null)
+            {
+                _editParametersToggle.RegisterValueChangedCallback(evt =>
+                {
+                    _editMode = evt.newValue;
+                    UpdateParameterCountDisplay();
+                    if (_parametersContainer != null)
+                    {
+                        var imgui = _parametersContainer.Q<IMGUIContainer>();
+                        if (imgui != null)
+                        {
+                            imgui.MarkDirtyRepaint();
+                        }
+                    }
+                });
+            }
+        }
+        
+        private void UpdateParameterCountDisplay()
+        {
+            if (_parameterCountLabel == null) return;
+            
             int totalParams = _parameterValuesProperty.arraySize;
             int enabledParams = 0;
             for (int i = 0; i < totalParams; i++)
@@ -181,21 +275,16 @@ namespace Smoothie
             string countText = $"Showing {enabledParams} of {totalParams} parameters";
             if (hiddenParams > 0)
                 countText += $" ({hiddenParams} hidden)";
-            GUIStyle countStyle = new GUIStyle(EditorStyles.miniLabel)
-            {
-                normal = { textColor = new Color(1f, 1f, 1f, 0.4f) }
-            };
-            EditorGUILayout.LabelField(countText, countStyle);
             
-            EditorGUILayout.Space(10);
+            _parameterCountLabel.text = countText;
+        }
+        
+        private void DrawParametersGUI()
+        {
+            serializedObject.Update();
             
-            // Проверяем наличие родительского ThemeDefinition
-            if (_theme.ParentDefinition != null)
-            {
-                _theme.SynchronizeWithDefinition();
-                serializedObject.Update();
-            }
-            else
+            // Check if parent definition exists
+            if (_theme.ParentDefinition == null)
             {
                 EditorGUILayout.HelpBox("This theme has no parent definition.", MessageType.Warning);
                 if (GUILayout.Button("Back to Theme Definition"))
@@ -204,95 +293,187 @@ namespace Smoothie
                     var mainAsset = AssetDatabase.LoadMainAssetAtPath(assetPath);
                     Selection.activeObject = mainAsset;
                 }
-                EndLayout();
                 return;
             }
             
-            // Отрисовка параметров темы
+            // Synchronize with definition
+            _theme.SynchronizeWithDefinition();
+            
+            // Group the parameters
+            EditorGUILayout.BeginVertical();
+            
+            // Build parameter list - only include valid parameters
+            bool lastWasTitle = false;
+            string currentSection = "";
+            
             foreach (var defParam in _theme.ParentDefinition.Parameters)
             {
+                // Find the parameter value in the theme
                 SerializedProperty paramValue = null;
                 for (int i = 0; i < _parameterValuesProperty.arraySize; i++)
                 {
                     var valueProp = _parameterValuesProperty.GetArrayElementAtIndex(i);
                     var nameProperty = valueProp.FindPropertyRelative("ParameterName");
-                    if (nameProperty.stringValue == defParam.Name)
+                    if (nameProperty != null && nameProperty.stringValue == defParam.Name)
                     {
                         paramValue = valueProp;
                         break;
                     }
                 }
+                
+                // Skip invalid parameters
                 if (paramValue == null)
                     continue;
                 
                 var enabledProperty = paramValue.FindPropertyRelative("Enabled");
+                
                 if (_editMode)
                 {
+                    // Edit mode - show all parameters with visibility toggles
                     if (defParam.Type == ThemeParameterType.Title)
                     {
+                        if (!lastWasTitle)
+                            EditorGUILayout.Space(5);
+                            
                         EditorGUILayout.BeginHorizontal();
-                        EditorGUILayout.PropertyField(enabledProperty, GUIContent.none, GUILayout.Width(20));
-                        EditorGUI.BeginDisabledGroup(!enabledProperty.boolValue);
+                        
+                        bool newEnabled = EditorGUILayout.Toggle(enabledProperty.boolValue, GUILayout.Width(20));
+                        if (newEnabled != enabledProperty.boolValue)
+                        {
+                            enabledProperty.boolValue = newEnabled;
+                            serializedObject.ApplyModifiedProperties();
+                            UpdateParameterCountDisplay();
+                        }
+                        
+                        // Add GUI.enabled to visually show disabled state
+                        bool oldEnabled = GUI.enabled;
+                        if (!enabledProperty.boolValue)
+                            GUI.enabled = false;
+                            
                         EditorGUILayout.LabelField(defParam.Name, EditorStyles.boldLabel);
-                        EditorGUI.EndDisabledGroup();
+                        
+                        // Restore GUI.enabled
+                        GUI.enabled = oldEnabled;
+                        
                         EditorGUILayout.EndHorizontal();
-                        EditorGUILayout.Space(5);
+                        EditorGUILayout.Space(3);
+                        lastWasTitle = true;
+                        currentSection = defParam.Name;
+                    }
+                    else if (defParam.Type == ThemeParameterType.Divider)
+                    {
+                        if (_editMode)
+                        {
+                            EditorGUILayout.BeginHorizontal();
+        
+                            bool newEnabled = EditorGUILayout.Toggle(enabledProperty.boolValue, GUILayout.Width(20));
+                            if (newEnabled != enabledProperty.boolValue)
+                            {
+                                enabledProperty.boolValue = newEnabled;
+                                serializedObject.ApplyModifiedProperties();
+                                UpdateParameterCountDisplay();
+                            }
+        
+                            bool oldEnabled = GUI.enabled;
+                            if (!enabledProperty.boolValue)
+                                GUI.enabled = false;
+            
+                            // Рисуем улучшенный разделитель
+                            Rect rect = EditorGUILayout.GetControlRect(false, 2);
+                            DrawDivider(rect);
+        
+                            GUI.enabled = oldEnabled;
+        
+                            EditorGUILayout.EndHorizontal();
+                            EditorGUILayout.Space(5);
+                            lastWasTitle = false;
+                        }
+                        else if (enabledProperty.boolValue)
+                        {
+                            EditorGUILayout.Space(3);
+                            Rect rect = EditorGUILayout.GetControlRect(false, 2);
+                            DrawDivider(rect);
+                            EditorGUILayout.Space(5);
+                            lastWasTitle = false;
+                        }
                     }
                     else
                     {
+                        lastWasTitle = false;
                         EditorGUILayout.BeginHorizontal();
-                        EditorGUILayout.PropertyField(enabledProperty, GUIContent.none, GUILayout.Width(20));
-                        DrawParameterValue(defParam, paramValue, !enabledProperty.boolValue);
+                        
+                        bool newEnabled = EditorGUILayout.Toggle(enabledProperty.boolValue, GUILayout.Width(20));
+                        if (newEnabled != enabledProperty.boolValue)
+                        {
+                            enabledProperty.boolValue = newEnabled;
+                            serializedObject.ApplyModifiedProperties();
+                            UpdateParameterCountDisplay();
+                        }
+                        
+                        EditorGUI.BeginDisabledGroup(!enabledProperty.boolValue);
+                        DrawParameterField(defParam, paramValue);
+                        EditorGUI.EndDisabledGroup();
+                        
                         EditorGUILayout.EndHorizontal();
                         EditorGUILayout.Space(2);
                     }
                 }
                 else
                 {
+                    // Normal mode - only show enabled parameters
                     if (enabledProperty.boolValue)
                     {
                         if (defParam.Type == ThemeParameterType.Title)
                         {
-                            EditorGUILayout.Space(10);
+                            if (!lastWasTitle)
+                                EditorGUILayout.Space(5);
+                                
                             EditorGUILayout.LabelField(defParam.Name, EditorStyles.boldLabel);
-                            continue;
+                            EditorGUILayout.Space(3);
+                            lastWasTitle = true;
+                            currentSection = defParam.Name;
+                        }
+                        else if (defParam.Type == ThemeParameterType.Divider)
+                        {
+                            Rect rect = EditorGUILayout.GetControlRect(false, 2);
+                            EditorGUI.DrawRect(rect, new Color(0.5f, 0.5f, 0.5f, 0.5f));
+                            EditorGUILayout.Space(5);
+                            lastWasTitle = false;
                         }
                         else
                         {
-                            EditorGUILayout.BeginHorizontal();
-                            DrawParameterValue(defParam, paramValue, false);
-                            EditorGUILayout.EndHorizontal();
+                            lastWasTitle = false;
+                            DrawParameterField(defParam, paramValue);
                             EditorGUILayout.Space(2);
                         }
                     }
                 }
             }
             
-            EditorGUILayout.Space(10);
-            EndLayout();
-            EditorGUI.indentLevel = oldIndent;
+            EditorGUILayout.EndVertical();
+            
             serializedObject.ApplyModifiedProperties();
         }
         
-        private void DrawParameterValue(ThemeParameter defParam, SerializedProperty paramValue, bool isDisabled)
+        private void DrawParameterField(ThemeParameter defParam, SerializedProperty paramValue)
         {
-            EditorGUI.BeginDisabledGroup(isDisabled);
             switch (defParam.Type)
             {
                 case ThemeParameterType.Color:
                     var colorProperty = paramValue.FindPropertyRelative("ColorValue");
-                    EditorGUILayout.PropertyField(colorProperty, new GUIContent(defParam.Name));
+                    colorProperty.colorValue = EditorGUILayout.ColorField(defParam.Name, colorProperty.colorValue);
                     break;
+                    
                 case ThemeParameterType.Float:
                     var floatProperty = paramValue.FindPropertyRelative("FloatValue");
-                    EditorGUILayout.PropertyField(floatProperty, new GUIContent(defParam.Name));
+                    floatProperty.floatValue = EditorGUILayout.FloatField(defParam.Name, floatProperty.floatValue);
                     break;
+                    
                 case ThemeParameterType.Vector3:
                     var vectorProperty = paramValue.FindPropertyRelative("VectorValue");
-                    EditorGUILayout.PropertyField(vectorProperty, new GUIContent(defParam.Name));
+                    vectorProperty.vector3Value = EditorGUILayout.Vector3Field(defParam.Name, vectorProperty.vector3Value);
                     break;
             }
-            EditorGUI.EndDisabledGroup();
         }
         
         private void DuplicateTheme()
@@ -315,25 +496,12 @@ namespace Smoothie
         {
             if (_theme.ParentDefinition == null)
             {
-                Debug.LogWarning("Cannot delete theme without a parent definition.");
+                Debug.LogWarning("Cannot duplicate theme without a parent definition.");
                 return;
             }
             Object.DestroyImmediate(_theme, true);
             EditorUtility.SetDirty(_theme.ParentDefinition);
             AssetDatabase.SaveAssets();
-            
-            // После удаления выбираем родительский ассет
-            var path = AssetDatabase.GetAssetPath(_theme.ParentDefinition);
-            var mainAsset = AssetDatabase.LoadMainAssetAtPath(path);
-            Selection.activeObject = mainAsset;
-        }
-        
-        // Завершает горизонтальный и вертикальный блоки
-        private void EndLayout()
-        {
-            EditorGUILayout.EndVertical();
-            GUILayout.Space(5);
-            EditorGUILayout.EndHorizontal();
         }
     }
 }

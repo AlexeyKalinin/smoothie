@@ -1,0 +1,138 @@
+.container {
+    padding: 10px;
+}
+
+.header {
+    font-size: 16px;
+    -unity-font-style: bold;
+    margin-bottom: 10px;
+}
+
+.toolbar {
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 15px;
+    height: 24px;
+}
+
+.spacer {
+    flex-grow: 1;
+}
+
+.icon-button {
+    width: 30px;
+    height: 24px;
+    margin-right: 5px;
+    justify-content: center;
+    align-items: center;
+}
+
+.button-icon {
+    width: 16px;
+    height: 16px;
+}
+
+.edit-theme-button {
+    height: 24px;
+    -unity-text-align: middle-center;
+    margin-right: 10px;
+    border-width: 1px;
+    border-radius: 3px;
+    padding: 3px 8px;
+    background-color: rgba(60, 60, 60, 0.1);
+}
+
+.edit-theme-button-active {
+    background-color: rgba(60, 120, 200, 0.5);
+    color: white;
+}
+
+.small-button {
+    height: 18px;
+    width: 24px;
+}
+
+.section-foldout {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.parameter-count {
+    opacity: 0.4;
+    margin-bottom: 10px;
+    font-size: 10px;
+    margin-left: 4px;
+    margin-top: -5px;
+}
+
+.parameters-container {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.themes-container {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.parameter-row {
+    flex-direction: row;
+    margin-bottom: 5px;
+    margin-top: 5px;
+    width: 100%;
+}
+
+.parameter-title {
+    -unity-font-style: bold;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.disabled-field {
+    opacity: 0.5;
+}
+
+.theme-item {
+    flex-direction: row;
+    align-items: center;
+    padding: 5px;
+    background-color: rgba(0, 0, 0, 0.05);
+    border-radius: 3px;
+}
+
+.theme-name {
+    -unity-font-style: bold;
+    flex-grow: 1;
+    margin-left: 10px;
+}
+
+.foldout-header {
+    -unity-font-style: bold;
+}
+
+.open-button {
+    width: 60px;
+    margin-right: 5px;
+}
+
+.enabled-toggle {
+    width: 20px;
+    margin-right: 5px;
+}
+
+.button-container {
+    flex-direction: row;
+    justify-content: flex-end;
+    margin-top: 5px;
+}
+
+.add-button {
+    height: 28px;
+    border-radius: 3px;
+    padding: 4px 10px;
+    background-color: rgba(60, 120, 200, 0.2);
+}
+
+.add-button:hover {
+    background-color: rgba(60, 120, 200, 0.3);
+}

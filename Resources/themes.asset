@@ -21,34 +21,52 @@ MonoBehaviour:
     ColorValue: {r: 1, g: 1, b: 1, a: 1}
     FloatValue: 0
     VectorValue: {x: 0, y: 0, z: 0}
-  - ParameterName: Test
+  - ParameterName: GLOBAL
     Type: 0
     Enabled: 1
     ColorValue: {r: 0, g: 0, b: 0, a: 0}
     FloatValue: 0
     VectorValue: {x: 0, y: 0, z: 0}
-  - ParameterName: TOP
+  - ParameterName: Fog
     Type: 1
     Enabled: 1
     ColorValue: {r: 1, g: 1, b: 1, a: 1}
     FloatValue: 0
     VectorValue: {x: 0, y: 0, z: 0}
-  - ParameterName: Class
+  - ParameterName: Light
     Type: 1
     Enabled: 1
     ColorValue: {r: 1, g: 1, b: 1, a: 1}
     FloatValue: 0
     VectorValue: {x: 0, y: 0, z: 0}
-  - ParameterName: "\u041D\u041D\u041D"
+  - ParameterName: Direction
+    Type: 2
+    Enabled: 1
+    ColorValue: {r: 0, g: 0, b: 0, a: 0}
+    FloatValue: 1
+    VectorValue: {x: 0, y: 0, z: 0}
+  - ParameterName: UI
     Type: 0
     Enabled: 1
     ColorValue: {r: 0, g: 0, b: 0, a: 0}
     FloatValue: 0
     VectorValue: {x: 0, y: 0, z: 0}
-  - ParameterName: 
-    Type: 5
+  - ParameterName: Background
+    Type: 1
     Enabled: 1
-    ColorValue: {r: 0, g: 0, b: 0, a: 0}
+    ColorValue: {r: 1, g: 1, b: 1, a: 1}
+    FloatValue: 0
+    VectorValue: {x: 0, y: 0, z: 0}
+  - ParameterName: Text
+    Type: 1
+    Enabled: 1
+    ColorValue: {r: 1, g: 1, b: 1, a: 1}
+    FloatValue: 0
+    VectorValue: {x: 0, y: 0, z: 0}
+  - ParameterName: Shadow
+    Type: 1
+    Enabled: 1
+    ColorValue: {r: 1, g: 1, b: 1, a: 1}
     FloatValue: 0
     VectorValue: {x: 0, y: 0, z: 0}
 --- !u!114 &-5316031354763720687
@@ -66,37 +84,61 @@ MonoBehaviour:
   themeName: global_night
   parentDefinition: {fileID: 11400000}
   parameterValues:
-  - ParameterName: Test
-    Type: 0
-    Enabled: 1
-    ColorValue: {r: 0, g: 0, b: 0, a: 0}
-    FloatValue: 0
-    VectorValue: {x: 0, y: 0, z: 0}
-  - ParameterName: TOP
-    Type: 1
-    Enabled: 1
-    ColorValue: {r: 1, g: 1, b: 1, a: 1}
-    FloatValue: 0
-    VectorValue: {x: 0, y: 0, z: 0}
-  - ParameterName: Class
-    Type: 1
-    Enabled: 1
-    ColorValue: {r: 1, g: 1, b: 1, a: 1}
-    FloatValue: 0
-    VectorValue: {x: 0, y: 0, z: 0}
   - ParameterName: New Parameter
     Type: 3
     Enabled: 1
     ColorValue: {r: 0, g: 0, b: 0, a: 0}
     FloatValue: 0
-    VectorValue: {x: 0, y: 0, z: 0}
-  - ParameterName: 
-    Type: 5
+    VectorValue: {x: 2.43, y: 5.43, z: 2.97}
+  - ParameterName: GLOBAL
+    Type: 0
     Enabled: 1
     ColorValue: {r: 0, g: 0, b: 0, a: 0}
     FloatValue: 0
     VectorValue: {x: 0, y: 0, z: 0}
-  - ParameterName: "\u041D\u041D\u041D"
+  - ParameterName: Fog
+    Type: 1
+    Enabled: 1
+    ColorValue: {r: 1, g: 1, b: 1, a: 1}
+    FloatValue: 0
+    VectorValue: {x: 0, y: 0, z: 0}
+  - ParameterName: Light
+    Type: 1
+    Enabled: 1
+    ColorValue: {r: 1, g: 1, b: 1, a: 1}
+    FloatValue: 0
+    VectorValue: {x: 0, y: 0, z: 0}
+  - ParameterName: Direction
+    Type: 2
+    Enabled: 1
+    ColorValue: {r: 0, g: 0, b: 0, a: 0}
+    FloatValue: 1
+    VectorValue: {x: 0, y: 0, z: 0}
+  - ParameterName: UI
+    Type: 0
+    Enabled: 1
+    ColorValue: {r: 0, g: 0, b: 0, a: 0}
+    FloatValue: 0
+    VectorValue: {x: 0, y: 0, z: 0}
+  - ParameterName: Background
+    Type: 1
+    Enabled: 1
+    ColorValue: {r: 1, g: 1, b: 1, a: 1}
+    FloatValue: 0
+    VectorValue: {x: 0, y: 0, z: 0}
+  - ParameterName: Text
+    Type: 1
+    Enabled: 1
+    ColorValue: {r: 1, g: 1, b: 1, a: 1}
+    FloatValue: 0
+    VectorValue: {x: 0, y: 0, z: 0}
+  - ParameterName: Shadow
+    Type: 1
+    Enabled: 1
+    ColorValue: {r: 1, g: 1, b: 1, a: 1}
+    FloatValue: 0
+    VectorValue: {x: 0, y: 0, z: 0}
+  - ParameterName: Test
     Type: 0
     Enabled: 1
     ColorValue: {r: 0, g: 0, b: 0, a: 0}
@@ -117,38 +159,62 @@ MonoBehaviour:
   themeName: ui_light
   parentDefinition: {fileID: 11400000}
   parameterValues:
-  - ParameterName: Test
-    Type: 2
-    Enabled: 1
-    ColorValue: {r: 0, g: 0, b: 0, a: 0}
-    FloatValue: 0
-    VectorValue: {x: 0, y: 0, z: 0}
-  - ParameterName: TOP
-    Type: 1
-    Enabled: 1
-    ColorValue: {r: 1, g: 1, b: 1, a: 1}
-    FloatValue: 0
-    VectorValue: {x: 0, y: 0, z: 0}
-  - ParameterName: Class
-    Type: 1
-    Enabled: 1
-    ColorValue: {r: 1, g: 1, b: 1, a: 1}
-    FloatValue: 0
-    VectorValue: {x: 0, y: 0, z: 0}
   - ParameterName: New Parameter
     Type: 3
-    Enabled: 1
+    Enabled: 0
     ColorValue: {r: 0.7924528, g: 0.25044498, b: 0.25044498, a: 0.56078434}
     FloatValue: 0
     VectorValue: {x: 0, y: 0, z: 0}
-  - ParameterName: "\u041D\u041D\u041D"
+  - ParameterName: GLOBAL
+    Type: 0
+    Enabled: 0
+    ColorValue: {r: 0, g: 0, b: 0, a: 0}
+    FloatValue: 0
+    VectorValue: {x: 0, y: 0, z: 0}
+  - ParameterName: Fog
+    Type: 1
+    Enabled: 0
+    ColorValue: {r: 1, g: 1, b: 1, a: 1}
+    FloatValue: 0
+    VectorValue: {x: 0, y: 0, z: 0}
+  - ParameterName: Light
+    Type: 1
+    Enabled: 0
+    ColorValue: {r: 1, g: 1, b: 1, a: 1}
+    FloatValue: 0
+    VectorValue: {x: 0, y: 0, z: 0}
+  - ParameterName: Direction
+    Type: 2
+    Enabled: 0
+    ColorValue: {r: 0, g: 0, b: 0, a: 0}
+    FloatValue: 1
+    VectorValue: {x: 0, y: 0, z: 0}
+  - ParameterName: UI
     Type: 0
     Enabled: 1
     ColorValue: {r: 0, g: 0, b: 0, a: 0}
     FloatValue: 0
     VectorValue: {x: 0, y: 0, z: 0}
-  - ParameterName: 
-    Type: 5
+  - ParameterName: Background
+    Type: 1
+    Enabled: 1
+    ColorValue: {r: 1, g: 1, b: 1, a: 1}
+    FloatValue: 0
+    VectorValue: {x: 0, y: 0, z: 0}
+  - ParameterName: Text
+    Type: 1
+    Enabled: 1
+    ColorValue: {r: 1, g: 1, b: 1, a: 1}
+    FloatValue: 0
+    VectorValue: {x: 0, y: 0, z: 0}
+  - ParameterName: Shadow
+    Type: 1
+    Enabled: 1
+    ColorValue: {r: 1, g: 1, b: 1, a: 1}
+    FloatValue: 0
+    VectorValue: {x: 0, y: 0, z: 0}
+  - ParameterName: Test
+    Type: 0
     Enabled: 1
     ColorValue: {r: 0, g: 0, b: 0, a: 0}
     FloatValue: 0
@@ -180,28 +246,58 @@ MonoBehaviour:
     ColorValue: {r: 0, g: 0, b: 0, a: 0}
     FloatValue: 0
     VectorValue: {x: 0, y: 0, z: 0}
-  - ParameterName: TOP
-    Type: 1
+  - ParameterName: 
+    Type: 5
     Enabled: 1
-    ColorValue: {r: 1, g: 1, b: 1, a: 1}
+    ColorValue: {r: 0, g: 0, b: 0, a: 0}
     FloatValue: 0
     VectorValue: {x: 0, y: 0, z: 0}
-  - ParameterName: Class
-    Type: 1
-    Enabled: 1
-    ColorValue: {r: 1, g: 1, b: 1, a: 1}
-    FloatValue: 0
-    VectorValue: {x: 0, y: 0, z: 0}
-  - ParameterName: "\u041D\u041D\u041D"
+  - ParameterName: GLOBAL
     Type: 0
     Enabled: 1
     ColorValue: {r: 0, g: 0, b: 0, a: 0}
     FloatValue: 0
     VectorValue: {x: 0, y: 0, z: 0}
-  - ParameterName: 
-    Type: 5
+  - ParameterName: Fog
+    Type: 2
     Enabled: 1
     ColorValue: {r: 0, g: 0, b: 0, a: 0}
+    FloatValue: 1
+    VectorValue: {x: 0, y: 0, z: 0}
+  - ParameterName: Light
+    Type: 1
+    Enabled: 1
+    ColorValue: {r: 1, g: 1, b: 1, a: 1}
+    FloatValue: 0
+    VectorValue: {x: 0, y: 0, z: 0}
+  - ParameterName: Direction
+    Type: 2
+    Enabled: 1
+    ColorValue: {r: 0, g: 0, b: 0, a: 0}
+    FloatValue: 1
+    VectorValue: {x: 0, y: 0, z: 0}
+  - ParameterName: UI
+    Type: 0
+    Enabled: 1
+    ColorValue: {r: 0, g: 0, b: 0, a: 0}
+    FloatValue: 0
+    VectorValue: {x: 0, y: 0, z: 0}
+  - ParameterName: Background
+    Type: 1
+    Enabled: 1
+    ColorValue: {r: 1, g: 1, b: 1, a: 1}
+    FloatValue: 0
+    VectorValue: {x: 0, y: 0, z: 0}
+  - ParameterName: Text
+    Type: 1
+    Enabled: 1
+    ColorValue: {r: 1, g: 1, b: 1, a: 1}
+    FloatValue: 0
+    VectorValue: {x: 0, y: 0, z: 0}
+  - ParameterName: Shadow
+    Type: 1
+    Enabled: 1
+    ColorValue: {r: 1, g: 1, b: 1, a: 1}
     FloatValue: 0
     VectorValue: {x: 0, y: 0, z: 0}
 --- !u!114 &-1688259563548627546
@@ -225,32 +321,56 @@ MonoBehaviour:
     ColorValue: {r: 1, g: 1, b: 1, a: 1}
     FloatValue: 0
     VectorValue: {x: 0, y: 0, z: 0}
+  - ParameterName: GLOBAL
+    Type: 0
+    Enabled: 1
+    ColorValue: {r: 0, g: 0, b: 0, a: 0}
+    FloatValue: 0
+    VectorValue: {x: 0, y: 0, z: 0}
+  - ParameterName: Fog
+    Type: 1
+    Enabled: 1
+    ColorValue: {r: 1, g: 1, b: 1, a: 1}
+    FloatValue: 0
+    VectorValue: {x: 0, y: 0, z: 0}
+  - ParameterName: Light
+    Type: 1
+    Enabled: 1
+    ColorValue: {r: 0.990566, g: 0.38781592, b: 0.38781592, a: 1}
+    FloatValue: 0
+    VectorValue: {x: 0, y: 0, z: 0}
+  - ParameterName: Direction
+    Type: 2
+    Enabled: 1
+    ColorValue: {r: 0, g: 0, b: 0, a: 0}
+    FloatValue: 1
+    VectorValue: {x: 0, y: 0, z: 0}
+  - ParameterName: UI
+    Type: 0
+    Enabled: 1
+    ColorValue: {r: 0, g: 0, b: 0, a: 0}
+    FloatValue: 0
+    VectorValue: {x: 0, y: 0, z: 0}
+  - ParameterName: Background
+    Type: 1
+    Enabled: 1
+    ColorValue: {r: 1, g: 1, b: 1, a: 1}
+    FloatValue: 0
+    VectorValue: {x: 0, y: 0, z: 0}
+  - ParameterName: Text
+    Type: 1
+    Enabled: 1
+    ColorValue: {r: 1, g: 1, b: 1, a: 1}
+    FloatValue: 0
+    VectorValue: {x: 0, y: 0, z: 0}
+  - ParameterName: Shadow
+    Type: 1
+    Enabled: 1
+    ColorValue: {r: 1, g: 1, b: 1, a: 1}
+    FloatValue: 0
+    VectorValue: {x: 0, y: 0, z: 0}
   - ParameterName: Test
     Type: 0
-    Enabled: 1
-    ColorValue: {r: 0, g: 0, b: 0, a: 0}
-    FloatValue: 0
-    VectorValue: {x: 0, y: 0, z: 0}
-  - ParameterName: TOP
-    Type: 1
-    Enabled: 1
-    ColorValue: {r: 1, g: 1, b: 1, a: 1}
-    FloatValue: 0
-    VectorValue: {x: 0, y: 0, z: 0}
-  - ParameterName: Class
-    Type: 1
-    Enabled: 1
-    ColorValue: {r: 1, g: 1, b: 1, a: 1}
-    FloatValue: 0
-    VectorValue: {x: 0, y: 0, z: 0}
-  - ParameterName: "\u041D\u041D\u041D"
-    Type: 0
-    Enabled: 1
-    ColorValue: {r: 0, g: 0, b: 0, a: 0}
-    FloatValue: 0
-    VectorValue: {x: 0, y: 0, z: 0}
-  - ParameterName: 
-    Type: 5
     Enabled: 1
     ColorValue: {r: 0, g: 0, b: 0, a: 0}
     FloatValue: 0
@@ -268,32 +388,50 @@ MonoBehaviour:
   m_Name: themes
   m_EditorClassIdentifier: 
   parameters:
-  - Name: Test
+  - Name: GLOBAL
     Type: 0
     Actions: []
-  - Name: TOP
+  - Name: Fog
+    Type: 2
+    Actions:
+    - ActionType: 4
+      TargetObject: {fileID: 0}
+      PropertyName: 
+    - ActionType: 4
+      TargetObject: {fileID: 0}
+      PropertyName: 
+  - Name: Light
     Type: 1
     Actions: []
-  - Name: Class
-    Type: 1
+  - Name: Direction
+    Type: 2
+    Actions:
+    - ActionType: 3
+      TargetObject: {fileID: 0}
+      PropertyName: 
+  - Name: UI
+    Type: 0
     Actions: []
   - Name: New Parameter
-    Type: 3
-    Actions: []
-  - Name: New Parameter
-    Type: 4
-    Actions: []
-  - Name: 
     Type: 5
     Actions: []
-  - Name: New Parameter
-    Type: 0
-    Actions: []
-  - Name: "\u041D\u041D\u041D"
-    Type: 0
-    Actions: []
-  - Name: New Parameter
+  - Name: Background
     Type: 1
+    Actions: []
+  - Name: Text
+    Type: 1
+    Actions: []
+  - Name: Shadow
+    Type: 1
+    Actions:
+    - ActionType: 1
+      TargetObject: {fileID: 0}
+      PropertyName: 
+    - ActionType: 1
+      TargetObject: {fileID: 0}
+      PropertyName: 
+  - Name: Test
+    Type: 0
     Actions: []
 --- !u!114 &5520942053270759708
 MonoBehaviour:
@@ -310,39 +448,213 @@ MonoBehaviour:
   themeName: ui_dark
   parentDefinition: {fileID: 11400000}
   parameterValues:
-  - ParameterName: Test
-    Type: 2
-    Enabled: 1
-    ColorValue: {r: 0, g: 0, b: 0, a: 0}
-    FloatValue: 0
-    VectorValue: {x: 0, y: 0, z: 0}
-  - ParameterName: TOP
-    Type: 1
-    Enabled: 1
-    ColorValue: {r: 1, g: 1, b: 1, a: 1}
-    FloatValue: 0
-    VectorValue: {x: 0, y: 0, z: 0}
-  - ParameterName: Class
-    Type: 1
-    Enabled: 1
-    ColorValue: {r: 1, g: 1, b: 1, a: 1}
-    FloatValue: 0
-    VectorValue: {x: 0, y: 0, z: 0}
   - ParameterName: New Parameter
     Type: 3
-    Enabled: 1
+    Enabled: 0
     ColorValue: {r: 0.7924528, g: 0.25044498, b: 0.25044498, a: 0.56078434}
     FloatValue: 0
     VectorValue: {x: 0, y: 0, z: 0}
-  - ParameterName: "\u041D\u041D\u041D"
+  - ParameterName: GLOBAL
+    Type: 0
+    Enabled: 0
+    ColorValue: {r: 0, g: 0, b: 0, a: 0}
+    FloatValue: 0
+    VectorValue: {x: 0, y: 0, z: 0}
+  - ParameterName: Fog
+    Type: 1
+    Enabled: 0
+    ColorValue: {r: 1, g: 1, b: 1, a: 1}
+    FloatValue: 0
+    VectorValue: {x: 0, y: 0, z: 0}
+  - ParameterName: Light
+    Type: 1
+    Enabled: 0
+    ColorValue: {r: 1, g: 1, b: 1, a: 1}
+    FloatValue: 0
+    VectorValue: {x: 0, y: 0, z: 0}
+  - ParameterName: Direction
+    Type: 3
+    Enabled: 0
+    ColorValue: {r: 0, g: 0, b: 0, a: 0}
+    FloatValue: 0
+    VectorValue: {x: 0, y: 0, z: 0}
+  - ParameterName: UI
     Type: 0
     Enabled: 1
     ColorValue: {r: 0, g: 0, b: 0, a: 0}
     FloatValue: 0
     VectorValue: {x: 0, y: 0, z: 0}
-  - ParameterName: 
-    Type: 5
+  - ParameterName: Background
+    Type: 1
     Enabled: 1
+    ColorValue: {r: 1, g: 1, b: 1, a: 1}
+    FloatValue: 0
+    VectorValue: {x: 0, y: 0, z: 0}
+  - ParameterName: Text
+    Type: 1
+    Enabled: 1
+    ColorValue: {r: 1, g: 1, b: 1, a: 1}
+    FloatValue: 0
+    VectorValue: {x: 0, y: 0, z: 0}
+  - ParameterName: Shadow
+    Type: 1
+    Enabled: 1
+    ColorValue: {r: 1, g: 1, b: 1, a: 1}
+    FloatValue: 0
+    VectorValue: {x: 0, y: 0, z: 0}
+  - ParameterName: Test
+    Type: 0
+    Enabled: 1
+    ColorValue: {r: 0, g: 0, b: 0, a: 0}
+    FloatValue: 0
+    VectorValue: {x: 0, y: 0, z: 0}
+--- !u!114 &6842620755359250030
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 971c51af8104e495b90cf02ae12e5531, type: 3}
+  m_Name: global
+  m_EditorClassIdentifier: 
+  themeName: global
+  parentDefinition: {fileID: 11400000}
+  parameterValues:
+  - ParameterName: New Parameter
+    Type: 3
+    Enabled: 1
+    ColorValue: {r: 0, g: 0, b: 0, a: 0}
+    FloatValue: 0
+    VectorValue: {x: 0, y: 0, z: 0}
+  - ParameterName: GLOBAL
+    Type: 0
+    Enabled: 1
+    ColorValue: {r: 0, g: 0, b: 0, a: 0}
+    FloatValue: 0
+    VectorValue: {x: 0, y: 0, z: 0}
+  - ParameterName: Fog
+    Type: 1
+    Enabled: 1
+    ColorValue: {r: 0.7028302, g: 1, b: 0.76995295, a: 1}
+    FloatValue: 0
+    VectorValue: {x: 0, y: 0, z: 0}
+  - ParameterName: Light
+    Type: 1
+    Enabled: 1
+    ColorValue: {r: 0.50614095, g: 0.81066203, b: 0.8867924, a: 1}
+    FloatValue: 0
+    VectorValue: {x: 0, y: 0, z: 0}
+  - ParameterName: Direction
+    Type: 3
+    Enabled: 1
+    ColorValue: {r: 0, g: 0, b: 0, a: 0}
+    FloatValue: 3.5
+    VectorValue: {x: 0, y: 0, z: 0}
+  - ParameterName: UI
+    Type: 0
+    Enabled: 1
+    ColorValue: {r: 0, g: 0, b: 0, a: 0}
+    FloatValue: 0
+    VectorValue: {x: 0, y: 0, z: 0}
+  - ParameterName: Background
+    Type: 1
+    Enabled: 0
+    ColorValue: {r: 1, g: 1, b: 1, a: 1}
+    FloatValue: 0
+    VectorValue: {x: 0, y: 0, z: 0}
+  - ParameterName: Text
+    Type: 1
+    Enabled: 0
+    ColorValue: {r: 1, g: 1, b: 1, a: 1}
+    FloatValue: 0
+    VectorValue: {x: 0, y: 0, z: 0}
+  - ParameterName: Shadow
+    Type: 1
+    Enabled: 0
+    ColorValue: {r: 1, g: 1, b: 1, a: 1}
+    FloatValue: 0
+    VectorValue: {x: 0, y: 0, z: 0}
+  - ParameterName: Test
+    Type: 0
+    Enabled: 1
+    ColorValue: {r: 0, g: 0, b: 0, a: 0}
+    FloatValue: 0
+    VectorValue: {x: 0, y: 0, z: 0}
+--- !u!114 &7471511550238747431
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 971c51af8104e495b90cf02ae12e5531, type: 3}
+  m_Name: GLOBAL
+  m_EditorClassIdentifier: 
+  themeName: GLOBAL
+  parentDefinition: {fileID: 11400000}
+  parameterValues:
+  - ParameterName: GLOBAL
+    Type: 0
+    Enabled: 1
+    ColorValue: {r: 0, g: 0, b: 0, a: 0}
+    FloatValue: 0
+    VectorValue: {x: 0, y: 0, z: 0}
+  - ParameterName: Fog
+    Type: 2
+    Enabled: 1
+    ColorValue: {r: 0, g: 0, b: 0, a: 0}
+    FloatValue: 1
+    VectorValue: {x: 0, y: 0, z: 0}
+  - ParameterName: Light
+    Type: 1
+    Enabled: 1
+    ColorValue: {r: 0.764151, g: 0.38568, b: 0.38568, a: 1}
+    FloatValue: 0
+    VectorValue: {x: 0, y: 0, z: 0}
+  - ParameterName: Direction
+    Type: 2
+    Enabled: 1
+    ColorValue: {r: 0, g: 0, b: 0, a: 0}
+    FloatValue: 1.37
+    VectorValue: {x: 0, y: 0, z: 0}
+  - ParameterName: New Parameter
+    Type: 4
+    Enabled: 1
+    ColorValue: {r: 0, g: 0, b: 0, a: 0}
+    FloatValue: 0
+    VectorValue: {x: 0, y: 0, z: 0}
+  - ParameterName: UI
+    Type: 0
+    Enabled: 0
+    ColorValue: {r: 0, g: 0, b: 0, a: 0}
+    FloatValue: 0
+    VectorValue: {x: 0, y: 0, z: 0}
+  - ParameterName: Background
+    Type: 1
+    Enabled: 0
+    ColorValue: {r: 1, g: 1, b: 1, a: 1}
+    FloatValue: 0
+    VectorValue: {x: 0, y: 0, z: 0}
+  - ParameterName: Text
+    Type: 1
+    Enabled: 0
+    ColorValue: {r: 1, g: 1, b: 1, a: 1}
+    FloatValue: 0
+    VectorValue: {x: 0, y: 0, z: 0}
+  - ParameterName: Shadow
+    Type: 1
+    Enabled: 0
+    ColorValue: {r: 1, g: 1, b: 1, a: 1}
+    FloatValue: 0
+    VectorValue: {x: 0, y: 0, z: 0}
+  - ParameterName: Test
+    Type: 0
+    Enabled: 0
     ColorValue: {r: 0, g: 0, b: 0, a: 0}
     FloatValue: 0
     VectorValue: {x: 0, y: 0, z: 0}

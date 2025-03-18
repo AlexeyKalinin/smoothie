@@ -1,0 +1,15 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <ui:VisualElement class="container">
+        <ui:VisualElement class="toolbar">
+            <ui:Button name="backButton" class="icon-button" style="height: 22px;" />
+            <ui:VisualElement class="spacer" />
+            <ui:Button name="editThemeButton" class="edit-theme-button" style="font-size: 12px; -unity-font-definition: url(&quot;project://database/Assets/_fonts/OpenSans-Bold.ttf?fileID=12800000&amp;guid=7ec66785013764db9af1ffa04b8bcf08&amp;type=3#OpenSans-Bold&quot;); -unity-font-style: bold; padding-left: 30px; padding-right: 30px; text-shadow: 0 2px 6px rgba(0, 0, 0, 0.79);" />
+            <ui:Button name="duplicateButton" class="icon-button" style="-unity-font-style: bold; -unity-font-definition: url(&quot;project://database/Assets/_fonts/Bender.otf?fileID=12800000&amp;guid=134ae498d4e464b04a183c701c853cd7&amp;type=3#Bender&quot;); font-size: 23px;" />
+            <ui:Button name="deleteButton" class="icon-button" />
+        </ui:VisualElement>
+        <ui:TextField name="themeName" label="Theme Name" style="margin-bottom: 6px;" />
+        <ui:Toggle name="editParametersToggle" label="Edit Parameters" />
+        <ui:Label name="parameterCount" class="parameter-count" />
+        <ui:VisualElement name="parametersContainer" />
+    </ui:VisualElement>
+</ui:UXML>
