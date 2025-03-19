@@ -423,13 +423,7 @@ MonoBehaviour:
     Actions: []
   - Name: Shadow
     Type: 1
-    Actions:
-    - ActionType: 1
-      TargetObject: {fileID: 0}
-      PropertyName: 
-    - ActionType: 1
-      TargetObject: {fileID: 0}
-      PropertyName: 
+    Actions: []
   - Name: Test
     Type: 0
     Actions: []

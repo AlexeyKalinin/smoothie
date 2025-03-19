@@ -1,0 +1,54 @@
+/* Styles.uss - Removed cursor property */
+GridBackground {
+    --grid-background-color: #1E1E1E;
+    --line-color: rgba(193, 196, 192, 0.1);
+    --thick-line-color: rgba(193, 196, 192, 0.15);
+    --spacing: 15;
+}
+
+.node {
+    background-color: #2A2A2A;
+    border-width: 1px;
+    border-radius: 5px;
+    border-color: #3A3A3A;
+    margin: 0;
+    padding: 0;
+}
+
+.node:selected {
+    border-color: #44C0FF;
+    border-width: 1px;
+}
+
+.node #title {
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    height: 28px;
+}
+
+.node #title-label {
+    font-size: 14px;
+    -unity-font-style: bold;
+    color: white;
+}
+
+.node #contents {
+    background-color: #2A2A2A;
+}
+
+#resizer {
+    /* cursor property removed */
+}
+
+Button {
+    background-color: #3A3A3A;
+    border-width: 1px;
+    border-color: #4A4A4A;
+    padding: 5px 10px;
+    margin: 10px;
+    border-radius: 3px;
+}
+
+Button:hover {
+    background-color: #4A4A4A;
+}

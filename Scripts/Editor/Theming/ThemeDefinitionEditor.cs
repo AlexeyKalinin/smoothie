@@ -6,7 +6,7 @@ using UnityEditor;
 namespace Smoothie
 {
     [CustomEditor(typeof(ThemeDefinition))]
-    public class ThemeDefinitionEditor : Editor
+    public class ThemeDefinitionEditor : UnityEditor.Editor
     {
         private bool _parametersFoldout = true;
         private bool _themesFoldout = true;

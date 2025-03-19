@@ -7,7 +7,7 @@ using System.Linq;
 namespace Smoothie
 {
     [CustomEditor(typeof(Theme))]
-    public class ThemeEditor : Editor
+    public class ThemeEditor : UnityEditor.Editor
     {
         // UI Elements
         private VisualElement _root;
