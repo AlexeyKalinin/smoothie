@@ -1,20 +1,28 @@
-// SmoothieGraphEditorWindow.cs - Fix for StyleCursor error
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEditor.UIElements;
+using System.Linq;
 
-namespace Smoothie.Editor
+namespace Smoothie.Editor.NodeEditor
 {
     public class SmoothieGraphEditorWindow : EditorWindow
     {
-        private SmoothieGraph graph;
-        private SmoothieGraphView graphView;
-        private InspectorView inspectorView;
-        private VisualElement resizer;
-        private bool isDragging;
-        private float inspectorWidth = 250;
-        private VisualElement contentContainer;
+        public enum EditorMode { Containers, Themes }
+        
+        private EditorMode _currentMode = EditorMode.Containers;
+        private SmoothieGraph _graph;
+        private ThemeDefinition _themeDefinition;
+        
+        private SmoothieGraphView _containerGraphView;
+        private ThemeGraphView _themeGraphView;
+        private VisualElement _activeGraphView;
+        
+        private InspectorView _inspectorView;
+        private VisualElement _resizer;
+        private bool _isDragging;
+        private float _inspectorWidth = 250;
+        private VisualElement _contentContainer;
         
         [MenuItem("Window/Smoothie/Graph Editor")]
         public static void OpenWindow()
@@ -43,6 +51,14 @@ namespace Smoothie.Editor
             var fileButton = new ToolbarButton(() => ShowFileMenu()) { text = "File" };
             toolbar.Add(fileButton);
             
+            // Add mode selector
+            var modeSelector = new ToolbarMenu { text = "Mode" };
+            modeSelector.menu.AppendAction("Containers", a => SwitchMode(EditorMode.Containers), 
+                a => _currentMode == EditorMode.Containers ? DropdownMenuAction.Status.Checked : DropdownMenuAction.Status.Normal);
+            modeSelector.menu.AppendAction("Themes", a => SwitchMode(EditorMode.Themes), 
+                a => _currentMode == EditorMode.Themes ? DropdownMenuAction.Status.Checked : DropdownMenuAction.Status.Normal);
+            toolbar.Add(modeSelector);
+            
             // Add spacer to push toggle to right side
             var spacer = new VisualElement();
             spacer.style.flexGrow = 1;
@@ -58,55 +74,92 @@ namespace Smoothie.Editor
             rootContainer.Add(toolbar);
             
             // Create main content area
-            contentContainer = new VisualElement();
-            contentContainer.style.flexGrow = 1;
-            contentContainer.style.flexDirection = FlexDirection.Row;
-            rootContainer.Add(contentContainer);
+            _contentContainer = new VisualElement();
+            _contentContainer.style.flexGrow = 1;
+            _contentContainer.style.flexDirection = FlexDirection.Row;
+            rootContainer.Add(_contentContainer);
             
-            // Create graph view
-            graphView = new SmoothieGraphView(this);
-            graphView.style.flexGrow = 1;
-            contentContainer.Add(graphView);
+            // Create graph views
+            _containerGraphView = new SmoothieGraphView(this);
+            _containerGraphView.style.flexGrow = 1;
+            
+            _themeGraphView = new ThemeGraphView(this);
+            _themeGraphView.style.flexGrow = 1;
+            
+            // Set initial view
+            SetActiveGraphView(_currentMode);
             
             // Create resizer
-            resizer = new VisualElement();
-            resizer.name = "resizer";
-            resizer.style.width = 5;
-            resizer.style.backgroundColor = new Color(0.1f, 0.1f, 0.1f);
+            _resizer = new VisualElement();
+            _resizer.name = "resizer";
+            _resizer.style.width = 5;
+            _resizer.style.backgroundColor = new Color(0.1f, 0.1f, 0.1f);
             // Removed cursor styling
-            resizer.RegisterCallback<MouseDownEvent>(OnResizerMouseDown);
+            _resizer.RegisterCallback<MouseDownEvent>(OnResizerMouseDown);
             rootVisualElement.RegisterCallback<MouseMoveEvent>(OnResizerMouseMove);
             rootVisualElement.RegisterCallback<MouseUpEvent>(OnResizerMouseUp);
-            contentContainer.Add(resizer);
+            _contentContainer.Add(_resizer);
             
             // Create inspector view
-            inspectorView = new InspectorView();
-            inspectorView.style.width = inspectorWidth;
-            inspectorView.style.minWidth = 200;
-            contentContainer.Add(inspectorView);
+            _inspectorView = new InspectorView();
+            _inspectorView.style.width = _inspectorWidth;
+            _inspectorView.style.minWidth = 200;
+            _contentContainer.Add(_inspectorView);
             
             // Open graph when selected
             EditorApplication.delayCall += () => 
             {
-                OpenGraph(Selection.activeObject as SmoothieGraph);
+                if (Selection.activeObject is SmoothieGraph selectedGraph)
+                {
+                    OpenGraph(selectedGraph);
+                }
+                else if (Selection.activeObject is ThemeDefinition selectedDefinition)
+                {
+                    OpenThemeDefinition(selectedDefinition);
+                }
             };
+        }
+        
+        private void SwitchMode(EditorMode mode)
+        {
+            if (_currentMode == mode)
+                return;
+                
+            _currentMode = mode;
+            SetActiveGraphView(mode);
+            
+            // Update window title
+            UpdateWindowTitle();
+        }
+        
+        private void SetActiveGraphView(EditorMode mode)
+        {
+            // Remove current view
+            if (_activeGraphView != null)
+                _contentContainer.Remove(_activeGraphView);
+                
+            // Set new active view
+            _activeGraphView = mode == EditorMode.Containers ? (VisualElement)_containerGraphView : _themeGraphView;
+            
+            // Add to container
+            _contentContainer.Insert(0, _activeGraphView);
         }
         
         private void ToggleInspector(bool visible)
         {
-            if (inspectorView != null)
+            if (_inspectorView != null)
             {
                 if (visible)
                 {
-                    inspectorView.style.width = inspectorWidth;
-                    inspectorView.style.display = DisplayStyle.Flex;
-                    resizer.style.display = DisplayStyle.Flex;
+                    _inspectorView.style.width = _inspectorWidth;
+                    _inspectorView.style.display = DisplayStyle.Flex;
+                    _resizer.style.display = DisplayStyle.Flex;
                 }
                 else
                 {
-                    inspectorWidth = inspectorView.style.width.value.value;
-                    inspectorView.style.display = DisplayStyle.None;
-                    resizer.style.display = DisplayStyle.None;
+                    _inspectorWidth = _inspectorView.style.width.value.value;
+                    _inspectorView.style.display = DisplayStyle.None;
+                    _resizer.style.display = DisplayStyle.None;
                 }
             }
         }
@@ -115,14 +168,14 @@ namespace Smoothie.Editor
         {
             if (evt.button == 0)
             {
-                isDragging = true;
+                _isDragging = true;
                 evt.StopPropagation();
             }
         }
         
         private void OnResizerMouseMove(MouseMoveEvent evt)
         {
-            if (isDragging)
+            if (_isDragging)
             {
                 Vector2 mousePos = evt.mousePosition;
                 float windowWidth = rootVisualElement.worldBound.width;
@@ -133,17 +186,17 @@ namespace Smoothie.Editor
                 // Clamp to reasonable values
                 newWidth = Mathf.Clamp(newWidth, 200, windowWidth * 0.7f);
                 
-                inspectorView.style.width = newWidth;
+                _inspectorView.style.width = newWidth;
                 evt.StopPropagation();
             }
         }
         
         private void OnResizerMouseUp(MouseUpEvent evt)
         {
-            if (isDragging && evt.button == 0)
+            if (_isDragging && evt.button == 0)
             {
-                isDragging = false;
-                inspectorWidth = inspectorView.style.width.value.value;
+                _isDragging = false;
+                _inspectorWidth = _inspectorView.style.width.value.value;
                 evt.StopPropagation();
             }
         }
@@ -151,9 +204,19 @@ namespace Smoothie.Editor
         private void ShowFileMenu()
         {
             GenericMenu menu = new GenericMenu();
-            menu.AddItem(new GUIContent("New Graph"), false, CreateNewGraph);
-            menu.AddItem(new GUIContent("Open Graph"), false, OpenGraphDialog);
-            menu.AddItem(new GUIContent("Save Graph"), false, SaveGraph);
+            
+            if (_currentMode == EditorMode.Containers)
+            {
+                menu.AddItem(new GUIContent("New Graph"), false, CreateNewGraph);
+                menu.AddItem(new GUIContent("Open Graph"), false, OpenGraphDialog);
+                menu.AddItem(new GUIContent("Save Graph"), false, SaveGraph);
+            }
+            else // Themes mode
+            {
+                menu.AddItem(new GUIContent("Open Theme Definition"), false, OpenThemeDefinitionDialog);
+                menu.AddItem(new GUIContent("Save Theme Definition"), false, SaveThemeDefinition);
+            }
+            
             menu.ShowAsContext();
         }
         
@@ -182,27 +245,60 @@ namespace Smoothie.Editor
                 OpenGraph(loadedGraph);
         }
         
-        public void OpenGraph(SmoothieGraph smoothieGraph)
+        private void OpenThemeDefinitionDialog()
         {
-            if (graphView == null)
+            string path = EditorUtility.OpenFilePanelWithFilters("Open Theme Definition", "Assets", new[] { "Theme Definition", "asset" });
+            if (string.IsNullOrEmpty(path))
                 return;
                 
-            graph = smoothieGraph;
-            graphView.PopulateView(graph);
+            // Convert from absolute path to relative path
+            path = "Assets" + path.Substring(Application.dataPath.Length);
+            ThemeDefinition loadedDefinition = AssetDatabase.LoadAssetAtPath<ThemeDefinition>(path);
+            if (loadedDefinition != null)
+                OpenThemeDefinition(loadedDefinition);
+        }
+        
+        public void OpenGraph(SmoothieGraph smoothieGraph)
+        {
+            _graph = smoothieGraph;
+            _containerGraphView.PopulateView(smoothieGraph);
             
-            if (smoothieGraph != null)
-                titleContent = new GUIContent($"Smoothie Graph - {graph.name}");
-            else
-                titleContent = new GUIContent("Smoothie Graph");
+            SwitchMode(EditorMode.Containers);
+            UpdateWindowTitle();
+        }
+        
+        public void OpenThemeDefinition(ThemeDefinition definition)
+        {
+            _themeDefinition = definition;
+            _themeGraphView.PopulateWithThemes(definition);
+            
+            SwitchMode(EditorMode.Themes);
+            UpdateWindowTitle();
+        }
+        
+        private void UpdateWindowTitle()
+        {
+            string windowTitle = "Smoothie Graph";
+            
+            if (_currentMode == EditorMode.Containers && _graph != null)
+            {
+                windowTitle += $" - Container: {_graph.name}";
+            }
+            else if (_currentMode == EditorMode.Themes && _themeDefinition != null)
+            {
+                windowTitle += $" - Theme: {_themeDefinition.name}";
+            }
+            
+            titleContent = new GUIContent(windowTitle);
         }
         
         private void SaveGraph()
         {
-            if (graph == null)
+            if (_graph == null)
                 return;
                 
             // Save container positions and connections
-            foreach (var nodeView in graphView.nodes.ToList())
+            foreach (var nodeView in _containerGraphView.nodes.ToList())
             {
                 if (nodeView is SmoothieNodeView smoothieNodeView)
                 {
@@ -212,99 +308,151 @@ namespace Smoothie.Editor
             }
             
             // Save view state
-            graph.viewPosition = graphView.viewTransform.position;
-            graph.zoomScale = graphView.viewTransform.scale.x;
+            _graph.viewPosition = _containerGraphView.viewTransform.position;
+            _graph.zoomScale = _containerGraphView.viewTransform.scale.x;
             
-            EditorUtility.SetDirty(graph);
+            EditorUtility.SetDirty(_graph);
             AssetDatabase.SaveAssets();
         }
         
-        public void UpdateSelection(SmoothieNodeView nodeView)
+        private void SaveThemeDefinition()
         {
-            inspectorView.UpdateSelection(nodeView);
+            if (_themeDefinition == null)
+                return;
+                
+            // Position data is saved automatically when nodes are moved
+            EditorUtility.SetDirty(_themeDefinition);
+            AssetDatabase.SaveAssets();
         }
-    }
-    
-    // Inspector View class in SmoothieGraphEditorWindow.cs
-public class InspectorView : VisualElement
-{
-    private UnityEditor.Editor containerEditor;
-    private IMGUIContainer inspectorContainer;
-    private VisualElement contentContainer;
-    private SmoothieNodeView currentNodeView;
-    
-    public InspectorView()
-    {
-        // Create header
-        var header = new VisualElement();
-        header.style.backgroundColor = new Color(0.2f, 0.2f, 0.2f);
-        header.style.paddingTop = 5;
-        header.style.paddingBottom = 5;
         
-        var label = new Label("Inspector");
-        label.style.unityFontStyleAndWeight = FontStyle.Bold;
-        label.style.fontSize = 14;
-        label.style.paddingLeft = 5;
-        header.Add(label);
-        
-        Add(header);
-        
-        // Create content container
-        contentContainer = new VisualElement();
-        contentContainer.style.flexGrow = 1;
-        contentContainer.style.backgroundColor = new Color(0.15f, 0.15f, 0.15f, 0.8f);
-        Add(contentContainer);
-        
-        // Add IMGUI container for editor
-        inspectorContainer = new IMGUIContainer(() => {
-            if (containerEditor != null && currentNodeView != null)
+        public void UpdateSelection(UnityEditor.Experimental.GraphView.Node nodeView)
+        {
+            if (nodeView is SmoothieNodeView containerNode)
             {
-                EditorGUI.BeginChangeCheck();
-                
-                EditorGUIUtility.labelWidth = 120; // Make labels fit better
-                containerEditor.OnInspectorGUI();
-                
-                // If any changes were made, update the node view
-                if (EditorGUI.EndChangeCheck())
-                {
-                    EditorUtility.SetDirty(containerEditor.target);
-                    currentNodeView.UpdateViewFromModel();
-                }
+                _inspectorView.UpdateContainerSelection(containerNode);
             }
-        });
-        contentContainer.Add(inspectorContainer);
-        
-        // Style the inspector
-        style.flexGrow = 0;
-        style.flexShrink = 0;
+            else if (nodeView is ThemeNodeView themeNode)
+            {
+                _inspectorView.UpdateThemeSelection(themeNode);
+            }
+            else
+            {
+                _inspectorView.ClearSelection();
+            }
+        }
     }
     
-    public void UpdateSelection(SmoothieNodeView nodeView)
+    // Enhanced InspectorView to handle both container and theme nodes
+    public class InspectorView : VisualElement
     {
-        // Store current node view reference
-        currentNodeView = nodeView;
+        private UnityEditor.Editor _currentEditor;
+        private IMGUIContainer _inspectorContainer;
+        private VisualElement _contentContainer;
         
-        // Remove previous editor
-        if (containerEditor != null)
+        private SmoothieNodeView _currentContainerNode;
+        private ThemeNodeView _currentThemeNode;
+        
+        public InspectorView()
         {
-            Object.DestroyImmediate(containerEditor);
-            containerEditor = null;
+            // Create header
+            var header = new VisualElement();
+            header.style.backgroundColor = new Color(0.2f, 0.2f, 0.2f);
+            header.style.paddingTop = 5;
+            header.style.paddingBottom = 5;
+            
+            var label = new Label("Inspector");
+            label.style.unityFontStyleAndWeight = FontStyle.Bold;
+            label.style.fontSize = 14;
+            label.style.paddingLeft = 5;
+            header.Add(label);
+            
+            Add(header);
+            
+            // Create content container
+            _contentContainer = new VisualElement();
+            _contentContainer.style.flexGrow = 1;
+            _contentContainer.style.backgroundColor = new Color(0.15f, 0.15f, 0.15f, 0.8f);
+            Add(_contentContainer);
+            
+            // Add IMGUI container for editor
+            _inspectorContainer = new IMGUIContainer(() => {
+                if (_currentEditor != null)
+                {
+                    EditorGUI.BeginChangeCheck();
+                    
+                    EditorGUIUtility.labelWidth = 120; // Make labels fit better
+                    _currentEditor.OnInspectorGUI();
+                    
+                    // If any changes were made, update the node view
+                    if (EditorGUI.EndChangeCheck())
+                    {
+                        if (_currentContainerNode != null)
+                        {
+                            EditorUtility.SetDirty(_currentContainerNode.container);
+                            _currentContainerNode.UpdateViewFromModel();
+                        }
+                        else if (_currentThemeNode != null)
+                        {
+                            EditorUtility.SetDirty(_currentThemeNode.theme);
+                            _currentThemeNode.UpdateViewFromModel();
+                        }
+                    }
+                }
+            });
+            _contentContainer.Add(_inspectorContainer);
+            
+            // Style the inspector
+            style.flexGrow = 0;
+            style.flexShrink = 0;
         }
         
-        // Update container
-        contentContainer.Clear();
-        
-        if (nodeView != null)
+        public void UpdateContainerSelection(SmoothieNodeView nodeView)
         {
-            // Create new editor for container
-            containerEditor = UnityEditor.Editor.CreateEditor(nodeView.container);
-            contentContainer.Add(inspectorContainer);
+            ClearSelection();
+            
+            _currentContainerNode = nodeView;
+            
+            if (nodeView != null)
+            {
+                _currentEditor = UnityEditor.Editor.CreateEditor(nodeView.container);
+                _contentContainer.Add(_inspectorContainer);
+            }
         }
-        else
+        
+        public void UpdateThemeSelection(ThemeNodeView nodeView)
         {
-            // No selection
-            contentContainer.Add(new Label("No container selected"));
+            ClearSelection();
+    
+            _currentThemeNode = nodeView;
+    
+            if (nodeView != null)
+            {
+                // Create instance of our custom editor for Theme, fully qualifying the types
+                _currentEditor = UnityEditor.Editor.CreateEditor(nodeView.theme, typeof(ThemeNodeEditor));
+                _contentContainer.Add(_inspectorContainer);
+        
+                // Add a title label
+                var titleLabel = new Label($"Editing Theme: {nodeView.theme.ThemeName}");
+                titleLabel.style.unityFontStyleAndWeight = FontStyle.Bold;
+                titleLabel.style.fontSize = 14;
+                titleLabel.style.marginBottom = 10;
+                _contentContainer.Insert(0, titleLabel);
+            }
+        }
+        
+        public void ClearSelection()
+        {
+            _currentContainerNode = null;
+            _currentThemeNode = null;
+            
+            if (_currentEditor != null)
+            {
+                Object.DestroyImmediate(_currentEditor);
+                _currentEditor = null;
+            }
+            
+            _contentContainer.Clear();
+            _contentContainer.Add(new Label("No selection"));
         }
     }
-}
 }

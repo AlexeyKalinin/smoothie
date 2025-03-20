@@ -1,4 +1,3 @@
-// SmoothieGraphView.cs - Add clipboard functionality
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,17 +6,17 @@ using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-namespace Smoothie.Editor
+namespace Smoothie.Editor.NodeEditor
 {
     public class SmoothieGraphView : GraphView
     {
-        private SmoothieGraphEditorWindow editorWindow;
-        private SmoothieGraph graph;
-        private List<SmoothieNodeView> copyBuffer = new List<SmoothieNodeView>();
+        protected SmoothieGraphEditorWindow _editorWindow;
+        private SmoothieGraph _graph;
+        private List<SmoothieNodeView> _copyBuffer = new List<SmoothieNodeView>();
         
         public SmoothieGraphView(SmoothieGraphEditorWindow window)
         {
-            editorWindow = window;
+            _editorWindow = window;
             
             // Set up styles and functionality
             this.AddManipulator(new ContentDragger());
@@ -50,7 +49,7 @@ namespace Smoothie.Editor
             this.RegisterCallback<KeyDownEvent>(OnKeyDown);
             
             // Register mouse up for selection tracking
-            RegisterCallback<MouseUpEvent>(evt => {
+            RegisterCallback<MouseUpEvent>(_ => {
                 // Small delay to ensure selection is up to date
                 schedule.Execute(() => UpdateSelection());
             });
@@ -67,12 +66,12 @@ namespace Smoothie.Editor
         private string SerializeSelectedElements(IEnumerable<GraphElement> elements)
         {
             // Store references to selected nodes
-            copyBuffer.Clear();
+            _copyBuffer.Clear();
             foreach (var element in elements)
             {
                 if (element is SmoothieNodeView nodeView)
                 {
-                    copyBuffer.Add(nodeView);
+                    _copyBuffer.Add(nodeView);
                 }
             }
             
@@ -83,7 +82,7 @@ namespace Smoothie.Editor
         private bool CanPaste(string data)
         {
             // Check if we have valid data in the buffer
-            return data == "SMOOTHIE_CLIPBOARD_DATA" && copyBuffer.Count > 0;
+            return data == "SMOOTHIE_CLIPBOARD_DATA" && _copyBuffer.Count > 0;
         }
         
         private void UnserializeAndPaste(string operationName, string data)
@@ -102,29 +101,29 @@ namespace Smoothie.Editor
             
             // Create offset for positioning new nodes
             Vector2 offset = pastePosition;
-            if (copyBuffer.Count > 0)
+            if (_copyBuffer.Count > 0)
             {
                 // Calculate average position of copied nodes
                 Vector2 averagePosition = Vector2.zero;
-                foreach (var nodeView in copyBuffer)
+                foreach (var nodeView in _copyBuffer)
                 {
                     averagePosition += nodeView.container.position;
                 }
-                averagePosition /= copyBuffer.Count;
+                averagePosition /= _copyBuffer.Count;
                 
                 // Calculate offset from average position to paste position
                 offset = pastePosition - averagePosition;
             }
             
             // Create new nodes from copied nodes
-            foreach (var nodeView in copyBuffer)
+            foreach (var nodeView in _copyBuffer)
             {
                 Vector2 newPosition = nodeView.container.position + offset + new Vector2(20, 20);
                 CreateContainerFromCopy(nodeView.container, newPosition);
             }
             
             // Save the changes
-            EditorUtility.SetDirty(graph);
+            EditorUtility.SetDirty(_graph);
             AssetDatabase.SaveAssets();
         }
         
@@ -139,7 +138,7 @@ namespace Smoothie.Editor
         
         private SmoothieNodeView CreateContainerFromCopy(SmoothieContainer originalContainer, Vector2 position)
         {
-            if (graph == null)
+            if (_graph == null)
                 return null;
                 
             // Create a new container as a copy
@@ -154,10 +153,10 @@ namespace Smoothie.Editor
             newContainer.name = newContainer.title;
             
             // Add to graph
-            graph.containers.Add(newContainer);
+            _graph.containers.Add(newContainer);
             
             // Save as sub-asset
-            AssetDatabase.AddObjectToAsset(newContainer, graph);
+            AssetDatabase.AddObjectToAsset(newContainer, _graph);
             
             // Create the visual node
             SmoothieNodeView newNodeView = CreateNodeView(newContainer);
@@ -168,15 +167,15 @@ namespace Smoothie.Editor
             return newNodeView;
         }
         
-        private void UpdateSelection()
+        protected void UpdateSelection()
         {
-            if (selection.Count == 1 && selection[0] is SmoothieNodeView nodeView)
+            if (selection.Count == 1 && selection[0] is UnityEditor.Experimental.GraphView.Node nodeView)
             {
-                editorWindow.UpdateSelection(nodeView);
+                _editorWindow.UpdateSelection(nodeView);
             }
             else
             {
-                editorWindow.UpdateSelection(null);
+                _editorWindow.UpdateSelection(null);
             }
         }
         
@@ -191,20 +190,20 @@ namespace Smoothie.Editor
                     if (element is SmoothieNodeView nodeView)
                     {
                         // Remove container from graph
-                        if (graph != null && nodeView.container != null)
+                        if (_graph != null && nodeView.container != null)
                         {
                             // Remove from graph
-                            graph.containers.Remove(nodeView.container);
+                            _graph.containers.Remove(nodeView.container);
                             
                             // Remove any connections
-                            foreach (var container in graph.containers)
+                            foreach (var container in _graph.containers)
                             {
                                 container.connections.RemoveAll(c => c.targetContainer == nodeView.container);
                             }
                             
                             // Remove asset
                             AssetDatabase.RemoveObjectFromAsset(nodeView.container);
-                            EditorUtility.SetDirty(graph);
+                            EditorUtility.SetDirty(_graph);
                         }
                     }
                 }
@@ -275,7 +274,7 @@ namespace Smoothie.Editor
         
         private void DuplicateNode(SmoothieNodeView nodeView)
         {
-            if (graph == null)
+            if (_graph == null)
                 return;
                 
             // Calculate new position slightly offset from original
@@ -285,7 +284,7 @@ namespace Smoothie.Editor
             CreateContainerFromCopy(nodeView.container, newPosition);
             
             // Save the asset
-            EditorUtility.SetDirty(graph);
+            EditorUtility.SetDirty(_graph);
             AssetDatabase.SaveAssets();
         }
         
@@ -296,15 +295,15 @@ namespace Smoothie.Editor
         }
         
         // Use a different name for the context menu handler to avoid conflict
-        private void OnContextualMenuPopulateEvent(ContextualMenuPopulateEvent evt)
+        protected virtual void OnContextualMenuPopulateEvent(ContextualMenuPopulateEvent evt)
         {
             Vector2 nodePosition = this.ChangeCoordinatesTo(contentViewContainer, evt.localMousePosition);
-            evt.menu.AppendAction("Add Container", (a) => CreateNewContainer(nodePosition));
+            evt.menu.AppendAction("Add Container", _ => CreateNewContainer(nodePosition));
             
             // Add paste option if there's data in the clipboard
-            if (copyBuffer.Count > 0)
+            if (_copyBuffer.Count > 0)
             {
-                evt.menu.AppendAction("Paste", (a) => {
+                evt.menu.AppendAction("Paste", _ => {
                     UnserializeAndPaste("Paste", "SMOOTHIE_CLIPBOARD_DATA");
                 });
             }
@@ -312,13 +311,13 @@ namespace Smoothie.Editor
         
         public void PopulateView(SmoothieGraph smoothieGraph)
         {
-            graph = smoothieGraph;
+            _graph = smoothieGraph;
             
             // Clear the view
             graphElements.ForEach(element => RemoveElement(element));
             
             // If graph is null, create test nodes for debugging
-            if (graph == null)
+            if (_graph == null)
             {
                 // Add a debug container
                 var testContainer = ScriptableObject.CreateInstance<SmoothieContainer>();
@@ -330,37 +329,25 @@ namespace Smoothie.Editor
             }
             
             // Restore view state
-            viewTransform.position = graph.viewPosition;
-            viewTransform.scale = new Vector3(graph.zoomScale, graph.zoomScale, 1);
+            viewTransform.position = _graph.viewPosition;
+            viewTransform.scale = new Vector3(_graph.zoomScale, _graph.zoomScale, 1);
             
             // Add nodes for each container
-            foreach (var container in graph.containers)
+            foreach (var container in _graph.containers)
             {
                 CreateNodeView(container);
             }
             
             // If no nodes exist, create one for testing
-            if (graph.containers.Count == 0)
+            if (_graph.containers.Count == 0)
             {
                 CreateNewContainer(new Vector2(300, 200));
             }
         }
         
-        private SmoothieNodeView FindNodeView(SmoothieContainer container)
-        {
-            foreach (var node in nodes.ToList())
-            {
-                if (node is SmoothieNodeView smoothieNodeView && smoothieNodeView.container == container)
-                {
-                    return smoothieNodeView;
-                }
-            }
-            return null;
-        }
-        
         private void CreateNewContainer(Vector2 position)
         {
-            if (graph == null)
+            if (_graph == null)
                 return;
                 
             SmoothieContainer container = ScriptableObject.CreateInstance<SmoothieContainer>();
@@ -371,11 +358,11 @@ namespace Smoothie.Editor
             container.position = position;
             
             // Add to graph asset
-            graph.containers.Add(container);
+            _graph.containers.Add(container);
             
             // Save as sub-asset
-            AssetDatabase.AddObjectToAsset(container, graph);
-            EditorUtility.SetDirty(graph);
+            AssetDatabase.AddObjectToAsset(container, _graph);
+            EditorUtility.SetDirty(_graph);
             AssetDatabase.SaveAssets();
             
             // Create the visual node
